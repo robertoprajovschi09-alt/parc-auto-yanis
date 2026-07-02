@@ -184,6 +184,59 @@
   }
 }
 
+@layer components {
+  /* Large, thumb-friendly range sliders (financing calculator) */
+  .range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 44px;
+    background: transparent;
+    cursor: pointer;
+  }
+  .range::-webkit-slider-runnable-track {
+    height: 8px;
+    border-radius: 9999px;
+    background: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 28px;
+    width: 28px;
+    border-radius: 9999px;
+    background: var(--brand);
+    border: 3px solid white;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.25);
+    margin-top: -11px;
+  }
+  .range::-moz-range-track {
+    height: 8px;
+    border-radius: 9999px;
+    background: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .range::-moz-range-thumb {
+    height: 28px;
+    width: 28px;
+    border-radius: 9999px;
+    background: var(--brand);
+    border: 3px solid white;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.25);
+  }
+  .range:focus-visible {
+    outline: none;
+  }
+  .range:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid var(--brand);
+    outline-offset: 3px;
+  }
+  .range:focus-visible::-moz-range-thumb {
+    outline: 2px solid var(--brand);
+    outline-offset: 3px;
+  }
+}
+
 /* Legacy utilities kept only until every usage is removed (see docs/AUDIT.md B2) */
 @utility glass {
   background: color-mix(in oklab, white 55%, transparent);

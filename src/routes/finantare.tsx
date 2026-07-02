@@ -1,91 +1,209 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Reveal } from "@/components/site/Reveal";
-import { Wallet, Clock, ShieldCheck, TrendingDown, ArrowUpRight } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { Clock, ShieldCheck, TrendingDown, Wallet } from "lucide-react";
+import { FINANCE, monthlyPayment } from "@/lib/finance";
+import { formatPrice } from "@/lib/vehicles";
+
+type FinSearch = { pret?: number };
 
 export const Route = createFileRoute("/finantare")({
+  validateSearch: (s: Record<string, unknown>): FinSearch => {
+    const n = Number(s.pret);
+    return {
+      pret: Number.isFinite(n) && n >= 3000 && n <= 100000 ? Math.round(n) : undefined,
+    };
+  },
   head: () => ({
     meta: [
-      { title: "Finanțare — Parc Auto Yanis" },
-      { name: "description", content: "Simulează rata lunară pentru mașina dorită. Aprobare în 48h, colaborăm cu peste 8 bănci." },
-      { property: "og:title", content: "Finanțare — Parc Auto Yanis" },
-      { property: "og:description", content: "Simulează rata lunară pentru mașina dorită. Aprobare în 48h." },
+      { title: "Calculator de rate — Parc Auto Yanis" },
+      { name: "description", content: "Calculează-ți rata lunară pentru mașina dorită: preț, avans și perioadă. Răspuns de la bancă în aproximativ 48 de ore." },
+      { property: "og:title", content: "Calculator de rate — Parc Auto Yanis" },
+      { property: "og:description", content: "Calculează-ți rata lunară: preț, avans, perioadă. Răspuns în ~48h." },
     ],
   }),
   component: Finantare,
 });
 
-function Finantare() {
+function SliderField({
+  id,
+  label,
+  min,
+  max,
+  step,
+  value,
+  onChange,
+  display,
+  hint,
+}: {
+  id: string;
+  label: string;
+  min: number;
+  max: number;
+  step: number;
+  value: number;
+  onChange: (v: number) => void;
+  display: string;
+  hint: string;
+}) {
   return (
-    <div className="pt-32 md:pt-40">
-      <section className="mx-auto max-w-[1400px] px-6 pb-16 md:px-10 md:pb-24">
-        <Reveal>
-          <p className="text-[11px] tracking-[0.25em] uppercase text-graphite">Finanțare</p>
-          <h1 className="mt-4 max-w-4xl font-serif text-[clamp(2.75rem,7vw,7rem)] leading-[0.95] tracking-[-0.03em] text-ink">
-            Rate care se <span className="italic text-graphite">așează</span> în bugetul tău.
-          </h1>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-graphite">
-            Colaborăm cu 8 bănci și IFN-uri. Îți construim oferta cea mai potrivită
-            pentru mașina aleasă, cu răspuns rapid și fără costuri ascunse.
-          </p>
-        </Reveal>
+    <div>
+      <div className="flex items-end justify-between gap-4">
+        <label htmlFor={id} className="text-base font-medium text-ink">
+          {label}
+        </label>
+        <output htmlFor={id} className="text-xl font-bold tracking-tight text-ink">
+          {display}
+        </output>
+      </div>
+      <input
+        id={id}
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="range mt-1"
+      />
+      <p className="text-[14px] text-graphite">{hint}</p>
+    </div>
+  );
+}
+
+function Finantare() {
+  const { pret } = Route.useSearch();
+  const [price, setPrice] = useState(pret ?? 18500);
+  const [downPct, setDownPct] = useState<number>(FINANCE.defaultDownPct);
+  const [months, setMonths] = useState<number>(FINANCE.defaultMonths);
+
+  const rate = monthlyPayment(price, downPct, months);
+  const downAmount = Math.round((price * downPct) / 100);
+  const financed = price - downAmount;
+  const total = rate * months + downAmount;
+
+  return (
+    <div className="pt-28 md:pt-36">
+      <section className="mx-auto max-w-[1320px] px-4 pb-10 md:px-8">
+        <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
+          Calculator de rate
+        </h1>
+        <p className="mt-3 max-w-2xl text-base leading-relaxed text-graphite md:text-lg">
+          Mută cele trei glisoare și vezi imediat rata lunară. Când ești
+          mulțumit de cifre, trimite-ne cererea — ne ocupăm noi de dosar, cu
+          mai multe bănci și IFN-uri.
+        </p>
       </section>
 
-      <section className="mx-auto grid max-w-[1400px] gap-8 px-6 pb-24 md:grid-cols-[1.4fr_1fr] md:px-10">
-        <Reveal>
-          <div className="rounded-[2rem] border border-ink/8 bg-surface p-8 md:p-10">
-            <h2 className="font-serif text-2xl text-ink">Simulator rată</h2>
-            <p className="mt-2 text-sm text-graphite">Ajustează valorile pentru o estimare rapidă.</p>
-
-            <div className="mt-8 space-y-8">
-              {[
-                { label: "Preț mașină", value: "18.500 €", hint: "Selectează din stoc" },
-                { label: "Avans", value: "20%", hint: "Recomandat: 15–30%" },
-                { label: "Perioadă", value: "60 luni", hint: "Între 12 și 84 luni" },
-              ].map((f) => (
-                <div key={f.label}>
-                  <div className="flex items-center justify-between">
-                    <label className="text-[11px] tracking-[0.2em] uppercase text-graphite">{f.label}</label>
-                    <span className="font-serif text-lg text-ink">{f.value}</span>
-                  </div>
-                  <div className="mt-3 h-1.5 rounded-full bg-ink/10">
-                    <div className="h-full w-1/3 rounded-full bg-ink" />
-                  </div>
-                  <p className="mt-2 text-xs text-graphite">{f.hint}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-10 flex items-end justify-between border-t border-ink/10 pt-8">
-              <div>
-                <p className="text-[11px] tracking-[0.2em] uppercase text-graphite">Rata estimată</p>
-                <p className="mt-2 font-serif text-5xl text-ink">247 €<span className="text-lg text-graphite"> / lună</span></p>
-              </div>
-              <button className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-sm text-canvas transition-transform hover:-translate-y-0.5">
-                Aplică acum <ArrowUpRight size={15} />
-              </button>
-            </div>
+      <section className="mx-auto grid max-w-[1320px] gap-6 px-4 pb-20 lg:grid-cols-[1.5fr_1fr] md:px-8">
+        {/* Calculator */}
+        <div className="rounded-2xl border border-ink/10 bg-surface p-6 md:p-9">
+          <div className="space-y-7">
+            <SliderField
+              id="calc-pret"
+              label="Prețul mașinii"
+              min={5000}
+              max={50000}
+              step={500}
+              value={price}
+              onChange={setPrice}
+              display={formatPrice(price)}
+              hint="Poți alege orice mașină din stoc sau un preț aproximativ."
+            />
+            <SliderField
+              id="calc-avans"
+              label="Avans"
+              min={FINANCE.minDownPct}
+              max={FINANCE.maxDownPct}
+              step={5}
+              value={downPct}
+              onChange={setDownPct}
+              display={`${downPct}% (${formatPrice(downAmount)})`}
+              hint={`Minim ${FINANCE.minDownPct}% din prețul mașinii.`}
+            />
+            <SliderField
+              id="calc-perioada"
+              label="Perioada"
+              min={FINANCE.minMonths}
+              max={FINANCE.maxMonths}
+              step={12}
+              value={months}
+              onChange={setMonths}
+              display={`${months} de luni`}
+              hint={`Între ${FINANCE.minMonths} și ${FINANCE.maxMonths} de luni (${FINANCE.maxMonths / 12} ani).`}
+            />
           </div>
-        </Reveal>
 
+          {/* Result */}
+          <div className="mt-9 rounded-xl bg-brand-soft p-6" role="status" aria-live="polite">
+            <p className="text-[15px] font-medium text-ink">Rata ta lunară, orientativ</p>
+            <p className="mt-1 text-5xl font-bold tracking-tight text-ink">
+              {rate} €<span className="text-xl font-semibold text-graphite"> / lună</span>
+            </p>
+            <dl className="mt-5 space-y-1.5 text-[15px] text-ink">
+              <div className="flex justify-between gap-4">
+                <dt className="text-graphite">Avans</dt>
+                <dd className="font-semibold">{formatPrice(downAmount)}</dd>
+              </div>
+              <div className="flex justify-between gap-4">
+                <dt className="text-graphite">Sumă finanțată</dt>
+                <dd className="font-semibold">{formatPrice(financed)}</dd>
+              </div>
+              <div className="flex justify-between gap-4">
+                <dt className="text-graphite">Cost total estimat</dt>
+                <dd className="font-semibold">{formatPrice(total)}</dd>
+              </div>
+            </dl>
+            <p className="mt-4 text-[13px] leading-relaxed text-graphite">
+              Calcul orientativ, cu o dobândă exemplu de {(FINANCE.annualRate * 100).toFixed(1)}%
+              pe an. Oferta finală depinde de bancă și de dosarul tău — o primești
+              gratuit, fără nicio obligație.
+            </p>
+          </div>
+
+          <Link
+            to="/contact"
+            className="mt-6 inline-flex min-h-14 w-full items-center justify-center rounded-full bg-brand px-8 text-[17px] font-semibold text-white transition-colors duration-150 hover:bg-brand-strong sm:w-auto"
+          >
+            Cere oferta exactă
+          </Link>
+        </div>
+
+        {/* Benefits */}
         <div className="space-y-4">
           {[
-            { icon: Clock, t: "Aprobare în 48h", d: "Analizăm dosarul rapid, împreună cu partenerii bancari." },
-            { icon: TrendingDown, t: "Avans flexibil", d: "De la 15% avans, adaptat bugetului tău." },
-            { icon: Wallet, t: "Fără comision", d: "Nu percepem comision de analiză sau intermediere." },
-            { icon: ShieldCheck, t: "Transparență totală", d: "Vezi DAE, dobândă și costuri înainte să semnezi." },
-          ].map(({ icon: I, t, d }, i) => (
-            <Reveal key={t} delay={i * 0.05}>
-              <div className="flex items-start gap-4 rounded-2xl border border-ink/8 bg-surface p-5">
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ink text-canvas">
-                  <I size={16} strokeWidth={1.5} />
-                </span>
-                <div>
-                  <p className="font-medium text-ink">{t}</p>
-                  <p className="mt-1 text-sm text-graphite">{d}</p>
-                </div>
+            { icon: Clock, t: "Răspuns în ~48 de ore", d: "Trimitem dosarul la mai multe bănci deodată și revenim rapid cu oferta." },
+            { icon: TrendingDown, t: "Avans de la 15%", d: "Alegi avansul care se potrivește bugetului tău." },
+            { icon: Wallet, t: "Fără comision de analiză", d: "Nu percepem niciun cost pentru întocmirea dosarului." },
+            { icon: ShieldCheck, t: "Totul transparent", d: "Vezi dobânda, DAE și toate costurile înainte să semnezi ceva." },
+          ].map(({ icon: Icon, t, d }) => (
+            <div key={t} className="flex items-start gap-4 rounded-xl border border-ink/10 bg-surface p-5">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-brand-soft text-brand">
+                <Icon size={20} strokeWidth={1.75} aria-hidden />
+              </span>
+              <div>
+                <h2 className="text-[16px] font-semibold text-ink">{t}</h2>
+                <p className="mt-1 text-[15px] leading-relaxed text-graphite">{d}</p>
               </div>
-            </Reveal>
+            </div>
           ))}
+
+          <div className="rounded-xl border border-ink/10 bg-surface p-5">
+            <h2 className="text-[16px] font-semibold text-ink">Cum funcționează</h2>
+            <ol className="mt-3 space-y-3 text-[15px] leading-relaxed text-graphite">
+              <li className="flex gap-3">
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-[13px] font-semibold text-white">1</span>
+                Alegi mașina și ne spui ce avans și perioadă ți se potrivesc.
+              </li>
+              <li className="flex gap-3">
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-[13px] font-semibold text-white">2</span>
+                Ne trimiți datele de contact — noi pregătim dosarul pentru bănci.
+              </li>
+              <li className="flex gap-3">
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-[13px] font-semibold text-white">3</span>
+                Primești oferta în ~48h. Dacă îți convine, semnezi și pleci cu mașina.
+              </li>
+            </ol>
+          </div>
         </div>
       </section>
     </div>
