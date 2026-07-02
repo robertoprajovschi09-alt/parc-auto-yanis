@@ -16,6 +16,7 @@ export const site = {
   scheduleShort: "L–S, 09–19",
   instagram: "https://www.instagram.com/parcautoyanis",
   facebook: "https://www.facebook.com/parcautoyanis",
+  mapsUrl: "https://maps.google.com/?q=Str.+Isaccei+12,+Tulcea",
 } as const;
 
 /** WhatsApp deep link with a prefilled Romanian message. */
