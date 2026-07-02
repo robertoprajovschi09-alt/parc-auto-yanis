@@ -89,6 +89,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "Marketplace premium de mașini rulate verificate. Istoric complet, kilometraj garantat, finanțare personalizată." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Parc Auto Yanis — Mașini atent selectate" },
+      { name: "twitter:description", content: "Marketplace premium de mașini rulate verificate. Istoric complet, kilometraj garantat, finanțare personalizată." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/52074c0f-f97d-456d-9faa-d840eaa2e8e6/id-preview-1657ce94--028140b0-9592-4b91-870c-e3339a8cb49e.lovable.app-1782982483854.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/52074c0f-f97d-456d-9faa-d840eaa2e8e6/id-preview-1657ce94--028140b0-9592-4b91-870c-e3339a8cb49e.lovable.app-1782982483854.png" },
     ],
     links: [
       {
