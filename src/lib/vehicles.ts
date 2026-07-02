@@ -3,6 +3,9 @@ import audi from "@/assets/car-audi.jpg";
 import vw from "@/assets/car-vw.jpg";
 import skoda from "@/assets/car-skoda.jpg";
 import mercedesHero from "@/assets/mercedes/470211463.jpg.asset.json";
+import { mercedesPhotos, mercedesFeatures } from "@/lib/mercedes";
+
+export type VehiclePhoto = { src: string; alt: string };
 
 export type Vehicle = {
   slug: string;
@@ -15,7 +18,17 @@ export type Vehicle = {
   power: string;
   price: number;
   image: string;
+  location: string;
   tag?: string;
+  /* Optional detail data — the vehicle page only renders what exists.
+     No placeholders, no "—" rows, no invented equipment. */
+  engine?: string;
+  body?: string;
+  color?: string;
+  drive?: string;
+  photos?: VehiclePhoto[];
+  features?: Record<string, string[]>;
+  description?: string[];
 };
 
 export const vehicles: Vehicle[] = [
@@ -30,7 +43,19 @@ export const vehicles: Vehicle[] = [
     power: "122 CP",
     price: 16500,
     image: mercedesHero.url,
+    location: "Tulcea",
     tag: "Recent adăugat",
+    engine: "1.6 Turbo",
+    body: "Sedan",
+    color: "Negru Cosmos",
+    drive: "Tracțiune față",
+    photos: mercedesPhotos,
+    features: mercedesFeatures,
+    description: [
+      "Mercedes-Benz CLA 180 din 2016, benzină, cutie automată. Mașina a fost verificată tehnic de echipa noastră, iar kilometrajul este garantat — la vânzare primești raportul complet de istoric.",
+      "Interior în stare foarte bună, cu Apple CarPlay, navigație, lumini ambientale, scaune încălzite și climatizare automată pe două zone. Dotările complete sunt listate mai jos.",
+      "Poți vedea mașina la sediul nostru din Tulcea, de luni până sâmbătă. Te ajutăm și cu finanțarea — răspuns de la bancă în aproximativ 48 de ore.",
+    ],
   },
   {
     slug: "bmw-320d-2018",
@@ -43,7 +68,7 @@ export const vehicles: Vehicle[] = [
     power: "190 CP",
     price: 19900,
     image: bmw,
-    tag: "Rezervat curând",
+    location: "Tulcea",
   },
   {
     slug: "audi-a5-2017",
@@ -56,6 +81,7 @@ export const vehicles: Vehicle[] = [
     power: "190 CP",
     price: 21500,
     image: audi,
+    location: "Tulcea",
   },
   {
     slug: "vw-arteon-2019",
@@ -68,6 +94,7 @@ export const vehicles: Vehicle[] = [
     power: "240 CP",
     price: 24800,
     image: vw,
+    location: "Tulcea",
   },
   {
     slug: "skoda-superb-2020",
@@ -80,6 +107,7 @@ export const vehicles: Vehicle[] = [
     power: "200 CP",
     price: 22900,
     image: skoda,
+    location: "Tulcea",
   },
   {
     slug: "audi-a5-white-2018",
@@ -92,6 +120,7 @@ export const vehicles: Vehicle[] = [
     power: "252 CP",
     price: 26400,
     image: audi,
+    location: "Tulcea",
   },
   {
     slug: "bmw-320d-touring-2019",
@@ -104,6 +133,7 @@ export const vehicles: Vehicle[] = [
     power: "184 CP",
     price: 20500,
     image: bmw,
+    location: "Tulcea",
   },
   {
     slug: "vw-arteon-shooting-2021",
@@ -116,6 +146,7 @@ export const vehicles: Vehicle[] = [
     power: "200 CP",
     price: 29900,
     image: vw,
+    location: "Tulcea",
   },
   {
     slug: "skoda-superb-scout-2019",
@@ -128,6 +159,7 @@ export const vehicles: Vehicle[] = [
     power: "190 CP",
     price: 19500,
     image: skoda,
+    location: "Tulcea",
   },
 ];
 
