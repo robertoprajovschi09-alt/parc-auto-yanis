@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform, useMotionValueEvent } from "motion/react";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const links = [
   { to: "/", label: "Acasă" },
@@ -18,17 +18,12 @@ export function SiteNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
   const isHome = pathname === "/";
-  // Over the dark home hero, invert nav content until user scrolls past it.
-  const [overDark, setOverDark] = useState(isHome);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useState(() => {
-    // sync when route changes handled via effect below
-  });
-  // simple scroll listener via motion value
-  scrollY.on("change", (v) => {
-    const next = isHome && v < 120;
-    if (next !== overDark) setOverDark(next);
-  });
+  const [scrolled, setScrolled] = useState(false);
+  useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 120));
+  useEffect(() => {
+    if (typeof window !== "undefined") setScrolled(window.scrollY > 120);
+  }, [pathname]);
+  const overDark = isHome && !scrolled;
 
   return (
     <motion.header
