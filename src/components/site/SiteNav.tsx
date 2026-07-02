@@ -1,110 +1,108 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "motion/react";
-import { Menu, X } from "lucide-react";
+import { Menu, Phone, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { site } from "@/lib/site";
 
 const links = [
   { to: "/", label: "Acasă" },
-  { to: "/stoc", label: "Stoc" },
+  { to: "/stoc", label: "Mașini în stoc" },
   { to: "/finantare", label: "Finanțare" },
-  { to: "/despre", label: "Despre" },
+  { to: "/despre", label: "Despre noi" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
 export function SiteNav() {
-  const { scrollY } = useScroll();
-  const bg = useTransform(scrollY, [0, 120], ["rgba(247,247,245,0)", "rgba(247,247,245,0.72)"]);
-  const border = useTransform(scrollY, [0, 120], ["rgba(0,0,0,0)", "rgba(0,0,0,0.06)"]);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
-  const isHome = pathname === "/";
-  const [scrolled, setScrolled] = useState(false);
-  useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 120));
+
+  // Close the mobile menu on navigation
   useEffect(() => {
-    if (typeof window !== "undefined") setScrolled(window.scrollY > 120);
+    setOpen(false);
   }, [pathname]);
-  const overDark = isHome && !scrolled;
 
   return (
-    <motion.header
-      style={{ backgroundColor: bg, borderColor: border }}
-      className={`fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl backdrop-saturate-150 transition-colors duration-500 ${
-        overDark ? "text-canvas" : "text-ink"
-      }`}
-    >
-      <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-6 md:h-20 md:px-10">
-        <Link to="/" className="group flex items-center gap-2.5">
-          <span className={`grid h-8 w-8 place-items-center rounded-full text-[10px] font-medium tracking-[0.2em] ${overDark ? "bg-canvas text-ink" : "bg-ink text-canvas"}`}>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-ink/8 bg-surface/95 backdrop-blur-sm">
+      <div className="mx-auto flex h-16 max-w-[1320px] items-center justify-between px-4 md:h-[72px] md:px-8">
+        <Link to="/" className="flex min-h-11 items-center gap-2.5" aria-label="Parc Auto Yanis — prima pagină">
+          <span className="grid h-9 w-9 place-items-center rounded-full bg-ink text-[10px] font-semibold tracking-[0.15em] text-white">
             PY
           </span>
-          <span className="font-serif text-lg leading-none tracking-tight">
-            Parc Auto <span className={`italic ${overDark ? "text-white/60" : "text-graphite"}`}>Yanis</span>
+          <span className="text-[17px] font-semibold tracking-tight text-ink">
+            Parc Auto Yanis
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Meniu principal">
           {links.map((l) => {
             const active = l.to === "/" ? pathname === "/" : pathname.startsWith(l.to);
             return (
               <Link
                 key={l.to}
                 to={l.to}
-                className={`relative rounded-full px-4 py-2 text-sm transition-colors ${
+                aria-current={active ? "page" : undefined}
+                className={`flex min-h-11 items-center rounded-full px-4 text-[15px] transition-colors duration-150 ${
                   active
-                    ? overDark ? "text-canvas" : "text-ink"
-                    : overDark ? "text-white/60 hover:text-canvas" : "text-graphite hover:text-ink"
+                    ? "bg-ink/5 font-semibold text-ink"
+                    : "font-medium text-graphite hover:bg-ink/5 hover:text-ink"
                 }`}
               >
-                {active && (
-                  <motion.span
-                    layoutId="nav-pill"
-                    className={`absolute inset-0 -z-10 rounded-full ${overDark ? "bg-white/10" : "bg-ink/5"}`}
-                    transition={{ type: "spring", stiffness: 400, damping: 40 }}
-                  />
-                )}
                 {l.label}
               </Link>
             );
           })}
         </nav>
 
-        <div className="hidden md:block">
-          <Link
-            to="/contact"
-            className={`group inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm transition-transform hover:-translate-y-0.5 ${
-              overDark ? "bg-canvas text-ink" : "bg-ink text-canvas"
-            }`}
+        <div className="flex items-center gap-2">
+          <a
+            href={site.phoneHref}
+            className="hidden min-h-12 items-center gap-2 rounded-full bg-brand px-5 text-[15px] font-semibold text-white transition-colors duration-150 hover:bg-brand-strong sm:inline-flex"
           >
-            Programează
-            <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
-          </Link>
-        </div>
+            <Phone size={16} aria-hidden />
+            {site.phone}
+          </a>
 
-        <button
-          aria-label="Meniu"
-          className={`grid h-10 w-10 place-items-center rounded-full border backdrop-blur md:hidden ${overDark ? "border-white/20 bg-white/10" : "border-ink/10 bg-white/60"}`}
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X size={18} /> : <Menu size={18} />}
-        </button>
+          <button
+            type="button"
+            aria-label={open ? "Închide meniul" : "Deschide meniul"}
+            aria-expanded={open}
+            aria-controls="meniu-mobil"
+            className="grid h-12 w-12 place-items-center rounded-full border border-ink/10 bg-surface text-ink lg:hidden"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </div>
 
       {open && (
-        <div className="border-t border-ink/5 bg-canvas/95 backdrop-blur-xl md:hidden">
-          <div className="mx-auto flex max-w-[1400px] flex-col gap-1 px-6 py-4">
-            {links.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                onClick={() => setOpen(false)}
-                className="rounded-xl px-3 py-3 text-base text-ink hover:bg-ink/5"
-              >
-                {l.label}
-              </Link>
-            ))}
-          </div>
+        <div id="meniu-mobil" className="border-t border-ink/8 bg-surface lg:hidden">
+          <nav className="mx-auto flex max-w-[1320px] flex-col px-4 py-3" aria-label="Meniu mobil">
+            {links.map((l) => {
+              const active = l.to === "/" ? pathname === "/" : pathname.startsWith(l.to);
+              return (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  onClick={() => setOpen(false)}
+                  aria-current={active ? "page" : undefined}
+                  className={`flex min-h-13 items-center rounded-xl px-4 text-[17px] ${
+                    active ? "bg-ink/5 font-semibold text-ink" : "font-medium text-ink hover:bg-ink/5"
+                  }`}
+                >
+                  {l.label}
+                </Link>
+              );
+            })}
+            <a
+              href={site.phoneHref}
+              className="mt-3 mb-2 inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-brand px-5 text-[17px] font-semibold text-white"
+            >
+              <Phone size={18} aria-hidden />
+              Sună-ne: {site.phone}
+            </a>
+          </nav>
         </div>
       )}
-    </motion.header>
+    </header>
   );
 }
