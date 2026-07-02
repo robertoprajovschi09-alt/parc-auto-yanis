@@ -12,10 +12,6 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import "@fontsource-variable/inter/index.css";
-// Instrument Serif is being phased out (docs/AUDIT.md B1); imports stay until
-// the last page stops using .font-serif, then get removed with the dependency.
-import "@fontsource/instrument-serif/400.css";
-import "@fontsource/instrument-serif/400-italic.css";
 import { SiteNav } from "@/components/site/SiteNav";
 import { SiteFooter } from "@/components/site/SiteFooter";
 
@@ -85,16 +81,36 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Parc Auto Yanis — Mașini rulate verificate, în Tulcea" },
-      { name: "description", content: "Mașini rulate verificate, cu istoric complet și kilometraj garantat. Finanțare cu aprobare rapidă. Parc Auto Yanis, Tulcea." },
+      {
+        name: "description",
+        content:
+          "Mașini rulate verificate, cu istoric complet și kilometraj garantat. Finanțare cu aprobare rapidă. Parc Auto Yanis, Tulcea.",
+      },
       { name: "author", content: "Parc Auto Yanis" },
       { property: "og:title", content: "Parc Auto Yanis — Mașini rulate verificate, în Tulcea" },
-      { property: "og:description", content: "Mașini rulate verificate, cu istoric complet și kilometraj garantat. Finanțare cu aprobare rapidă." },
+      {
+        property: "og:description",
+        content:
+          "Mașini rulate verificate, cu istoric complet și kilometraj garantat. Finanțare cu aprobare rapidă.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Parc Auto Yanis — Mașini rulate verificate, în Tulcea" },
-      { name: "twitter:description", content: "Mașini rulate verificate, cu istoric complet și kilometraj garantat. Finanțare cu aprobare rapidă." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/52074c0f-f97d-456d-9faa-d840eaa2e8e6/id-preview-1657ce94--028140b0-9592-4b91-870c-e3339a8cb49e.lovable.app-1782982483854.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/52074c0f-f97d-456d-9faa-d840eaa2e8e6/id-preview-1657ce94--028140b0-9592-4b91-870c-e3339a8cb49e.lovable.app-1782982483854.png" },
+      {
+        name: "twitter:description",
+        content:
+          "Mașini rulate verificate, cu istoric complet și kilometraj garantat. Finanțare cu aprobare rapidă.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/52074c0f-f97d-456d-9faa-d840eaa2e8e6/id-preview-1657ce94--028140b0-9592-4b91-870c-e3339a8cb49e.lovable.app-1782982483854.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/52074c0f-f97d-456d-9faa-d840eaa2e8e6/id-preview-1657ce94--028140b0-9592-4b91-870c-e3339a8cb49e.lovable.app-1782982483854.png",
+      },
     ],
     links: [
       {

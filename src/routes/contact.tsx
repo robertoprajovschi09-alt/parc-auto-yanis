@@ -1,6 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Phone, Mail, MapPin, Clock, Instagram, Facebook, MessageCircle, ChevronDown } from "lucide-react";
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  Instagram,
+  Facebook,
+  MessageCircle,
+  ChevronDown,
+} from "lucide-react";
 import { site, whatsappLink } from "@/lib/site";
 import { vehicles } from "@/lib/vehicles";
 
@@ -16,7 +25,11 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — Parc Auto Yanis" },
-      { name: "description", content: "Programează o vizionare sau trimite-ne un mesaj. Ne găsești în Tulcea, de luni până sâmbătă, 09:00–19:00." },
+      {
+        name: "description",
+        content:
+          "Programează o vizionare sau trimite-ne un mesaj. Ne găsești în Tulcea, de luni până sâmbătă, 09:00–19:00.",
+      },
       { property: "og:title", content: "Contact — Parc Auto Yanis" },
       { property: "og:description", content: "Programează o vizionare sau trimite-ne un mesaj." },
     ],
@@ -49,7 +62,9 @@ function Contact() {
 
   const composedMessage = () => {
     const car = vehicles.find((v) => v.slug === masinaSel);
-    const carLine = car ? `Mașina care mă interesează: ${car.brand} ${car.model} (${car.year}).` : "";
+    const carLine = car
+      ? `Mașina care mă interesează: ${car.brand} ${car.model} (${car.year}).`
+      : "";
     return [`Bună ziua! Sunt ${nume.trim()}.`, carLine, mesaj.trim(), `Telefon: ${telefon.trim()}`]
       .filter(Boolean)
       .join("\n");
@@ -72,9 +87,8 @@ function Contact() {
       <section className="mx-auto max-w-[1320px] px-4 pb-10 md:px-8">
         <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">Contact</h1>
         <p className="mt-3 max-w-2xl text-base leading-relaxed text-graphite md:text-lg">
-          Cel mai rapid ne prinzi la telefon. Dacă preferi să scrii, completează
-          formularul și trimite-l pe WhatsApp sau pe email — răspundem în cel
-          mult 24 de ore.
+          Cel mai rapid ne prinzi la telefon. Dacă preferi să scrii, completează formularul și
+          trimite-l pe WhatsApp sau pe email — răspundem în cel mult 24 de ore.
         </p>
       </section>
 
@@ -139,7 +153,10 @@ function Contact() {
 
             <div className="sm:col-span-2">
               <label htmlFor="c-mesaj" className="mb-2 block text-base font-medium text-ink">
-                Mesajul tău <span className="text-destructive" aria-hidden>*</span>
+                Mesajul tău{" "}
+                <span className="text-destructive" aria-hidden>
+                  *
+                </span>
               </label>
               <textarea
                 id="c-mesaj"
@@ -181,13 +198,19 @@ function Contact() {
           </div>
 
           {sentVia && (
-            <div role="status" className="mt-6 rounded-xl bg-brand-soft p-5 text-[15px] leading-relaxed text-ink">
+            <div
+              role="status"
+              className="mt-6 rounded-xl bg-brand-soft p-5 text-[15px] leading-relaxed text-ink"
+            >
               <strong>Mesajul tău este pregătit.</strong>{" "}
               {sentVia === "whatsapp"
                 ? "S-a deschis WhatsApp cu mesajul completat — mai trebuie doar să apeși „Trimite” acolo."
                 : "S-a deschis aplicația de email cu mesajul completat — mai trebuie doar să apeși „Trimite” acolo."}{" "}
               Dacă nu s-a deschis nimic, sună-ne direct la{" "}
-              <a href={site.phoneHref} className="font-semibold text-brand underline underline-offset-4">
+              <a
+                href={site.phoneHref}
+                className="font-semibold text-brand underline underline-offset-4"
+              >
                 {site.phone}
               </a>
               .
@@ -198,17 +221,28 @@ function Contact() {
         {/* Contact info */}
         <div className="space-y-3">
           <InfoCard icon={Phone} title="Telefon" hint={site.schedule}>
-            <a href={site.phoneHref} className="font-semibold text-ink underline-offset-4 hover:underline">
+            <a
+              href={site.phoneHref}
+              className="font-semibold text-ink underline-offset-4 hover:underline"
+            >
               {site.phone}
             </a>
           </InfoCard>
           <InfoCard icon={Mail} title="Email" hint="Răspundem în cel mult 24h">
-            <a href={`mailto:${site.email}`} className="font-semibold text-ink underline-offset-4 hover:underline">
+            <a
+              href={`mailto:${site.email}`}
+              className="font-semibold text-ink underline-offset-4 hover:underline"
+            >
               {site.email}
             </a>
           </InfoCard>
           <InfoCard icon={MapPin} title="Adresă" hint="Parcare proprie pentru clienți">
-            <a href={site.mapsUrl} target="_blank" rel="noreferrer" className="font-semibold text-ink underline-offset-4 hover:underline">
+            <a
+              href={site.mapsUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="font-semibold text-ink underline-offset-4 hover:underline"
+            >
               {site.address}
             </a>
           </InfoCard>
@@ -266,7 +300,12 @@ function Field({
   return (
     <div>
       <label htmlFor={id} className="mb-2 block text-base font-medium text-ink">
-        {label} {required && <span className="text-destructive" aria-hidden>*</span>}
+        {label}{" "}
+        {required && (
+          <span className="text-destructive" aria-hidden>
+            *
+          </span>
+        )}
       </label>
       <input
         id={id}

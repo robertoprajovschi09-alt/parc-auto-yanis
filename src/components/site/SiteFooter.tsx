@@ -15,9 +15,8 @@ export function SiteFooter() {
               <span className="text-xl font-semibold tracking-tight">Parc Auto Yanis</span>
             </div>
             <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-white/75">
-              Mașini rulate verificate tehnic, cu istoric complet și kilometraj
-              garantat. Te ajutăm și cu finanțarea, de la primul telefon până la
-              înmatriculare.
+              Mașini rulate verificate tehnic, cu istoric complet și kilometraj garantat. Te ajutăm
+              și cu finanțarea, de la primul telefon până la înmatriculare.
             </p>
             <div className="mt-7 flex items-center gap-3">
               <a
@@ -42,12 +41,42 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-white/60">Navigare</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-white/60">
+              Navigare
+            </h2>
             <ul className="mt-5 space-y-1 text-[15px]">
-              <li><Link to="/stoc" className="inline-flex min-h-10 items-center text-white/85 hover:text-white hover:underline">Mașini în stoc</Link></li>
-              <li><Link to="/finantare" className="inline-flex min-h-10 items-center text-white/85 hover:text-white hover:underline">Finanțare</Link></li>
-              <li><Link to="/despre" className="inline-flex min-h-10 items-center text-white/85 hover:text-white hover:underline">Despre noi</Link></li>
-              <li><Link to="/contact" className="inline-flex min-h-10 items-center text-white/85 hover:text-white hover:underline">Contact</Link></li>
+              <li>
+                <Link
+                  to="/stoc"
+                  className="inline-flex min-h-10 items-center text-white/85 hover:text-white hover:underline"
+                >
+                  Mașini în stoc
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/finantare"
+                  className="inline-flex min-h-10 items-center text-white/85 hover:text-white hover:underline"
+                >
+                  Finanțare
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/despre"
+                  className="inline-flex min-h-10 items-center text-white/85 hover:text-white hover:underline"
+                >
+                  Despre noi
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className="inline-flex min-h-10 items-center text-white/85 hover:text-white hover:underline"
+                >
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -55,13 +84,19 @@ export function SiteFooter() {
             <h2 className="text-sm font-semibold uppercase tracking-wide text-white/60">Contact</h2>
             <ul className="mt-5 space-y-3 text-[15px] text-white/85">
               <li>
-                <a href={site.phoneHref} className="inline-flex min-h-10 items-center gap-3 hover:text-white hover:underline">
+                <a
+                  href={site.phoneHref}
+                  className="inline-flex min-h-10 items-center gap-3 hover:text-white hover:underline"
+                >
                   <Phone size={16} className="shrink-0" aria-hidden />
                   {site.phone}
                 </a>
               </li>
               <li>
-                <a href={`mailto:${site.email}`} className="inline-flex min-h-10 items-center gap-3 hover:text-white hover:underline">
+                <a
+                  href={`mailto:${site.email}`}
+                  className="inline-flex min-h-10 items-center gap-3 hover:text-white hover:underline"
+                >
                   <Mail size={16} className="shrink-0" aria-hidden />
                   {site.email}
                 </a>

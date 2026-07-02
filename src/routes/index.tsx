@@ -49,9 +49,9 @@ function Hero() {
             Mașini rulate verificate, cu istoric complet.
           </h1>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-graphite">
-            Fiecare mașină din stocul nostru este verificată tehnic, are
-            kilometrajul garantat și raport de istoric. Vezi mașinile, calculează
-            rata și programează o vizionare în {site.city}.
+            Fiecare mașină din stocul nostru este verificată tehnic, are kilometrajul garantat și
+            raport de istoric. Vezi mașinile, calculează rata și programează o vizionare în{" "}
+            {site.city}.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -221,14 +221,17 @@ function WhyUs() {
   ];
 
   return (
-    <section className="border-y border-ink/8 bg-surface px-4 py-14 md:px-8 md:py-20" aria-labelledby="deceyanis-titlu">
+    <section
+      className="border-y border-ink/8 bg-surface px-4 py-14 md:px-8 md:py-20"
+      aria-labelledby="deceyanis-titlu"
+    >
       <div className="mx-auto max-w-[1320px]">
         <h2 id="deceyanis-titlu" className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
           De ce să cumperi de la noi
         </h2>
         <p className="mt-2 max-w-2xl text-base text-graphite md:text-lg">
-          Suntem în piață de 9 ani și am vândut peste 100 de mașini. Regula e
-          simplă: vindem doar mașini pe care le-am cumpăra și noi.
+          Suntem în piață de 9 ani și am vândut peste 100 de mașini. Regula e simplă: vindem doar
+          mașini pe care le-am cumpăra și noi.
         </p>
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -265,12 +268,15 @@ function Financing() {
         </div>
 
         <div className="order-1 lg:order-2">
-          <h2 id="finantare-titlu" className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
+          <h2
+            id="finantare-titlu"
+            className="text-3xl font-bold tracking-tight text-ink md:text-4xl"
+          >
             Finanțare fără drumuri și fără bătăi de cap
           </h2>
           <p className="mt-4 max-w-lg text-base leading-relaxed text-graphite md:text-lg">
-            Ne ocupăm noi de dosarul de finanțare, cu mai multe bănci și IFN-uri.
-            Tu alegi mașina, noi îți aducem cea mai bună ofertă de rate.
+            Ne ocupăm noi de dosarul de finanțare, cu mai multe bănci și IFN-uri. Tu alegi mașina,
+            noi îți aducem cea mai bună ofertă de rate.
           </p>
 
           <ul className="mt-7 space-y-3 text-base text-ink">
@@ -289,10 +295,10 @@ function Financing() {
 
           {example && exampleRate && (
             <p className="mt-6 rounded-xl border border-ink/10 bg-surface p-4 text-[15px] leading-relaxed text-graphite">
-              De exemplu: {example.brand} {example.model} la {formatPrice(example.price)},
-              cu avans de {FINANCE.defaultDownPct}% pe {FINANCE.defaultMonths} de luni ≈{" "}
-              <strong className="text-ink">{exampleRate} € / lună</strong>. Calcul orientativ,
-              cu dobândă exemplu de {(FINANCE.annualRate * 100).toFixed(1)}% pe an.
+              De exemplu: {example.brand} {example.model} la {formatPrice(example.price)}, cu avans
+              de {FINANCE.defaultDownPct}% pe {FINANCE.defaultMonths} de luni ≈{" "}
+              <strong className="text-ink">{exampleRate} € / lună</strong>. Calcul orientativ, cu
+              dobândă exemplu de {(FINANCE.annualRate * 100).toFixed(1)}% pe an.
             </p>
           )}
 
@@ -332,7 +338,10 @@ function Testimonials() {
   ];
 
   return (
-    <section className="border-y border-ink/8 bg-surface px-4 py-14 md:px-8 md:py-20" aria-labelledby="pareri-titlu">
+    <section
+      className="border-y border-ink/8 bg-surface px-4 py-14 md:px-8 md:py-20"
+      aria-labelledby="pareri-titlu"
+    >
       <div className="mx-auto max-w-[1320px]">
         <h2 id="pareri-titlu" className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
           Ce spun clienții noștri
@@ -340,7 +349,10 @@ function Testimonials() {
 
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {items.map((t) => (
-            <figure key={t.name} className="flex h-full flex-col rounded-xl border border-ink/10 bg-canvas p-6">
+            <figure
+              key={t.name}
+              className="flex h-full flex-col rounded-xl border border-ink/10 bg-canvas p-6"
+            >
               <div className="flex gap-1 text-brand" aria-label="5 din 5 stele">
                 {Array.from({ length: 5 }).map((_, k) => (
                   <Star key={k} size={16} fill="currentColor" strokeWidth={0} aria-hidden />
@@ -420,17 +432,25 @@ function ContactBand() {
       <div className="mx-auto max-w-[1320px] rounded-2xl border border-ink/10 bg-surface p-8 md:p-12">
         <div className="grid items-center gap-8 lg:grid-cols-[1.3fr_1fr]">
           <div>
-            <h2 id="contact-titlu" className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
+            <h2
+              id="contact-titlu"
+              className="text-3xl font-bold tracking-tight text-ink md:text-4xl"
+            >
               Vino să vezi mașinile
             </h2>
             <p className="mt-3 max-w-lg text-base leading-relaxed text-graphite md:text-lg">
-              Te așteptăm la sediul nostru din {site.city}. Dacă ne suni înainte,
-              pregătim mașinile care te interesează pentru probă.
+              Te așteptăm la sediul nostru din {site.city}. Dacă ne suni înainte, pregătim mașinile
+              care te interesează pentru probă.
             </p>
             <ul className="mt-6 space-y-2 text-base text-ink">
               <li className="flex items-center gap-3">
                 <MapPin size={18} className="shrink-0 text-brand" aria-hidden />
-                <a href={site.mapsUrl} target="_blank" rel="noreferrer" className="underline-offset-4 hover:underline">
+                <a
+                  href={site.mapsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline-offset-4 hover:underline"
+                >
                   {site.address}
                 </a>
               </li>

@@ -29,9 +29,16 @@ export const Route = createFileRoute("/stoc")({
   head: () => ({
     meta: [
       { title: "Mașini în stoc — Parc Auto Yanis" },
-      { name: "description", content: "Toate mașinile disponibile acum: verificate tehnic, cu istoric complet și kilometraj garantat. Filtrează după marcă, preț, combustibil sau an." },
+      {
+        name: "description",
+        content:
+          "Toate mașinile disponibile acum: verificate tehnic, cu istoric complet și kilometraj garantat. Filtrează după marcă, preț, combustibil sau an.",
+      },
       { property: "og:title", content: "Mașini în stoc — Parc Auto Yanis" },
-      { property: "og:description", content: "Toate mașinile disponibile acum, verificate și cu istoric complet." },
+      {
+        property: "og:description",
+        content: "Toate mașinile disponibile acum, verificate și cu istoric complet.",
+      },
     ],
   }),
   component: Inventory,
@@ -41,7 +48,11 @@ const brands = [...new Set(vehicles.map((v) => v.brand))].sort();
 
 const priceBands = [
   { value: "sub-20000", label: "Sub 20.000 €", test: (p: number) => p < 20000 },
-  { value: "20000-25000", label: "20.000 – 25.000 €", test: (p: number) => p >= 20000 && p <= 25000 },
+  {
+    value: "20000-25000",
+    label: "20.000 – 25.000 €",
+    test: (p: number) => p >= 20000 && p <= 25000,
+  },
   { value: "peste-25000", label: "Peste 25.000 €", test: (p: number) => p > 25000 },
 ];
 
@@ -154,9 +165,7 @@ function Inventory() {
       {/* Header + filters */}
       <section className="border-b border-ink/8 bg-surface px-4 pt-28 pb-10 md:px-8 md:pt-36">
         <div className="mx-auto max-w-[1320px]">
-          <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
-            Mașini în stoc
-          </h1>
+          <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">Mașini în stoc</h1>
           <p className="mt-2 text-base text-graphite md:text-lg">
             {vehicles.length} mașini disponibile, toate verificate tehnic și cu istoric complet.
           </p>
@@ -180,36 +189,67 @@ function Inventory() {
 
           {/* Filters */}
           <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            <FilterSelect id="f-marca" label="Marcă" value={search.marca ?? ""} onChange={(v) => setFilter("marca", v)}>
+            <FilterSelect
+              id="f-marca"
+              label="Marcă"
+              value={search.marca ?? ""}
+              onChange={(v) => setFilter("marca", v)}
+            >
               <option value="">Toate mărcile</option>
               {brands.map((b) => (
-                <option key={b} value={b}>{b}</option>
+                <option key={b} value={b}>
+                  {b}
+                </option>
               ))}
             </FilterSelect>
 
-            <FilterSelect id="f-pret" label="Preț" value={search.pret ?? ""} onChange={(v) => setFilter("pret", v)}>
+            <FilterSelect
+              id="f-pret"
+              label="Preț"
+              value={search.pret ?? ""}
+              onChange={(v) => setFilter("pret", v)}
+            >
               <option value="">Orice preț</option>
               {priceBands.map((b) => (
-                <option key={b.value} value={b.value}>{b.label}</option>
+                <option key={b.value} value={b.value}>
+                  {b.label}
+                </option>
               ))}
             </FilterSelect>
 
-            <FilterSelect id="f-combustibil" label="Combustibil" value={search.combustibil ?? ""} onChange={(v) => setFilter("combustibil", v)}>
+            <FilterSelect
+              id="f-combustibil"
+              label="Combustibil"
+              value={search.combustibil ?? ""}
+              onChange={(v) => setFilter("combustibil", v)}
+            >
               <option value="">Orice combustibil</option>
               <option value="Benzină">Benzină</option>
               <option value="Diesel">Diesel</option>
             </FilterSelect>
 
-            <FilterSelect id="f-cutie" label="Cutie de viteze" value={search.cutie ?? ""} onChange={(v) => setFilter("cutie", v)}>
+            <FilterSelect
+              id="f-cutie"
+              label="Cutie de viteze"
+              value={search.cutie ?? ""}
+              onChange={(v) => setFilter("cutie", v)}
+            >
               <option value="">Orice cutie</option>
               <option value="Automată">Automată</option>
               <option value="Manuală">Manuală</option>
             </FilterSelect>
 
-            <FilterSelect id="f-an" label="Anul fabricației" value={search.an ?? ""} onChange={(v) => setFilter("an", v)}>
+            <FilterSelect
+              id="f-an"
+              label="Anul fabricației"
+              value={search.an ?? ""}
+              onChange={(v) => setFilter("an", v)}
+            >
               <option value="">Orice an</option>
               {yearBands.map((b) => (
-                <option key={b.value} value={b.value}>{b.label}</option>
+                <option key={b.value} value={b.value}>
+                  {b.label}
+                </option>
               ))}
             </FilterSelect>
           </div>
@@ -235,18 +275,25 @@ function Inventory() {
             </p>
 
             <div className="flex items-center gap-3">
-              <label htmlFor="f-sort" className="text-[15px] font-medium whitespace-nowrap text-ink">
+              <label
+                htmlFor="f-sort"
+                className="text-[15px] font-medium whitespace-nowrap text-ink"
+              >
                 Sortează după
               </label>
               <div className="relative">
                 <select
                   id="f-sort"
                   value={search.sort ?? "recente"}
-                  onChange={(e) => setFilter("sort", e.target.value === "recente" ? "" : e.target.value)}
+                  onChange={(e) =>
+                    setFilter("sort", e.target.value === "recente" ? "" : e.target.value)
+                  }
                   className="h-12 appearance-none rounded-xl border border-input bg-surface pr-10 pl-4 text-[15px] text-ink"
                 >
                   {sortOptions.map((o) => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
+                    <option key={o.value} value={o.value}>
+                      {o.label}
+                    </option>
                   ))}
                 </select>
                 <ChevronDown
@@ -271,8 +318,8 @@ function Inventory() {
                 Nicio mașină nu se potrivește filtrelor
               </h2>
               <p className="mx-auto mt-2 max-w-md text-base text-graphite">
-                Încearcă să scoți unul dintre filtre sau șterge-le pe toate ca să
-                vezi din nou întreg stocul.
+                Încearcă să scoți unul dintre filtre sau șterge-le pe toate ca să vezi din nou
+                întreg stocul.
               </p>
               <button
                 type="button"

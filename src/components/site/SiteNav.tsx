@@ -23,13 +23,15 @@ export function SiteNav() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-ink/8 bg-surface/95 backdrop-blur-sm">
       <div className="mx-auto flex h-16 max-w-[1320px] items-center justify-between px-4 md:h-[72px] md:px-8">
-        <Link to="/" className="flex min-h-11 items-center gap-2.5" aria-label="Parc Auto Yanis — prima pagină">
+        <Link
+          to="/"
+          className="flex min-h-11 items-center gap-2.5"
+          aria-label="Parc Auto Yanis — prima pagină"
+        >
           <span className="grid h-9 w-9 place-items-center rounded-full bg-ink text-[10px] font-semibold tracking-[0.15em] text-white">
             PY
           </span>
-          <span className="text-[17px] font-semibold tracking-tight text-ink">
-            Parc Auto Yanis
-          </span>
+          <span className="text-[17px] font-semibold tracking-tight text-ink">Parc Auto Yanis</span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Meniu principal">
@@ -86,7 +88,9 @@ export function SiteNav() {
                   onClick={() => setOpen(false)}
                   aria-current={active ? "page" : undefined}
                   className={`flex min-h-13 items-center rounded-xl px-4 text-[17px] ${
-                    active ? "bg-ink/5 font-semibold text-ink" : "font-medium text-ink hover:bg-ink/5"
+                    active
+                      ? "bg-ink/5 font-semibold text-ink"
+                      : "font-medium text-ink hover:bg-ink/5"
                   }`}
                 >
                   {l.label}

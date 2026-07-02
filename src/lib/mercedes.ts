@@ -14,23 +14,6 @@ export const mercedesPhotos = [
   { src: img1.url, alt: "Mercedes CLA 180 — scaun spate și tapițerie" },
 ];
 
-export const mercedesSpec = {
-  brand: "Mercedes-Benz",
-  model: "CLA 180",
-  year: 2016,
-  fuel: "Benzină",
-  engine: "1.8 Turbo",
-  power: "122 CP",
-  mileage: 144789,
-  transmission: "Automată",
-  body: "Sedan",
-  color: "Negru Cosmos",
-  drive: "Tracțiune față",
-  price: 16500,
-  vin: "WDD117***DRK",
-  location: "Tulcea, România",
-};
-
 export const mercedesFeatures = {
   Confort: [
     "Apple CarPlay",

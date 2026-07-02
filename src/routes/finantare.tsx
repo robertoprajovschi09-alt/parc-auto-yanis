@@ -16,9 +16,16 @@ export const Route = createFileRoute("/finantare")({
   head: () => ({
     meta: [
       { title: "Calculator de rate — Parc Auto Yanis" },
-      { name: "description", content: "Calculează-ți rata lunară pentru mașina dorită: preț, avans și perioadă. Răspuns de la bancă în aproximativ 48 de ore." },
+      {
+        name: "description",
+        content:
+          "Calculează-ți rata lunară pentru mașina dorită: preț, avans și perioadă. Răspuns de la bancă în aproximativ 48 de ore.",
+      },
       { property: "og:title", content: "Calculator de rate — Parc Auto Yanis" },
-      { property: "og:description", content: "Calculează-ți rata lunară: preț, avans, perioadă. Răspuns în ~48h." },
+      {
+        property: "og:description",
+        content: "Calculează-ți rata lunară: preț, avans, perioadă. Răspuns în ~48h.",
+      },
     ],
   }),
   component: Finantare,
@@ -88,9 +95,8 @@ function Finantare() {
           Calculator de rate
         </h1>
         <p className="mt-3 max-w-2xl text-base leading-relaxed text-graphite md:text-lg">
-          Mută cele trei glisoare și vezi imediat rata lunară. Când ești
-          mulțumit de cifre, trimite-ne cererea — ne ocupăm noi de dosar, cu
-          mai multe bănci și IFN-uri.
+          Mută cele trei glisoare și vezi imediat rata lunară. Când ești mulțumit de cifre,
+          trimite-ne cererea — ne ocupăm noi de dosar, cu mai multe bănci și IFN-uri.
         </p>
       </section>
 
@@ -154,9 +160,9 @@ function Finantare() {
               </div>
             </dl>
             <p className="mt-4 text-[13px] leading-relaxed text-graphite">
-              Calcul orientativ, cu o dobândă exemplu de {(FINANCE.annualRate * 100).toFixed(1)}%
-              pe an. Oferta finală depinde de bancă și de dosarul tău — o primești
-              gratuit, fără nicio obligație.
+              Calcul orientativ, cu o dobândă exemplu de {(FINANCE.annualRate * 100).toFixed(1)}% pe
+              an. Oferta finală depinde de bancă și de dosarul tău — o primești gratuit, fără nicio
+              obligație.
             </p>
           </div>
 
@@ -171,12 +177,31 @@ function Finantare() {
         {/* Benefits */}
         <div className="space-y-4">
           {[
-            { icon: Clock, t: "Răspuns în ~48 de ore", d: "Trimitem dosarul la mai multe bănci deodată și revenim rapid cu oferta." },
-            { icon: TrendingDown, t: "Avans de la 15%", d: "Alegi avansul care se potrivește bugetului tău." },
-            { icon: Wallet, t: "Fără comision de analiză", d: "Nu percepem niciun cost pentru întocmirea dosarului." },
-            { icon: ShieldCheck, t: "Totul transparent", d: "Vezi dobânda, DAE și toate costurile înainte să semnezi ceva." },
+            {
+              icon: Clock,
+              t: "Răspuns în ~48 de ore",
+              d: "Trimitem dosarul la mai multe bănci deodată și revenim rapid cu oferta.",
+            },
+            {
+              icon: TrendingDown,
+              t: "Avans de la 15%",
+              d: "Alegi avansul care se potrivește bugetului tău.",
+            },
+            {
+              icon: Wallet,
+              t: "Fără comision de analiză",
+              d: "Nu percepem niciun cost pentru întocmirea dosarului.",
+            },
+            {
+              icon: ShieldCheck,
+              t: "Totul transparent",
+              d: "Vezi dobânda, DAE și toate costurile înainte să semnezi ceva.",
+            },
           ].map(({ icon: Icon, t, d }) => (
-            <div key={t} className="flex items-start gap-4 rounded-xl border border-ink/10 bg-surface p-5">
+            <div
+              key={t}
+              className="flex items-start gap-4 rounded-xl border border-ink/10 bg-surface p-5"
+            >
               <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-brand-soft text-brand">
                 <Icon size={20} strokeWidth={1.75} aria-hidden />
               </span>
@@ -191,15 +216,21 @@ function Finantare() {
             <h2 className="text-[16px] font-semibold text-ink">Cum funcționează</h2>
             <ol className="mt-3 space-y-3 text-[15px] leading-relaxed text-graphite">
               <li className="flex gap-3">
-                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-[13px] font-semibold text-white">1</span>
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-[13px] font-semibold text-white">
+                  1
+                </span>
                 Alegi mașina și ne spui ce avans și perioadă ți se potrivesc.
               </li>
               <li className="flex gap-3">
-                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-[13px] font-semibold text-white">2</span>
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-[13px] font-semibold text-white">
+                  2
+                </span>
                 Ne trimiți datele de contact — noi pregătim dosarul pentru bănci.
               </li>
               <li className="flex gap-3">
-                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-[13px] font-semibold text-white">3</span>
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-[13px] font-semibold text-white">
+                  3
+                </span>
                 Primești oferta în ~48h. Dacă îți convine, semnezi și pleci cu mașina.
               </li>
             </ol>

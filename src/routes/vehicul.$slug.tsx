@@ -24,7 +24,9 @@ export const Route = createFileRoute("/vehicul/$slug")({
   },
   head: ({ loaderData }) => {
     const v = loaderData?.vehicle;
-    const title = v ? `${v.brand} ${v.model} ${v.year} — Parc Auto Yanis` : "Mașină — Parc Auto Yanis";
+    const title = v
+      ? `${v.brand} ${v.model} ${v.year} — Parc Auto Yanis`
+      : "Mașină — Parc Auto Yanis";
     const description = v
       ? `${v.brand} ${v.model} din ${v.year}, ${formatKm(v.mileage)}, ${v.fuel}, ${v.transmission}. Preț ${formatPrice(v.price)}.`
       : "Detalii vehicul";
@@ -91,21 +93,30 @@ function VehiclePage() {
       {/* Breadcrumb */}
       <nav aria-label="Localizare în site" className="mx-auto max-w-[1320px] px-4 md:px-8">
         <ol className="flex flex-wrap items-center gap-2 text-[14px] text-graphite">
-          <li><Link to="/" className="underline-offset-4 hover:text-ink hover:underline">Acasă</Link></li>
+          <li>
+            <Link to="/" className="underline-offset-4 hover:text-ink hover:underline">
+              Acasă
+            </Link>
+          </li>
           <li aria-hidden>/</li>
-          <li><Link to="/stoc" className="underline-offset-4 hover:text-ink hover:underline">Mașini în stoc</Link></li>
+          <li>
+            <Link to="/stoc" className="underline-offset-4 hover:text-ink hover:underline">
+              Mașini în stoc
+            </Link>
+          </li>
           <li aria-hidden>/</li>
-          <li aria-current="page" className="font-medium text-ink">{title}</li>
+          <li aria-current="page" className="font-medium text-ink">
+            {title}
+          </li>
         </ol>
       </nav>
 
       {/* Title */}
       <header className="mx-auto max-w-[1320px] px-4 pt-6 md:px-8">
-        <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
-          {title}
-        </h1>
+        <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">{title}</h1>
         <p className="mt-2 text-base text-graphite md:text-lg">
-          {vehicle.year} · {formatKm(vehicle.mileage)} · {vehicle.fuel} · {vehicle.transmission} · {vehicle.power}
+          {vehicle.year} · {formatKm(vehicle.mileage)} · {vehicle.fuel} · {vehicle.transmission} ·{" "}
+          {vehicle.power}
         </p>
         <p className="mt-1.5 flex items-center gap-1.5 text-[15px] text-graphite">
           <MapPin size={15} aria-hidden /> {vehicle.location}
@@ -142,7 +153,12 @@ function VehiclePage() {
                   className="relative block overflow-hidden rounded-xl bg-muted"
                   aria-label={`Fotografia ${i + 2}`}
                 >
-                  <img src={p.src} alt={p.alt} loading="lazy" className="aspect-[4/3] h-full w-full object-cover" />
+                  <img
+                    src={p.src}
+                    alt={p.alt}
+                    loading="lazy"
+                    className="aspect-[4/3] h-full w-full object-cover"
+                  />
                   {i === 3 && photos.length > 5 && (
                     <span className="absolute inset-0 grid place-items-center bg-ink/60 text-lg font-semibold text-white">
                       +{photos.length - 5} foto
@@ -165,8 +181,8 @@ function VehiclePage() {
               {formatPrice(vehicle.price)}
             </p>
             <p className="mt-3 text-[15px] leading-relaxed text-graphite">
-              Rată orientativă: <strong className="text-ink">{rate} € / lună</strong>{" "}
-              (avans {FINANCE.defaultDownPct}%, {FINANCE.defaultMonths} de luni).{" "}
+              Rată orientativă: <strong className="text-ink">{rate} € / lună</strong> (avans{" "}
+              {FINANCE.defaultDownPct}%, {FINANCE.defaultMonths} de luni).{" "}
               <Link
                 to="/finantare"
                 search={{ pret: vehicle.price }}
@@ -213,7 +229,10 @@ function VehiclePage() {
             <h2 className="text-2xl font-bold tracking-tight text-ink">Date tehnice</h2>
             <dl className="mt-5 grid grid-cols-1 gap-x-8 sm:grid-cols-2">
               {specRows(vehicle).map(([label, value]) => (
-                <div key={label} className="flex items-center justify-between gap-4 border-b border-ink/8 py-3.5">
+                <div
+                  key={label}
+                  className="flex items-center justify-between gap-4 border-b border-ink/8 py-3.5"
+                >
                   <dt className="text-[15px] text-graphite">{label}</dt>
                   <dd className="text-[16px] font-semibold text-ink">{value}</dd>
                 </div>
@@ -225,10 +244,12 @@ function VehiclePage() {
           <div>
             <h2 className="text-2xl font-bold tracking-tight text-ink">Despre această mașină</h2>
             <div className="mt-4 space-y-4 text-base leading-relaxed text-ink-soft">
-              {(vehicle.description ?? [
-                `${title} din ${vehicle.year}, ${vehicle.fuel.toLowerCase()}, cutie ${vehicle.transmission.toLowerCase()}. Mașina este verificată tehnic, are kilometrajul garantat și istoric complet — primești toate documentele înainte de cumpărare.`,
-                `Sună-ne pentru orice detaliu sau programează o vizionare la sediul nostru din ${vehicle.location}. Te putem ajuta și cu finanțarea, cu răspuns în aproximativ 48 de ore.`,
-              ]).map((p) => (
+              {(
+                vehicle.description ?? [
+                  `${title} din ${vehicle.year}, ${vehicle.fuel.toLowerCase()}, cutie ${vehicle.transmission.toLowerCase()}. Mașina este verificată tehnic, are kilometrajul garantat și istoric complet — primești toate documentele înainte de cumpărare.`,
+                  `Sună-ne pentru orice detaliu sau programează o vizionare la sediul nostru din ${vehicle.location}. Te putem ajuta și cu finanțarea, cu răspuns în aproximativ 48 de ore.`,
+                ]
+              ).map((p) => (
                 <p key={p.slice(0, 40)}>{p}</p>
               ))}
             </div>
@@ -263,8 +284,16 @@ function VehiclePage() {
               { t: "Kilometraj garantat", d: "Confirmat prin rapoarte independente" },
               { t: "Garanție inclusă", d: "Pentru componentele majore" },
             ].map((x) => (
-              <div key={x.t} className="flex items-start gap-3 rounded-xl border border-ink/10 bg-surface p-4">
-                <ShieldCheck size={20} className="mt-0.5 shrink-0 text-brand" strokeWidth={1.75} aria-hidden />
+              <div
+                key={x.t}
+                className="flex items-start gap-3 rounded-xl border border-ink/10 bg-surface p-4"
+              >
+                <ShieldCheck
+                  size={20}
+                  className="mt-0.5 shrink-0 text-brand"
+                  strokeWidth={1.75}
+                  aria-hidden
+                />
                 <div>
                   <p className="text-[15px] font-semibold text-ink">{x.t}</p>
                   <p className="mt-0.5 text-[14px] text-graphite">{x.d}</p>
@@ -279,7 +308,10 @@ function VehiclePage() {
       <section className="px-4 pt-16 pb-4 md:px-8 md:pt-24" aria-labelledby="similare-titlu">
         <div className="mx-auto max-w-[1320px]">
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <h2 id="similare-titlu" className="text-2xl font-bold tracking-tight text-ink md:text-3xl">
+            <h2
+              id="similare-titlu"
+              className="text-2xl font-bold tracking-tight text-ink md:text-3xl"
+            >
               Alte mașini din stoc
             </h2>
             <Link
