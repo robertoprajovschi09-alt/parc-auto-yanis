@@ -17,19 +17,33 @@ export function SiteNav() {
   const border = useTransform(scrollY, [0, 120], ["rgba(0,0,0,0)", "rgba(0,0,0,0.06)"]);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
+  const isHome = pathname === "/";
+  // Over the dark home hero, invert nav content until user scrolls past it.
+  const [overDark, setOverDark] = useState(isHome);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useState(() => {
+    // sync when route changes handled via effect below
+  });
+  // simple scroll listener via motion value
+  scrollY.on("change", (v) => {
+    const next = isHome && v < 120;
+    if (next !== overDark) setOverDark(next);
+  });
 
   return (
     <motion.header
       style={{ backgroundColor: bg, borderColor: border }}
-      className="fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl backdrop-saturate-150"
+      className={`fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl backdrop-saturate-150 transition-colors duration-500 ${
+        overDark ? "text-canvas" : "text-ink"
+      }`}
     >
       <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-6 md:h-20 md:px-10">
         <Link to="/" className="group flex items-center gap-2.5">
-          <span className="grid h-8 w-8 place-items-center rounded-full bg-ink text-[10px] font-medium tracking-[0.2em] text-canvas">
+          <span className={`grid h-8 w-8 place-items-center rounded-full text-[10px] font-medium tracking-[0.2em] ${overDark ? "bg-canvas text-ink" : "bg-ink text-canvas"}`}>
             PY
           </span>
-          <span className="font-serif text-lg leading-none tracking-tight text-ink">
-            Parc Auto <span className="italic text-graphite">Yanis</span>
+          <span className="font-serif text-lg leading-none tracking-tight">
+            Parc Auto <span className={`italic ${overDark ? "text-white/60" : "text-graphite"}`}>Yanis</span>
           </span>
         </Link>
 
@@ -41,13 +55,15 @@ export function SiteNav() {
                 key={l.to}
                 to={l.to}
                 className={`relative rounded-full px-4 py-2 text-sm transition-colors ${
-                  active ? "text-ink" : "text-graphite hover:text-ink"
+                  active
+                    ? overDark ? "text-canvas" : "text-ink"
+                    : overDark ? "text-white/60 hover:text-canvas" : "text-graphite hover:text-ink"
                 }`}
               >
                 {active && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 -z-10 rounded-full bg-ink/5"
+                    className={`absolute inset-0 -z-10 rounded-full ${overDark ? "bg-white/10" : "bg-ink/5"}`}
                     transition={{ type: "spring", stiffness: 400, damping: 40 }}
                   />
                 )}
@@ -60,7 +76,9 @@ export function SiteNav() {
         <div className="hidden md:block">
           <Link
             to="/contact"
-            className="group inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm text-canvas transition-transform hover:-translate-y-0.5"
+            className={`group inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm transition-transform hover:-translate-y-0.5 ${
+              overDark ? "bg-canvas text-ink" : "bg-ink text-canvas"
+            }`}
           >
             Programează
             <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
@@ -69,7 +87,7 @@ export function SiteNav() {
 
         <button
           aria-label="Meniu"
-          className="grid h-10 w-10 place-items-center rounded-full border border-ink/10 bg-white/60 backdrop-blur md:hidden"
+          className={`grid h-10 w-10 place-items-center rounded-full border backdrop-blur md:hidden ${overDark ? "border-white/20 bg-white/10" : "border-ink/10 bg-white/60"}`}
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X size={18} /> : <Menu size={18} />}
