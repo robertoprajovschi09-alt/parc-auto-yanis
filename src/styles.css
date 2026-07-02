@@ -13,9 +13,9 @@
  * The :root and .dark blocks define the actual color values using oklch.
  * All colors MUST use oklch format.
  *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ * Palette philosophy (see docs/AUDIT.md): white surfaces, one near-black
+ * text color, one mid gray for secondary text, and a single blue accent
+ * reserved for primary actions. Nothing else.
  */
 
 @theme inline {
@@ -65,38 +65,44 @@
   --color-graphite: var(--graphite);
   --color-surface: var(--surface);
   --color-canvas: var(--canvas);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
   --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
   --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
-  --radius: 0.875rem;
-  /* Parc Auto Yanis — luxury automotive palette */
-  --canvas: oklch(0.972 0.003 90);          /* #F7F7F5 warm off-white */
+  --radius: 0.75rem;
+  /* Parc Auto Yanis — restrained, high-contrast palette */
+  --canvas: oklch(0.982 0.002 90);           /* near-white page background */
   --surface: oklch(1 0 0);                   /* pure white for cards */
-  --ink: oklch(0.16 0.005 260);              /* near black #090909 */
-  --ink-soft: oklch(0.32 0.006 260);         /* deep graphite */
-  --graphite: oklch(0.45 0.005 260);         /* mid graphite */
-  --chrome: oklch(0.78 0.008 240);           /* chrome silver */
+  --ink: oklch(0.17 0.005 260);              /* near black — primary text */
+  --ink-soft: oklch(0.3 0.006 260);          /* deep graphite — long-form text */
+  --graphite: oklch(0.42 0.005 260);         /* secondary text, AA on white */
+  --chrome: oklch(0.78 0.008 240);           /* legacy silver (being phased out) */
+  --brand: oklch(0.48 0.19 259);             /* action blue — primary CTAs only */
+  --brand-strong: oklch(0.41 0.18 259);      /* hover/active state of brand */
+  --brand-soft: oklch(0.95 0.025 259);       /* pale blue tint for highlights */
   --background: var(--canvas);
   --foreground: var(--ink);
   --card: var(--surface);
   --card-foreground: var(--ink);
   --popover: var(--surface);
   --popover-foreground: var(--ink);
-  --primary: var(--ink);
+  --primary: var(--brand);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.945 0.003 90);
+  --secondary: oklch(0.955 0.003 90);
   --secondary-foreground: var(--ink);
-  --muted: oklch(0.94 0.003 90);
-  --muted-foreground: oklch(0.48 0.005 260);
-  --accent: oklch(0.92 0.006 240);
+  --muted: oklch(0.945 0.003 90);
+  --muted-foreground: oklch(0.42 0.005 260);
+  --accent: var(--brand-soft);
   --accent-foreground: var(--ink);
   --destructive: oklch(0.55 0.2 27);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.9 0.004 260 / 0.7);
-  --input: oklch(0.9 0.004 260);
-  --ring: oklch(0.55 0.03 240);
+  --border: oklch(0.9 0.004 260 / 0.8);
+  --input: oklch(0.88 0.004 260);
+  --ring: var(--brand);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -167,18 +173,18 @@
 
   html { scroll-behavior: smooth; }
 
-  /* subtle grain overlay utility */
-  .grain::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.035;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-    mix-blend-mode: overlay;
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  /* High-visibility keyboard focus, everywhere */
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
   }
 }
 
+/* Legacy utilities kept only until every usage is removed (see docs/AUDIT.md B2) */
 @utility glass {
   background: color-mix(in oklab, white 55%, transparent);
   backdrop-filter: saturate(180%) blur(20px);
@@ -189,16 +195,6 @@
   background: color-mix(in oklab, black 45%, transparent);
   backdrop-filter: saturate(180%) blur(24px);
   border: 1px solid color-mix(in oklab, white 12%, transparent);
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-@keyframes float-slow {
-  0%, 100% { transform: translate3d(0,0,0); }
-  50% { transform: translate3d(0,-8px,0); }
 }
 
 @keyframes gradient-drift {

@@ -12,6 +12,8 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import "@fontsource-variable/inter/index.css";
+// Instrument Serif is being phased out (docs/AUDIT.md B1); imports stay until
+// the last page stops using .font-serif, then get removed with the dependency.
 import "@fontsource/instrument-serif/400.css";
 import "@fontsource/instrument-serif/400-italic.css";
 import { SiteNav } from "@/components/site/SiteNav";
@@ -21,17 +23,17 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+        <h1 className="text-6xl font-bold text-foreground">404</h1>
+        <h2 className="mt-4 text-2xl font-semibold text-foreground">Pagina nu există</h2>
+        <p className="mt-3 text-base text-muted-foreground">
+          Pagina pe care o cauți nu există sau a fost mutată.
         </p>
-        <div className="mt-6">
+        <div className="mt-8">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-7 text-base font-medium text-white transition-colors hover:bg-brand-strong"
           >
-            Go home
+            Înapoi la prima pagină
           </Link>
         </div>
       </div>
@@ -49,27 +51,27 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+          Pagina nu s-a încărcat
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+        <p className="mt-3 text-base text-muted-foreground">
+          A apărut o problemă la noi. Poți reîncerca sau te poți întoarce la prima pagină.
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
           <button
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-7 text-base font-medium text-white transition-colors hover:bg-brand-strong"
           >
-            Try again
+            Încearcă din nou
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="inline-flex min-h-12 items-center justify-center rounded-full border border-input bg-background px-7 text-base font-medium text-foreground transition-colors hover:bg-secondary"
           >
-            Go home
+            Prima pagină
           </a>
         </div>
       </div>
@@ -82,15 +84,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Parc Auto Yanis — Mașini atent selectate" },
-      { name: "description", content: "Marketplace premium de mașini rulate verificate. Istoric complet, kilometraj garantat, finanțare personalizată." },
+      { title: "Parc Auto Yanis — Mașini rulate verificate, în Tulcea" },
+      { name: "description", content: "Mașini rulate verificate, cu istoric complet și kilometraj garantat. Finanțare cu aprobare rapidă. Parc Auto Yanis, Tulcea." },
       { name: "author", content: "Parc Auto Yanis" },
-      { property: "og:title", content: "Parc Auto Yanis — Mașini atent selectate" },
-      { property: "og:description", content: "Marketplace premium de mașini rulate verificate. Istoric complet, kilometraj garantat, finanțare personalizată." },
+      { property: "og:title", content: "Parc Auto Yanis — Mașini rulate verificate, în Tulcea" },
+      { property: "og:description", content: "Mașini rulate verificate, cu istoric complet și kilometraj garantat. Finanțare cu aprobare rapidă." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Parc Auto Yanis — Mașini atent selectate" },
-      { name: "twitter:description", content: "Marketplace premium de mașini rulate verificate. Istoric complet, kilometraj garantat, finanțare personalizată." },
+      { name: "twitter:title", content: "Parc Auto Yanis — Mașini rulate verificate, în Tulcea" },
+      { name: "twitter:description", content: "Mașini rulate verificate, cu istoric complet și kilometraj garantat. Finanțare cu aprobare rapidă." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/52074c0f-f97d-456d-9faa-d840eaa2e8e6/id-preview-1657ce94--028140b0-9592-4b91-870c-e3339a8cb49e.lovable.app-1782982483854.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/52074c0f-f97d-456d-9faa-d840eaa2e8e6/id-preview-1657ce94--028140b0-9592-4b91-870c-e3339a8cb49e.lovable.app-1782982483854.png" },
     ],
@@ -110,7 +112,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ro">
       <head>
         <HeadContent />
       </head>
@@ -128,8 +130,14 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="relative min-h-screen bg-background text-foreground">
+        <a
+          href="#continut"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:bg-brand focus:px-5 focus:py-3 focus:text-sm focus:font-medium focus:text-white"
+        >
+          Sari la conținut
+        </a>
         <SiteNav />
-        <main className="pt-0">
+        <main id="continut">
           <Outlet />
         </main>
         <SiteFooter />
