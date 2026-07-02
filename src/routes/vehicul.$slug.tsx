@@ -1,30 +1,19 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { motion, AnimatePresence } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  ArrowLeft,
-  ArrowUpRight,
-  Calendar,
-  Fuel,
-  Gauge,
-  Cog,
-  Zap,
-  Palette,
-  MapPin,
-  ShieldCheck,
   Phone,
   MessageCircle,
-  Share2,
-  Heart,
+  ShieldCheck,
   X,
   ChevronLeft,
   ChevronRight,
   Check,
+  MapPin,
 } from "lucide-react";
 
-import { vehicles, formatKm, formatPrice } from "@/lib/vehicles";
-import { mercedesPhotos, mercedesSpec, mercedesFeatures } from "@/lib/mercedes";
-import { Reveal } from "@/components/site/Reveal";
+import { vehicles, formatKm, formatPrice, type Vehicle } from "@/lib/vehicles";
+import { monthlyPayment, FINANCE } from "@/lib/finance";
+import { site, whatsappLink } from "@/lib/site";
 import { VehicleCard } from "@/components/site/VehicleCard";
 
 export const Route = createFileRoute("/vehicul/$slug")({
@@ -51,207 +40,212 @@ export const Route = createFileRoute("/vehicul/$slug")({
   },
   component: VehiclePage,
   notFoundComponent: () => (
-    <div className="grid min-h-[80vh] place-items-center px-6 text-center">
+    <div className="grid min-h-[70vh] place-items-center px-4 text-center">
       <div>
-        <p className="text-[11px] tracking-[0.25em] uppercase text-graphite">404</p>
-        <h1 className="mt-4 font-serif text-5xl text-ink">Mașina nu a fost găsită.</h1>
-        <Link to="/stoc" className="mt-8 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm text-canvas">
-          Înapoi la stoc <ArrowUpRight size={15} />
+        <h1 className="text-3xl font-bold text-ink">Mașina nu a fost găsită</h1>
+        <p className="mt-3 text-base text-graphite">
+          Probabil a fost vândută sau linkul nu mai este valabil.
+        </p>
+        <Link
+          to="/stoc"
+          className="mt-8 inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-7 text-base font-semibold text-white transition-colors duration-150 hover:bg-brand-strong"
+        >
+          Vezi mașinile disponibile
         </Link>
       </div>
     </div>
   ),
   errorComponent: () => (
-    <div className="grid min-h-[80vh] place-items-center px-6 text-center">
-      <p className="text-graphite">A apărut o eroare la încărcarea mașinii.</p>
+    <div className="grid min-h-[70vh] place-items-center px-4 text-center">
+      <p className="text-base text-graphite">A apărut o eroare la încărcarea mașinii.</p>
     </div>
   ),
 });
 
+function specRows(v: Vehicle) {
+  const rows: [string, string][] = [
+    ["Anul fabricației", String(v.year)],
+    ["Kilometraj", formatKm(v.mileage)],
+    ["Combustibil", v.fuel],
+    ["Cutie de viteze", v.transmission],
+    ["Putere", v.power],
+  ];
+  if (v.engine) rows.push(["Motor", v.engine]);
+  if (v.body) rows.push(["Caroserie", v.body]);
+  if (v.color) rows.push(["Culoare", v.color]);
+  if (v.drive) rows.push(["Tracțiune", v.drive]);
+  return rows;
+}
+
 function VehiclePage() {
   const { vehicle } = Route.useLoaderData();
-  const isMercedes = vehicle.slug === "mercedes-cla-180-2016";
-
-  // For non-mercedes cars, fall back to a single-image gallery
-  const photos = isMercedes
-    ? mercedesPhotos
-    : [{ src: vehicle.image, alt: `${vehicle.brand} ${vehicle.model}` }];
-
-  const spec = isMercedes
-    ? mercedesSpec
-    : {
-        brand: vehicle.brand,
-        model: vehicle.model,
-        year: vehicle.year,
-        fuel: vehicle.fuel,
-        engine: "—",
-        power: vehicle.power,
-        mileage: vehicle.mileage,
-        transmission: vehicle.transmission,
-        body: "Sedan",
-        color: "—",
-        drive: "—",
-        price: vehicle.price,
-        vin: "—",
-        location: "Tulcea, România",
-      };
-
-  const features = isMercedes ? mercedesFeatures : {};
-
+  const title = `${vehicle.brand} ${vehicle.model}`;
+  const photos = vehicle.photos ?? [{ src: vehicle.image, alt: `${title}, ${vehicle.year}` }];
   const [lightbox, setLightbox] = useState<number | null>(null);
   const related = vehicles.filter((v) => v.slug !== vehicle.slug).slice(0, 3);
+  const rate = monthlyPayment(vehicle.price);
+  const waMessage = `Bună ziua! Mă interesează ${title} din ${vehicle.year} (${formatPrice(vehicle.price)}). Mai este disponibilă?`;
 
   return (
-    <div className="pt-24 md:pt-28">
+    <div className="pt-24 md:pt-32">
       {/* Breadcrumb */}
-      <div className="mx-auto max-w-[1400px] px-6 md:px-10">
-        <div className="flex items-center gap-2 text-xs text-graphite">
-          <Link to="/" className="hover:text-ink">Acasă</Link>
-          <span className="text-ink/20">/</span>
-          <Link to="/stoc" className="hover:text-ink">Stoc</Link>
-          <span className="text-ink/20">/</span>
-          <span className="text-ink">{spec.brand} {spec.model}</span>
-        </div>
-      </div>
+      <nav aria-label="Localizare în site" className="mx-auto max-w-[1320px] px-4 md:px-8">
+        <ol className="flex flex-wrap items-center gap-2 text-[14px] text-graphite">
+          <li><Link to="/" className="underline-offset-4 hover:text-ink hover:underline">Acasă</Link></li>
+          <li aria-hidden>/</li>
+          <li><Link to="/stoc" className="underline-offset-4 hover:text-ink hover:underline">Mașini în stoc</Link></li>
+          <li aria-hidden>/</li>
+          <li aria-current="page" className="font-medium text-ink">{title}</li>
+        </ol>
+      </nav>
 
-      {/* Hero + Title */}
-      <section className="mx-auto max-w-[1400px] px-6 pt-8 md:px-10 md:pt-14">
-        <Reveal>
-          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-            <div className="min-w-0">
-              <p className="text-[11px] tracking-[0.25em] uppercase text-graphite">{spec.brand}</p>
-              <h1 className="mt-3 font-serif text-[clamp(2.5rem,6vw,6rem)] leading-[0.95] tracking-[-0.03em] text-ink">
-                {spec.model} <span className="italic text-graphite">{spec.year}</span>
-              </h1>
-              <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-graphite">
-                <span className="inline-flex items-center gap-2"><MapPin size={14} /> {spec.location}</span>
-                <span className="inline-flex items-center gap-2"><Gauge size={14} /> {formatKm(spec.mileage)}</span>
-                <span className="inline-flex items-center gap-2"><Fuel size={14} /> {spec.fuel}</span>
-                <span className="inline-flex items-center gap-2"><Cog size={14} /> {spec.transmission}</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <button className="grid h-11 w-11 place-items-center rounded-full border border-ink/10 bg-surface text-ink hover:bg-ink hover:text-canvas transition-colors">
-                <Heart size={16} />
-              </button>
-              <button className="grid h-11 w-11 place-items-center rounded-full border border-ink/10 bg-surface text-ink hover:bg-ink hover:text-canvas transition-colors">
-                <Share2 size={16} />
-              </button>
-            </div>
-          </div>
-        </Reveal>
+      {/* Title */}
+      <header className="mx-auto max-w-[1320px] px-4 pt-6 md:px-8">
+        <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
+          {title}
+        </h1>
+        <p className="mt-2 text-base text-graphite md:text-lg">
+          {vehicle.year} · {formatKm(vehicle.mileage)} · {vehicle.fuel} · {vehicle.transmission} · {vehicle.power}
+        </p>
+        <p className="mt-1.5 flex items-center gap-1.5 text-[15px] text-graphite">
+          <MapPin size={15} aria-hidden /> {vehicle.location}
+        </p>
+      </header>
 
-        {/* Gallery */}
-        <div className="mt-10 grid gap-3 md:grid-cols-[1.6fr_1fr] md:gap-4">
-          <Reveal className="relative overflow-hidden rounded-[1.5rem] bg-muted">
-            <button onClick={() => setLightbox(0)} className="group block h-full w-full">
-              <img
-                src={photos[0].src}
-                alt={photos[0].alt}
-                className="aspect-[4/3] h-full w-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.04] md:aspect-auto"
-              />
-              <span className="glass absolute right-4 bottom-4 rounded-full px-3 py-1.5 text-xs text-ink">
-                {photos.length} fotografii
-              </span>
-            </button>
-          </Reveal>
+      {/* Gallery */}
+      <section className="mx-auto max-w-[1320px] px-4 pt-6 md:px-8" aria-label="Fotografii">
+        <div className="grid gap-3 md:grid-cols-[1.6fr_1fr]">
+          <button
+            type="button"
+            onClick={() => setLightbox(0)}
+            className="relative block overflow-hidden rounded-xl bg-muted"
+            aria-label={`Deschide fotografiile (${photos.length})`}
+          >
+            <img
+              src={photos[0].src}
+              alt={photos[0].alt}
+              fetchPriority="high"
+              className="aspect-[4/3] h-full w-full object-cover"
+            />
+            <span className="absolute right-3 bottom-3 rounded-full bg-surface px-3.5 py-1.5 text-[14px] font-medium text-ink shadow-sm">
+              {photos.length === 1 ? "1 fotografie" : `${photos.length} fotografii`}
+            </span>
+          </button>
 
-          <div className="grid grid-cols-2 gap-3 md:gap-4">
-            {photos.slice(1, 5).map((p, i) => (
-              <Reveal
-                key={i}
-                delay={i * 0.05}
-                className="relative overflow-hidden rounded-[1.25rem] bg-muted"
-              >
-                <button onClick={() => setLightbox(i + 1)} className="group block h-full w-full">
-                  <img
-                    src={p.src}
-                    alt={p.alt}
-                    className="aspect-[4/3] h-full w-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.06]"
-                  />
+          {photos.length > 1 && (
+            <div className="grid grid-cols-2 gap-3">
+              {photos.slice(1, 5).map((p, i) => (
+                <button
+                  key={p.src}
+                  type="button"
+                  onClick={() => setLightbox(i + 1)}
+                  className="relative block overflow-hidden rounded-xl bg-muted"
+                  aria-label={`Fotografia ${i + 2}`}
+                >
+                  <img src={p.src} alt={p.alt} loading="lazy" className="aspect-[4/3] h-full w-full object-cover" />
                   {i === 3 && photos.length > 5 && (
-                    <span className="absolute inset-0 grid place-items-center bg-ink/50 text-canvas">
+                    <span className="absolute inset-0 grid place-items-center bg-ink/60 text-lg font-semibold text-white">
                       +{photos.length - 5} foto
                     </span>
                   )}
                 </button>
-              </Reveal>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/* Main content */}
-      <section className="mx-auto grid max-w-[1400px] gap-14 px-6 pt-20 md:grid-cols-[1.6fr_1fr] md:gap-16 md:px-10 md:pt-24">
-        {/* Left */}
-        <div className="space-y-16">
-          {/* Key specs */}
-          <Reveal>
-            <h2 className="font-serif text-3xl text-ink md:text-4xl">
-              Fișă <span className="italic text-graphite">tehnică</span>
-            </h2>
-            <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-5 md:grid-cols-3">
-              {[
-                ["Anul fabricației", spec.year, Calendar],
-                ["Kilometraj", formatKm(spec.mileage), Gauge],
-                ["Combustibil", spec.fuel, Fuel],
-                ["Motor", spec.engine, Cog],
-                ["Putere", spec.power, Zap],
-                ["Transmisie", spec.transmission, Cog],
-                ["Caroserie", spec.body, Cog],
-                ["Culoare", spec.color, Palette],
-                ["Tracțiune", spec.drive, Cog],
-              ].map(([label, value, Icon]) => {
-                const IconComp = Icon as typeof Calendar;
-                return (
-                  <div key={label as string} className="border-t border-ink/10 pt-4">
-                    <dt className="flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase text-graphite">
-                      <IconComp size={12} /> {label}
-                    </dt>
-                    <dd className="mt-2 font-serif text-lg text-ink">{value}</dd>
-                  </div>
-                );
-              })}
+      <section className="mx-auto grid max-w-[1320px] gap-10 px-4 pt-10 md:grid-cols-[1.6fr_1fr] md:gap-12 md:px-8">
+        {/* Price + actions — first on mobile, right column on desktop */}
+        <aside className="md:order-2 md:sticky md:top-28 md:self-start">
+          <div className="rounded-xl border border-ink/10 bg-surface p-6">
+            <p className="text-[15px] text-graphite">Preț</p>
+            <p className="mt-1 text-4xl font-bold tracking-tight text-ink">
+              {formatPrice(vehicle.price)}
+            </p>
+            <p className="mt-3 text-[15px] leading-relaxed text-graphite">
+              Rată orientativă: <strong className="text-ink">{rate} € / lună</strong>{" "}
+              (avans {FINANCE.defaultDownPct}%, {FINANCE.defaultMonths} de luni).{" "}
+              <Link
+                to="/finantare"
+                search={{ pret: vehicle.price }}
+                className="font-semibold text-brand underline underline-offset-4 hover:text-brand-strong"
+              >
+                Calculează exact
+              </Link>
+            </p>
+
+            <div className="mt-6 space-y-2.5">
+              <Link
+                to="/contact"
+                search={{ masina: vehicle.slug }}
+                className="flex min-h-14 w-full items-center justify-center rounded-full bg-brand px-6 text-[17px] font-semibold text-white transition-colors duration-150 hover:bg-brand-strong"
+              >
+                Programează o vizionare
+              </Link>
+              <a
+                href={site.phoneHref}
+                className="flex min-h-14 w-full items-center justify-center gap-2 rounded-full border border-ink/15 bg-surface px-6 text-[17px] font-semibold text-ink transition-colors duration-150 hover:bg-ink/5"
+              >
+                <Phone size={18} aria-hidden /> {site.phone}
+              </a>
+              <a
+                href={whatsappLink(waMessage)}
+                target="_blank"
+                rel="noreferrer"
+                className="flex min-h-14 w-full items-center justify-center gap-2 rounded-full border border-ink/15 bg-surface px-6 text-[17px] font-semibold text-ink transition-colors duration-150 hover:bg-ink/5"
+              >
+                <MessageCircle size={18} aria-hidden /> Scrie-ne pe WhatsApp
+              </a>
+            </div>
+
+            <p className="mt-5 text-[14px] leading-relaxed text-graphite">
+              Program: {site.schedule}. Răspundem în cel mult 24 de ore.
+            </p>
+          </div>
+        </aside>
+
+        {/* Details */}
+        <div className="space-y-12 md:order-1">
+          {/* Specs */}
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight text-ink">Date tehnice</h2>
+            <dl className="mt-5 grid grid-cols-1 gap-x-8 sm:grid-cols-2">
+              {specRows(vehicle).map(([label, value]) => (
+                <div key={label} className="flex items-center justify-between gap-4 border-b border-ink/8 py-3.5">
+                  <dt className="text-[15px] text-graphite">{label}</dt>
+                  <dd className="text-[16px] font-semibold text-ink">{value}</dd>
+                </div>
+              ))}
             </dl>
-          </Reveal>
+          </div>
 
           {/* Description */}
-          <Reveal>
-            <h2 className="font-serif text-3xl text-ink md:text-4xl">
-              Despre <span className="italic text-graphite">această mașină</span>
-            </h2>
-            <div className="mt-6 space-y-4 text-base leading-relaxed text-ink-soft">
-              <p>
-                {spec.brand} {spec.model} din {spec.year}, întreținut impecabil, cu istoric complet
-                de service la reprezentanță. Mașina se prezintă într-o stare excelentă,
-                atât estetic cât și mecanic, gata de drum imediat după înmatriculare.
-              </p>
-              <p>
-                Interiorul păstrează atmosfera clasei premium — tapițerie combinată piele-textil,
-                bord digital, lumini ambientale, sistem multimedia cu Apple CarPlay și navigație extinsă.
-                Kilometrajul este garantat, iar la vânzare oferim raportul complet de istoric.
-              </p>
-              <p>
-                Pentru orice detaliu tehnic sau programare pentru vizionare, echipa Parc Auto Yanis
-                îți răspunde în cel mult 24 de ore. Finanțarea poate fi aprobată în doar 48h.
-              </p>
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight text-ink">Despre această mașină</h2>
+            <div className="mt-4 space-y-4 text-base leading-relaxed text-ink-soft">
+              {(vehicle.description ?? [
+                `${title} din ${vehicle.year}, ${vehicle.fuel.toLowerCase()}, cutie ${vehicle.transmission.toLowerCase()}. Mașina este verificată tehnic, are kilometrajul garantat și istoric complet — primești toate documentele înainte de cumpărare.`,
+                `Sună-ne pentru orice detaliu sau programează o vizionare la sediul nostru din ${vehicle.location}. Te putem ajuta și cu finanțarea, cu răspuns în aproximativ 48 de ore.`,
+              ]).map((p) => (
+                <p key={p.slice(0, 40)}>{p}</p>
+              ))}
             </div>
-          </Reveal>
+          </div>
 
-          {/* Features */}
-          {isMercedes && (
-            <Reveal>
-              <h2 className="font-serif text-3xl text-ink md:text-4xl">
-                Dotări <span className="italic text-graphite">complete</span>
-              </h2>
-              <div className="mt-8 grid gap-6 sm:grid-cols-2">
-                {Object.entries(features).map(([group, list]) => (
-                  <div key={group} className="rounded-3xl border border-ink/8 bg-surface p-6">
-                    <h3 className="font-serif text-xl text-ink">{group}</h3>
-                    <ul className="mt-4 space-y-2.5 text-sm text-ink-soft">
-                      {(list as string[]).map((f) => (
+          {/* Features — only when real data exists */}
+          {vehicle.features && (
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight text-ink">Dotări</h2>
+              <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                {Object.entries(vehicle.features).map(([group, list]) => (
+                  <div key={group} className="rounded-xl border border-ink/10 bg-surface p-5">
+                    <h3 className="text-[17px] font-semibold text-ink">{group}</h3>
+                    <ul className="mt-3 space-y-2 text-[15px] text-ink-soft">
+                      {list.map((f) => (
                         <li key={f} className="flex items-start gap-2.5">
-                          <Check size={14} className="mt-1 shrink-0 text-ink" />
+                          <Check size={16} className="mt-1 shrink-0 text-brand" aria-hidden />
                           {f}
                         </li>
                       ))}
@@ -259,144 +253,144 @@ function VehiclePage() {
                   </div>
                 ))}
               </div>
-            </Reveal>
+            </div>
           )}
 
           {/* Trust */}
-          <Reveal>
-            <div className="grid gap-4 sm:grid-cols-3">
-              {[
-                { t: "Istoric verificat", d: "Raport complet oferit la cerere" },
-                { t: "Kilometraj garantat", d: "Validat prin rapoarte multiple" },
-                { t: "Garanție inclusă", d: "6 luni la componente majore" },
-              ].map((x) => (
-                <div key={x.t} className="flex items-start gap-3 rounded-2xl border border-ink/8 bg-surface p-5">
-                  <ShieldCheck size={18} className="mt-0.5 text-ink" strokeWidth={1.5} />
-                  <div>
-                    <p className="text-sm font-medium text-ink">{x.t}</p>
-                    <p className="mt-1 text-xs text-graphite">{x.d}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-
-        {/* Right — sticky price card */}
-        <aside className="md:sticky md:top-28 md:self-start">
-          <Reveal>
-            <div className="overflow-hidden rounded-[1.75rem] border border-ink/8 bg-surface p-7 shadow-[0_1px_0_rgba(0,0,0,0.02),0_30px_60px_-30px_rgba(0,0,0,0.15)]">
-              <p className="text-[11px] tracking-[0.2em] uppercase text-graphite">Preț listat</p>
-              <div className="mt-3 flex items-baseline gap-3">
-                <span className="font-serif text-[clamp(2.5rem,5vw,4rem)] leading-none tracking-tight text-ink">
-                  {formatPrice(spec.price)}
-                </span>
-                <span className="text-sm text-graphite">TVA inclus</span>
-              </div>
-              <p className="mt-3 text-sm text-graphite">
-                Sau finanțare de la <span className="font-medium text-ink">{Math.round(spec.price / 84).toLocaleString("ro-RO")} € / lună</span> pe 84 luni.
-              </p>
-
-              <div className="my-6 h-px w-full bg-ink/8" />
-
-              <div className="space-y-2">
-                <button className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-ink px-6 py-4 text-sm font-medium text-canvas transition-transform hover:-translate-y-0.5">
-                  Programează vizionare
-                  <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-0.5" />
-                </button>
-                <div className="grid grid-cols-2 gap-2">
-                  <a href="tel:+40743000000" className="inline-flex items-center justify-center gap-2 rounded-2xl border border-ink/10 bg-surface px-4 py-3 text-sm text-ink hover:bg-ink/5">
-                    <Phone size={14} /> Sună
-                  </a>
-                  <a href="#" className="inline-flex items-center justify-center gap-2 rounded-2xl border border-ink/10 bg-surface px-4 py-3 text-sm text-ink hover:bg-ink/5">
-                    <MessageCircle size={14} /> WhatsApp
-                  </a>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[
+              { t: "Istoric verificat", d: "Raport complet, oferit înainte de cumpărare" },
+              { t: "Kilometraj garantat", d: "Confirmat prin rapoarte independente" },
+              { t: "Garanție inclusă", d: "Pentru componentele majore" },
+            ].map((x) => (
+              <div key={x.t} className="flex items-start gap-3 rounded-xl border border-ink/10 bg-surface p-4">
+                <ShieldCheck size={20} className="mt-0.5 shrink-0 text-brand" strokeWidth={1.75} aria-hidden />
+                <div>
+                  <p className="text-[15px] font-semibold text-ink">{x.t}</p>
+                  <p className="mt-0.5 text-[14px] text-graphite">{x.d}</p>
                 </div>
               </div>
-
-              <div className="mt-6 rounded-2xl bg-secondary/60 p-4 text-xs text-graphite leading-relaxed">
-                Cod anunț: <span className="font-mono text-ink">PY-{vehicle.slug.slice(-6).toUpperCase()}</span> · Actualizat astăzi · Verificat de Yanis
-              </div>
-            </div>
-          </Reveal>
-        </aside>
-      </section>
-
-      {/* Related */}
-      <section className="px-6 pt-32 pb-8 md:px-10">
-        <div className="mx-auto max-w-[1400px]">
-          <Reveal>
-            <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
-              <h2 className="font-serif text-[clamp(2rem,4vw,3.5rem)] leading-[1] tracking-[-0.02em] text-ink">
-                S-ar potrivi și <span className="italic text-graphite">aceste mașini</span>.
-              </h2>
-              <Link to="/stoc" className="inline-flex items-center gap-2 text-sm text-graphite hover:text-ink">
-                <ArrowLeft size={15} /> Vezi tot stocul
-              </Link>
-            </div>
-          </Reveal>
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {related.map((v, i) => (
-              <VehicleCard key={v.slug} v={v} index={i} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Lightbox */}
-      <AnimatePresence>
-        {lightbox !== null && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[70] grid place-items-center bg-ink/95 p-4 md:p-10"
-            onClick={() => setLightbox(null)}
+      {/* Related */}
+      <section className="px-4 pt-16 pb-4 md:px-8 md:pt-24" aria-labelledby="similare-titlu">
+        <div className="mx-auto max-w-[1320px]">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <h2 id="similare-titlu" className="text-2xl font-bold tracking-tight text-ink md:text-3xl">
+              Alte mașini din stoc
+            </h2>
+            <Link
+              to="/stoc"
+              className="inline-flex min-h-11 items-center text-base font-semibold text-brand underline-offset-4 hover:underline"
+            >
+              Vezi tot stocul
+            </Link>
+          </div>
+          <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {related.map((v) => (
+              <VehicleCard key={v.slug} v={v} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {lightbox !== null && (
+        <Lightbox
+          photos={photos}
+          index={lightbox}
+          onClose={() => setLightbox(null)}
+          onNavigate={setLightbox}
+        />
+      )}
+    </div>
+  );
+}
+
+function Lightbox({
+  photos,
+  index,
+  onClose,
+  onNavigate,
+}: {
+  photos: { src: string; alt: string }[];
+  index: number;
+  onClose: () => void;
+  onNavigate: (i: number) => void;
+}) {
+  const prev = () => onNavigate((index - 1 + photos.length) % photos.length);
+  const next = () => onNavigate((index + 1) % photos.length);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") onNavigate((index - 1 + photos.length) % photos.length);
+      if (e.key === "ArrowRight") onNavigate((index + 1) % photos.length);
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [index, photos.length, onClose, onNavigate]);
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Fotografia ${index + 1} din ${photos.length}`}
+      className="fixed inset-0 z-[70] grid place-items-center bg-ink/95 p-4 md:p-10"
+      onClick={onClose}
+    >
+      <button
+        type="button"
+        autoFocus
+        className="absolute top-4 right-4 grid h-12 w-12 place-items-center rounded-full border border-white/25 text-white transition-colors duration-150 hover:bg-white/10"
+        onClick={onClose}
+        aria-label="Închide galeria"
+      >
+        <X size={20} />
+      </button>
+
+      {photos.length > 1 && (
+        <>
+          <button
+            type="button"
+            className="absolute left-3 grid h-12 w-12 place-items-center rounded-full border border-white/25 text-white transition-colors duration-150 hover:bg-white/10 md:left-8"
+            onClick={(e) => {
+              e.stopPropagation();
+              prev();
+            }}
+            aria-label="Fotografia anterioară"
           >
-            <button
-              className="absolute top-5 right-5 grid h-11 w-11 place-items-center rounded-full border border-white/15 text-white hover:bg-white/10"
-              onClick={() => setLightbox(null)}
-              aria-label="Închide"
-            >
-              <X size={18} />
-            </button>
-            <button
-              className="absolute left-5 grid h-11 w-11 place-items-center rounded-full border border-white/15 text-white hover:bg-white/10 md:left-10"
-              onClick={(e) => {
-                e.stopPropagation();
-                setLightbox((v) => (v === null ? 0 : (v - 1 + photos.length) % photos.length));
-              }}
-              aria-label="Anterioară"
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <button
-              className="absolute right-5 grid h-11 w-11 place-items-center rounded-full border border-white/15 text-white hover:bg-white/10 md:right-10"
-              onClick={(e) => {
-                e.stopPropagation();
-                setLightbox((v) => (v === null ? 0 : (v + 1) % photos.length));
-              }}
-              aria-label="Următoarea"
-            >
-              <ChevronRight size={18} />
-            </button>
-            <motion.img
-              key={lightbox}
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              src={photos[lightbox].src}
-              alt={photos[lightbox].alt}
-              className="max-h-[85vh] max-w-[92vw] rounded-2xl object-contain"
-              onClick={(e) => e.stopPropagation()}
-            />
-            <div className="absolute bottom-5 text-sm text-white/60">
-              {lightbox + 1} / {photos.length}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <ChevronLeft size={20} />
+          </button>
+          <button
+            type="button"
+            className="absolute right-3 grid h-12 w-12 place-items-center rounded-full border border-white/25 text-white transition-colors duration-150 hover:bg-white/10 md:right-8"
+            onClick={(e) => {
+              e.stopPropagation();
+              next();
+            }}
+            aria-label="Fotografia următoare"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </>
+      )}
+
+      <img
+        src={photos[index].src}
+        alt={photos[index].alt}
+        className="max-h-[85vh] max-w-[92vw] rounded-xl object-contain"
+        onClick={(e) => e.stopPropagation()}
+      />
+      <p className="absolute bottom-4 text-[15px] text-white/80">
+        {index + 1} / {photos.length}
+      </p>
     </div>
   );
 }
