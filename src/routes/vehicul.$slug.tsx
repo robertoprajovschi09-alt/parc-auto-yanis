@@ -1,13 +1,17 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import {
   Phone,
   MessageCircle,
   ShieldCheck,
+  Gauge,
+  BadgeCheck,
   X,
   ChevronLeft,
   ChevronRight,
   Check,
+  Camera,
   MapPin,
 } from "lucide-react";
 
@@ -15,6 +19,8 @@ import { vehicles, formatKm, formatPrice, type Vehicle } from "@/lib/vehicles";
 import { monthlyPayment, FINANCE } from "@/lib/finance";
 import { site, whatsappLink } from "@/lib/site";
 import { VehicleCard } from "@/components/site/VehicleCard";
+import { SectionHeading } from "@/components/site/SectionHeading";
+import { Reveal, RevealGroup, RevealItem, EASE } from "@/components/motion/Reveal";
 
 export const Route = createFileRoute("/vehicul/$slug")({
   loader: ({ params }) => {
@@ -44,16 +50,15 @@ export const Route = createFileRoute("/vehicul/$slug")({
   notFoundComponent: () => (
     <div className="grid min-h-[70vh] place-items-center px-4 text-center">
       <div>
-        <h1 className="text-3xl font-bold text-ink">Mașina nu a fost găsită</h1>
+        <h1 className="text-3xl font-extrabold text-ink">Mașina nu a fost găsită</h1>
         <p className="mt-3 text-base text-graphite">
           Probabil a fost vândută sau linkul nu mai este valabil.
         </p>
-        <Link
-          to="/stoc"
-          className="mt-8 inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-7 text-base font-semibold text-white transition-colors duration-150 hover:bg-brand-strong"
-        >
-          Vezi mașinile disponibile
-        </Link>
+        <div className="mt-8 flex justify-center">
+          <Link to="/stoc" className="btn-primary">
+            Vezi mașinile disponibile
+          </Link>
+        </div>
       </div>
     </div>
   ),
@@ -92,56 +97,81 @@ function VehiclePage() {
     <div className="pt-24 md:pt-32">
       {/* Breadcrumb */}
       <nav aria-label="Localizare în site" className="mx-auto max-w-[1320px] px-4 md:px-8">
-        <ol className="flex flex-wrap items-center gap-2 text-[14px] text-graphite">
+        <ol className="flex flex-wrap items-center gap-2 text-[14px] font-medium text-graphite">
           <li>
-            <Link to="/" className="underline-offset-4 hover:text-ink hover:underline">
+            <Link to="/" className="underline-offset-4 hover:text-brand hover:underline">
               Acasă
             </Link>
           </li>
-          <li aria-hidden>/</li>
+          <li aria-hidden className="text-sun-strong">
+            /
+          </li>
           <li>
-            <Link to="/stoc" className="underline-offset-4 hover:text-ink hover:underline">
+            <Link to="/stoc" className="underline-offset-4 hover:text-brand hover:underline">
               Mașini în stoc
             </Link>
           </li>
-          <li aria-hidden>/</li>
-          <li aria-current="page" className="font-medium text-ink">
+          <li aria-hidden className="text-sun-strong">
+            /
+          </li>
+          <li aria-current="page" className="font-bold text-ink">
             {title}
           </li>
         </ol>
       </nav>
 
-      {/* Title */}
+      {/* Title + price row */}
       <header className="mx-auto max-w-[1320px] px-4 pt-6 md:px-8">
-        <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">{title}</h1>
-        <p className="mt-2 text-base text-graphite md:text-lg">
-          {vehicle.year} · {formatKm(vehicle.mileage)} · {vehicle.fuel} · {vehicle.transmission} ·{" "}
-          {vehicle.power}
-        </p>
-        <p className="mt-1.5 flex items-center gap-1.5 text-[15px] text-graphite">
-          <MapPin size={15} aria-hidden /> {vehicle.location}
-        </p>
+        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+          <div>
+            {vehicle.tag && (
+              <span className="mb-3 inline-block rounded-md bg-sun px-2.5 py-1 text-[13px] font-bold text-ink">
+                {vehicle.tag}
+              </span>
+            )}
+            <h1 className="text-3xl font-extrabold tracking-tight text-ink md:text-[44px] md:leading-[1.1]">
+              {title}
+            </h1>
+            <p className="mt-2.5 text-base font-medium text-graphite md:text-lg">
+              {vehicle.year} · {formatKm(vehicle.mileage)} · {vehicle.fuel} · {vehicle.transmission}{" "}
+              · {vehicle.power}
+            </p>
+            <p className="mt-1.5 flex items-center gap-1.5 text-[15px] font-medium text-graphite">
+              <MapPin size={15} aria-hidden className="text-brand" /> {vehicle.location}
+            </p>
+          </div>
+          <div className="md:text-right">
+            <p className="text-[14px] font-semibold text-graphite">Preț</p>
+            <p className="text-[40px] leading-none font-black tracking-tight text-brand">
+              {formatPrice(vehicle.price)}
+            </p>
+          </div>
+        </div>
       </header>
 
       {/* Gallery */}
-      <section className="mx-auto max-w-[1320px] px-4 pt-6 md:px-8" aria-label="Fotografii">
+      <section className="mx-auto max-w-[1320px] px-4 pt-7 md:px-8" aria-label="Fotografii">
         <div className="grid gap-3 md:grid-cols-[1.6fr_1fr]">
-          <button
+          <motion.button
             type="button"
             onClick={() => setLightbox(0)}
-            className="relative block overflow-hidden rounded-xl bg-muted"
+            whileHover={{ scale: 0.995 }}
+            className="group relative block overflow-hidden rounded-xl bg-muted"
             aria-label={`Deschide fotografiile (${photos.length})`}
           >
             <img
               src={photos[0].src}
               alt={photos[0].alt}
               fetchPriority="high"
-              className="aspect-[4/3] h-full w-full object-cover"
+              width={1200}
+              height={900}
+              className="aspect-[4/3] h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
             />
-            <span className="absolute right-3 bottom-3 rounded-full bg-surface px-3.5 py-1.5 text-[14px] font-medium text-ink shadow-sm">
+            <span className="absolute right-3 bottom-3 inline-flex items-center gap-1.5 rounded-md bg-ink/80 px-3 py-1.5 text-[14px] font-bold text-white">
+              <Camera size={15} aria-hidden />
               {photos.length === 1 ? "1 fotografie" : `${photos.length} fotografii`}
             </span>
-          </button>
+          </motion.button>
 
           {photos.length > 1 && (
             <div className="grid grid-cols-2 gap-3">
@@ -150,17 +180,19 @@ function VehiclePage() {
                   key={p.src}
                   type="button"
                   onClick={() => setLightbox(i + 1)}
-                  className="relative block overflow-hidden rounded-xl bg-muted"
+                  className="group relative block overflow-hidden rounded-xl bg-muted"
                   aria-label={`Fotografia ${i + 2}`}
                 >
                   <img
                     src={p.src}
                     alt={p.alt}
                     loading="lazy"
-                    className="aspect-[4/3] h-full w-full object-cover"
+                    width={600}
+                    height={450}
+                    className="aspect-[4/3] h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                   />
                   {i === 3 && photos.length > 5 && (
-                    <span className="absolute inset-0 grid place-items-center bg-ink/60 text-lg font-semibold text-white">
+                    <span className="absolute inset-0 grid place-items-center bg-ink/60 text-lg font-extrabold text-white">
                       +{photos.length - 5} foto
                     </span>
                   )}
@@ -174,19 +206,21 @@ function VehiclePage() {
       {/* Main content */}
       <section className="mx-auto grid max-w-[1320px] gap-10 px-4 pt-10 md:grid-cols-[1.6fr_1fr] md:gap-12 md:px-8">
         {/* Price + actions — first on mobile, right column on desktop */}
-        <aside className="md:order-2 md:sticky md:top-28 md:self-start">
-          <div className="rounded-xl border border-ink/10 bg-surface p-6">
-            <p className="text-[15px] text-graphite">Preț</p>
-            <p className="mt-1 text-4xl font-bold tracking-tight text-ink">
-              {formatPrice(vehicle.price)}
-            </p>
-            <p className="mt-3 text-[15px] leading-relaxed text-graphite">
+        <aside className="md:order-2 md:sticky md:top-32 md:self-start">
+          <div className="rounded-2xl bg-surface p-6 shadow-float">
+            <div>
+              <p className="text-[14px] font-semibold text-graphite">Preț</p>
+              <p className="mt-1 text-4xl font-black tracking-tight text-brand">
+                {formatPrice(vehicle.price)}
+              </p>
+            </div>
+            <p className="mt-4 rounded-lg bg-canvas p-3.5 text-[14px] leading-relaxed text-graphite">
               Rată orientativă: <strong className="text-ink">{rate} € / lună</strong> (avans{" "}
               {FINANCE.defaultDownPct}%, {FINANCE.defaultMonths} de luni).{" "}
               <Link
                 to="/finantare"
                 search={{ pret: vehicle.price }}
-                className="font-semibold text-brand underline underline-offset-4 hover:text-brand-strong"
+                className="font-bold text-brand underline underline-offset-4 hover:text-brand-strong"
               >
                 Calculează exact
               </Link>
@@ -196,27 +230,37 @@ function VehiclePage() {
               <Link
                 to="/contact"
                 search={{ masina: vehicle.slug }}
-                className="flex min-h-14 w-full items-center justify-center rounded-full bg-brand px-6 text-[17px] font-semibold text-white transition-colors duration-150 hover:bg-brand-strong"
+                className="btn-primary w-full !min-h-14 !text-[17px]"
               >
                 Programează o vizionare
               </Link>
-              <a
-                href={site.phoneHref}
-                className="flex min-h-14 w-full items-center justify-center gap-2 rounded-full border border-ink/15 bg-surface px-6 text-[17px] font-semibold text-ink transition-colors duration-150 hover:bg-ink/5"
-              >
+              <a href={site.phoneHref} className="btn-ghost w-full !min-h-14 !text-[17px]">
                 <Phone size={18} aria-hidden /> {site.phone}
               </a>
               <a
                 href={whatsappLink(waMessage)}
                 target="_blank"
                 rel="noreferrer"
-                className="flex min-h-14 w-full items-center justify-center gap-2 rounded-full border border-ink/15 bg-surface px-6 text-[17px] font-semibold text-ink transition-colors duration-150 hover:bg-ink/5"
+                className="btn-ghost w-full !min-h-14 !text-[17px]"
               >
                 <MessageCircle size={18} aria-hidden /> Scrie-ne pe WhatsApp
               </a>
             </div>
 
-            <p className="mt-5 text-[14px] leading-relaxed text-graphite">
+            <ul className="mt-6 space-y-2 border-t border-ink/8 pt-5 text-[14px] font-medium text-ink-soft">
+              {[
+                "Istoric complet, oferit înainte de cumpărare",
+                "Kilometraj garantat",
+                "Garanție pentru componentele majore",
+              ].map((x) => (
+                <li key={x} className="flex items-start gap-2.5">
+                  <BadgeCheck size={17} className="mt-0.5 shrink-0 text-sun-strong" aria-hidden />
+                  {x}
+                </li>
+              ))}
+            </ul>
+
+            <p className="mt-5 text-[13px] leading-relaxed text-graphite">
               Program: {site.schedule}. Răspundem în cel mult 24 de ore.
             </p>
           </div>
@@ -225,24 +269,26 @@ function VehiclePage() {
         {/* Details */}
         <div className="space-y-12 md:order-1">
           {/* Specs */}
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight text-ink">Date tehnice</h2>
-            <dl className="mt-5 grid grid-cols-1 gap-x-8 sm:grid-cols-2">
+          <Reveal>
+            <h2 className="text-2xl font-extrabold tracking-tight text-ink">Date tehnice</h2>
+            <dl className="mt-5 grid grid-cols-1 gap-x-10 sm:grid-cols-2">
               {specRows(vehicle).map(([label, value]) => (
                 <div
                   key={label}
                   className="flex items-center justify-between gap-4 border-b border-ink/8 py-3.5"
                 >
-                  <dt className="text-[15px] text-graphite">{label}</dt>
-                  <dd className="text-[16px] font-semibold text-ink">{value}</dd>
+                  <dt className="text-[15px] font-medium text-graphite">{label}</dt>
+                  <dd className="text-[16px] font-extrabold text-ink">{value}</dd>
                 </div>
               ))}
             </dl>
-          </div>
+          </Reveal>
 
           {/* Description */}
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight text-ink">Despre această mașină</h2>
+          <Reveal>
+            <h2 className="text-2xl font-extrabold tracking-tight text-ink">
+              Despre această mașină
+            </h2>
             <div className="mt-4 space-y-4 text-base leading-relaxed text-ink-soft">
               {(
                 vehicle.description ?? [
@@ -253,90 +299,96 @@ function VehiclePage() {
                 <p key={p.slice(0, 40)}>{p}</p>
               ))}
             </div>
-          </div>
+          </Reveal>
 
           {/* Features — only when real data exists */}
           {vehicle.features && (
             <div>
-              <h2 className="text-2xl font-bold tracking-tight text-ink">Dotări</h2>
-              <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              <h2 className="text-2xl font-extrabold tracking-tight text-ink">Dotări</h2>
+              <RevealGroup className="mt-5 grid gap-4 sm:grid-cols-2">
                 {Object.entries(vehicle.features).map(([group, list]) => (
-                  <div key={group} className="rounded-xl border border-ink/10 bg-surface p-5">
-                    <h3 className="text-[17px] font-semibold text-ink">{group}</h3>
-                    <ul className="mt-3 space-y-2 text-[15px] text-ink-soft">
-                      {list.map((f) => (
-                        <li key={f} className="flex items-start gap-2.5">
-                          <Check size={16} className="mt-1 shrink-0 text-brand" aria-hidden />
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  <RevealItem key={group} className="h-full">
+                    <div className="h-full rounded-lg bg-surface p-5 shadow-card">
+                      <h3 className="text-[17px] font-extrabold text-ink">{group}</h3>
+                      <ul className="mt-3 space-y-2 text-[15px] text-ink-soft">
+                        {list.map((f) => (
+                          <li key={f} className="flex items-start gap-2.5">
+                            <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-sun-soft">
+                              <Check size={12} className="text-ink" strokeWidth={3} aria-hidden />
+                            </span>
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </RevealItem>
                 ))}
-              </div>
+              </RevealGroup>
             </div>
           )}
 
           {/* Trust */}
-          <div className="grid gap-4 sm:grid-cols-3">
+          <RevealGroup className="grid gap-4 sm:grid-cols-3">
             {[
-              { t: "Istoric verificat", d: "Raport complet, oferit înainte de cumpărare" },
-              { t: "Kilometraj garantat", d: "Confirmat prin rapoarte independente" },
-              { t: "Garanție inclusă", d: "Pentru componentele majore" },
-            ].map((x) => (
-              <div
-                key={x.t}
-                className="flex items-start gap-3 rounded-xl border border-ink/10 bg-surface p-4"
-              >
-                <ShieldCheck
-                  size={20}
-                  className="mt-0.5 shrink-0 text-brand"
-                  strokeWidth={1.75}
-                  aria-hidden
-                />
-                <div>
-                  <p className="text-[15px] font-semibold text-ink">{x.t}</p>
-                  <p className="mt-0.5 text-[14px] text-graphite">{x.d}</p>
+              {
+                icon: ShieldCheck,
+                t: "Istoric verificat",
+                d: "Raport complet, oferit înainte de cumpărare",
+              },
+              { icon: Gauge, t: "Kilometraj garantat", d: "Confirmat prin rapoarte independente" },
+              { icon: BadgeCheck, t: "Garanție inclusă", d: "Pentru componentele majore" },
+            ].map(({ icon: Icon, t, d }) => (
+              <RevealItem key={t} className="h-full">
+                <div className="flex h-full items-start gap-3 rounded-lg bg-surface p-4 shadow-card">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-ink text-sun">
+                    <Icon size={19} strokeWidth={1.75} aria-hidden />
+                  </span>
+                  <div>
+                    <p className="text-[15px] font-extrabold text-ink">{t}</p>
+                    <p className="mt-0.5 text-[14px] text-graphite">{d}</p>
+                  </div>
                 </div>
-              </div>
+              </RevealItem>
             ))}
-          </div>
+          </RevealGroup>
         </div>
       </section>
 
       {/* Related */}
       <section className="px-4 pt-16 pb-4 md:px-8 md:pt-24" aria-labelledby="similare-titlu">
         <div className="mx-auto max-w-[1320px]">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <h2
-              id="similare-titlu"
-              className="text-2xl font-bold tracking-tight text-ink md:text-3xl"
-            >
-              Alte mașini din stoc
-            </h2>
+          <SectionHeading
+            id="similare-titlu"
+            eyebrow="Continuă căutarea"
+            title="Alte mașini din stoc"
+          >
             <Link
               to="/stoc"
-              className="inline-flex min-h-11 items-center text-base font-semibold text-brand underline-offset-4 hover:underline"
+              className="inline-flex min-h-11 items-center text-base font-bold text-brand underline-offset-4 hover:underline"
             >
-              Vezi tot stocul
+              Vezi tot stocul →
             </Link>
-          </div>
-          <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          </SectionHeading>
+          <RevealGroup className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((v) => (
-              <VehicleCard key={v.slug} v={v} />
+              <RevealItem key={v.slug} className="h-full">
+                <VehicleCard v={v} />
+              </RevealItem>
             ))}
-          </div>
+          </RevealGroup>
         </div>
       </section>
 
-      {lightbox !== null && (
-        <Lightbox
-          photos={photos}
-          index={lightbox}
-          onClose={() => setLightbox(null)}
-          onNavigate={setLightbox}
-        />
-      )}
+      <AnimatePresence>
+        {lightbox !== null && (
+          <Lightbox
+            photos={photos}
+            index={lightbox}
+            onClose={() => setLightbox(null)}
+            onNavigate={setLightbox}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -370,17 +422,21 @@ function Lightbox({
   }, [index, photos.length, onClose, onNavigate]);
 
   return (
-    <div
+    <motion.div
       role="dialog"
       aria-modal="true"
       aria-label={`Fotografia ${index + 1} din ${photos.length}`}
       className="fixed inset-0 z-[70] grid place-items-center bg-ink/95 p-4 md:p-10"
       onClick={onClose}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
     >
       <button
         type="button"
         autoFocus
-        className="absolute top-4 right-4 grid h-12 w-12 place-items-center rounded-full border border-white/25 text-white transition-colors duration-150 hover:bg-white/10"
+        className="absolute top-4 right-4 z-10 grid h-12 w-12 place-items-center rounded-lg border border-white/25 text-white transition-colors duration-200 hover:border-sun hover:bg-sun hover:text-ink"
         onClick={onClose}
         aria-label="Închide galeria"
       >
@@ -391,7 +447,7 @@ function Lightbox({
         <>
           <button
             type="button"
-            className="absolute left-3 grid h-12 w-12 place-items-center rounded-full border border-white/25 text-white transition-colors duration-150 hover:bg-white/10 md:left-8"
+            className="absolute left-3 z-10 grid h-12 w-12 place-items-center rounded-lg border border-white/25 text-white transition-colors duration-200 hover:border-sun hover:bg-sun hover:text-ink md:left-8"
             onClick={(e) => {
               e.stopPropagation();
               prev();
@@ -402,7 +458,7 @@ function Lightbox({
           </button>
           <button
             type="button"
-            className="absolute right-3 grid h-12 w-12 place-items-center rounded-full border border-white/25 text-white transition-colors duration-150 hover:bg-white/10 md:right-8"
+            className="absolute right-3 z-10 grid h-12 w-12 place-items-center rounded-lg border border-white/25 text-white transition-colors duration-200 hover:border-sun hover:bg-sun hover:text-ink md:right-8"
             onClick={(e) => {
               e.stopPropagation();
               next();
@@ -414,15 +470,19 @@ function Lightbox({
         </>
       )}
 
-      <img
+      <motion.img
+        key={photos[index].src}
         src={photos[index].src}
         alt={photos[index].alt}
         className="max-h-[85vh] max-w-[92vw] rounded-xl object-contain"
         onClick={(e) => e.stopPropagation()}
+        initial={{ opacity: 0, scale: 0.97 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3, ease: EASE }}
       />
-      <p className="absolute bottom-4 text-[15px] text-white/80">
+      <p className="absolute bottom-4 rounded-md bg-white/10 px-3 py-1.5 text-[14px] font-bold text-white">
         {index + 1} / {photos.length}
       </p>
-    </div>
+    </motion.div>
   );
 }
