@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ChevronDown, Search, SearchX } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { ChevronDown, Search, SearchX, SlidersHorizontal } from "lucide-react";
 import { useMemo } from "react";
 import { vehicles } from "@/lib/vehicles";
 import { VehicleCard } from "@/components/site/VehicleCard";
+import { EASE } from "@/components/motion/Reveal";
 
 type StocSearch = {
   q?: string;
@@ -85,7 +87,7 @@ function FilterSelect({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-2 block text-[15px] font-medium text-ink">
+      <label htmlFor={id} className="mb-2 block text-[14px] font-bold text-ink">
         {label}
       </label>
       <div className="relative">
@@ -93,7 +95,7 @@ function FilterSelect({
           id={id}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="h-14 w-full appearance-none rounded-xl border border-input bg-surface pr-11 pl-4 text-base text-ink transition-colors duration-150 hover:border-ink/40"
+          className="h-14 w-full appearance-none rounded-lg border border-input bg-surface pr-11 pl-4 text-base font-semibold text-ink transition-colors duration-200 hover:border-ink/40"
         >
           {children}
         </select>
@@ -162,33 +164,52 @@ function Inventory() {
 
   return (
     <div>
-      {/* Header + filters */}
-      <section className="border-b border-ink/8 bg-surface px-4 pt-28 pb-10 md:px-8 md:pt-36">
+      {/* Dark page header */}
+      <section className="bg-ink px-4 pt-32 pb-24 md:px-8 md:pt-40 md:pb-28">
         <div className="mx-auto max-w-[1320px]">
-          <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">Mașini în stoc</h1>
-          <p className="mt-2 text-base text-graphite md:text-lg">
+          <p className="flex items-center gap-2 text-[13px] font-extrabold tracking-[0.1em] text-sun uppercase">
+            <span className="h-[3px] w-6 rounded-full bg-sun" aria-hidden />
+            Stocul complet
+          </p>
+          <h1 className="mt-2.5 text-3xl font-extrabold tracking-tight text-white md:text-[44px]">
+            Mașini în stoc
+          </h1>
+          <p className="mt-3 text-base text-white/70 md:text-lg">
             {vehicles.length} mașini disponibile, toate verificate tehnic și cu istoric complet.
           </p>
+        </div>
+      </section>
 
-          {/* Search */}
-          <div className="relative mt-8 max-w-xl">
-            <Search
-              size={20}
-              aria-hidden
-              className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-graphite"
-            />
-            <input
-              type="search"
-              value={search.q ?? ""}
-              onChange={(e) => setFilter("q", e.target.value)}
-              placeholder="Caută marcă sau model, de ex. BMW"
-              aria-label="Caută după marcă sau model"
-              className="h-14 w-full rounded-xl border border-input bg-surface pr-4 pl-12 text-base text-ink placeholder:text-graphite/70"
-            />
+      {/* Floating filter panel */}
+      <section className="relative z-10 -mt-14 px-4 md:px-8" aria-label="Filtre">
+        <div className="mx-auto max-w-[1320px] rounded-2xl bg-surface p-5 shadow-float md:p-6">
+          <div className="flex items-center gap-2.5 text-[15px] font-extrabold text-ink">
+            <SlidersHorizontal size={17} aria-hidden className="text-brand" />
+            Filtrează stocul
           </div>
 
-          {/* Filters */}
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-[1.3fr_1fr_1fr_1fr_1fr_1fr]">
+            <div>
+              <label htmlFor="f-cauta" className="mb-2 block text-[14px] font-bold text-ink">
+                Caută
+              </label>
+              <div className="relative">
+                <Search
+                  size={18}
+                  aria-hidden
+                  className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-graphite"
+                />
+                <input
+                  id="f-cauta"
+                  type="search"
+                  value={search.q ?? ""}
+                  onChange={(e) => setFilter("q", e.target.value)}
+                  placeholder="Marcă sau model"
+                  className="h-14 w-full rounded-lg border border-input bg-surface pr-4 pl-11 text-base font-semibold text-ink placeholder:font-medium placeholder:text-graphite/70"
+                />
+              </div>
+            </div>
+
             <FilterSelect
               id="f-marca"
               label="Marcă"
@@ -223,7 +244,7 @@ function Inventory() {
               value={search.combustibil ?? ""}
               onChange={(v) => setFilter("combustibil", v)}
             >
-              <option value="">Orice combustibil</option>
+              <option value="">Oricare</option>
               <option value="Benzină">Benzină</option>
               <option value="Diesel">Diesel</option>
             </FilterSelect>
@@ -234,7 +255,7 @@ function Inventory() {
               value={search.cutie ?? ""}
               onChange={(v) => setFilter("cutie", v)}
             >
-              <option value="">Orice cutie</option>
+              <option value="">Oricare</option>
               <option value="Automată">Automată</option>
               <option value="Manuală">Manuală</option>
             </FilterSelect>
@@ -259,15 +280,15 @@ function Inventory() {
       {/* Results */}
       <section className="px-4 pb-24 md:px-8">
         <div className="mx-auto max-w-[1320px]">
-          <div className="flex flex-wrap items-center justify-between gap-4 py-6">
-            <p className="text-base text-ink" role="status">
-              <strong>{results.length}</strong>{" "}
+          <div className="flex flex-wrap items-center justify-between gap-4 py-7">
+            <p className="text-base font-semibold text-ink" role="status">
+              <strong className="font-extrabold">{results.length}</strong>{" "}
               {results.length === 1 ? "mașină găsită" : "mașini găsite"}
               {hasFilters && (
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="ml-4 inline-flex min-h-10 items-center font-semibold text-brand underline underline-offset-4 hover:text-brand-strong"
+                  className="ml-4 inline-flex min-h-10 items-center font-bold text-brand underline underline-offset-4 hover:text-brand-strong"
                 >
                   Șterge filtrele
                 </button>
@@ -275,10 +296,7 @@ function Inventory() {
             </p>
 
             <div className="flex items-center gap-3">
-              <label
-                htmlFor="f-sort"
-                className="text-[15px] font-medium whitespace-nowrap text-ink"
-              >
+              <label htmlFor="f-sort" className="text-[14px] font-bold whitespace-nowrap text-ink">
                 Sortează după
               </label>
               <div className="relative">
@@ -288,7 +306,7 @@ function Inventory() {
                   onChange={(e) =>
                     setFilter("sort", e.target.value === "recente" ? "" : e.target.value)
                   }
-                  className="h-12 appearance-none rounded-xl border border-input bg-surface pr-10 pl-4 text-[15px] text-ink"
+                  className="h-12 appearance-none rounded-lg border border-input bg-surface pr-10 pl-4 text-[15px] font-semibold text-ink"
                 >
                   {sortOptions.map((o) => (
                     <option key={o.value} value={o.value}>
@@ -306,26 +324,36 @@ function Inventory() {
           </div>
 
           {results.length > 0 ? (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {results.map((v) => (
-                <VehicleCard key={v.slug} v={v} />
-              ))}
-            </div>
+            <motion.div layout className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <AnimatePresence mode="popLayout">
+                {results.map((v) => (
+                  <motion.div
+                    key={v.slug}
+                    layout
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.96 }}
+                    transition={{ duration: 0.28, ease: EASE }}
+                    className="h-full"
+                  >
+                    <VehicleCard v={v} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
           ) : (
-            <div className="rounded-xl border border-ink/10 bg-surface px-6 py-16 text-center">
-              <SearchX size={40} aria-hidden className="mx-auto text-graphite" strokeWidth={1.5} />
-              <h2 className="mt-5 text-xl font-semibold text-ink">
+            <div className="rounded-2xl bg-surface px-6 py-16 text-center shadow-card">
+              <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-sun-soft">
+                <SearchX size={28} aria-hidden className="text-ink" strokeWidth={1.75} />
+              </span>
+              <h2 className="mt-5 text-xl font-extrabold text-ink">
                 Nicio mașină nu se potrivește filtrelor
               </h2>
               <p className="mx-auto mt-2 max-w-md text-base text-graphite">
                 Încearcă să scoți unul dintre filtre sau șterge-le pe toate ca să vezi din nou
                 întreg stocul.
               </p>
-              <button
-                type="button"
-                onClick={clearFilters}
-                className="mt-7 inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-7 text-base font-semibold text-white transition-colors duration-150 hover:bg-brand-strong"
-              >
+              <button type="button" onClick={clearFilters} className="btn-primary mt-7">
                 Arată toate mașinile
               </button>
             </div>
