@@ -6,18 +6,13 @@ import { BadgeCheck, ChevronDown, Search } from "lucide-react";
 import heroBg from "@/assets/hero-bg.jpg";
 import { vehicles } from "@/lib/vehicles";
 import { site } from "@/lib/site";
-import { EASE } from "@/components/motion/Reveal";
 
 const brands = [...new Set(vehicles.map((v) => v.brand))].sort();
 
-const intro = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
-};
-const introItem = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: EASE } },
-};
+/* Staggered entrance via CSS animations (tw-animate-css): they run without
+   JS and the SSR HTML is never hidden, so the LCP hero is always readable.
+   Motion is used only for the parallax enhancement. */
+const rise = "animate-in fade-in slide-in-from-bottom-6 fill-mode-backwards duration-700";
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -45,23 +40,16 @@ export function Hero() {
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink to-transparent" />
         </motion.div>
 
-        <motion.div
-          variants={intro}
-          initial="hidden"
-          animate="show"
-          className="mx-auto max-w-[1320px] px-4 pt-36 pb-40 md:px-8 md:pt-48 md:pb-48"
-        >
-          <motion.p
-            variants={introItem}
-            className="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-[14px] font-semibold text-white/85 backdrop-blur-sm"
+        <div className="mx-auto max-w-[1320px] px-4 pt-36 pb-40 md:px-8 md:pt-48 md:pb-48">
+          <p
+            className={`inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-[14px] font-semibold text-white/85 backdrop-blur-sm ${rise}`}
           >
             <span className="h-2 w-2 rounded-full bg-sun" aria-hidden />
             Parc auto în {site.city} · {site.scheduleShort}
-          </motion.p>
+          </p>
 
-          <motion.h1
-            variants={introItem}
-            className="mt-6 max-w-3xl text-[42px] leading-[1.05] font-black tracking-tight text-white md:text-[64px]"
+          <h1
+            className={`mt-6 max-w-3xl text-[42px] leading-[1.05] font-black tracking-tight text-white md:text-[64px] ${rise} delay-100`}
           >
             Găsește-ți următoarea{" "}
             <span className="relative inline-block">
@@ -80,19 +68,15 @@ export function Hero() {
                 />
               </svg>
             </span>
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            variants={introItem}
-            className="mt-7 max-w-xl text-lg leading-relaxed text-white/75"
-          >
+          <p className={`mt-7 max-w-xl text-lg leading-relaxed text-white/75 ${rise} delay-200`}>
             Fiecare mașină din stoc este verificată tehnic, are kilometrajul garantat și raport de
             istoric. Alege-o pe a ta și programează o vizionare în {site.city}.
-          </motion.p>
+          </p>
 
-          <motion.ul
-            variants={introItem}
-            className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3 text-[15px] font-semibold text-white"
+          <ul
+            className={`mt-9 flex flex-wrap items-center gap-x-7 gap-y-3 text-[15px] font-semibold text-white ${rise} delay-300`}
           >
             {["Istoric verificat", "Kilometraj garantat", "Finanțare în ~48h"].map((x) => (
               <li key={x} className="flex items-center gap-2.5">
@@ -100,19 +84,15 @@ export function Hero() {
                 {x}
               </li>
             ))}
-          </motion.ul>
-        </motion.div>
+          </ul>
+        </div>
       </section>
 
       {/* Floating search panel, Vehica-style, overlapping the hero edge */}
       <div className="relative z-10 mx-auto -mt-28 max-w-[1320px] px-4 md:-mt-24 md:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, ease: EASE, delay: 0.35 }}
-        >
+        <div className={`${rise} delay-300`}>
           <SearchPanel />
-        </motion.div>
+        </div>
       </div>
     </>
   );

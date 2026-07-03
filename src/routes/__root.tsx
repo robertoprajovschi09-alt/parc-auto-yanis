@@ -9,7 +9,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { MotionConfig, motion } from "motion/react";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -142,9 +142,15 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+/* Animate route changes only — never the first paint, so SSR HTML arrives
+   fully visible and the page never depends on JS to become readable. */
+let hasRenderedOnce = false;
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isFirstRender = useRef(!hasRenderedOnce);
+  hasRenderedOnce = true;
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -157,11 +163,10 @@ function RootComponent() {
             Sari la conținut
           </a>
           <SiteNav />
-          {/* Soft cross-page fade; entrance only, so SSR content stays visible */}
           <motion.main
             id="continut"
             key={pathname}
-            initial={{ opacity: 0, y: 10 }}
+            initial={isFirstRender.current ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, ease: [0.21, 0.47, 0.32, 0.98] }}
           >
