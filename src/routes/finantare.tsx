@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Clock, ShieldCheck, TrendingDown, Wallet } from "lucide-react";
 import { FINANCE, monthlyPayment } from "@/lib/finance";
 import { formatPrice } from "@/lib/vehicles";
+import { RevealGroup, RevealItem } from "@/components/motion/Reveal";
 
 type FinSearch = { pret?: number };
 
@@ -55,10 +56,10 @@ function SliderField({
   return (
     <div>
       <div className="flex items-end justify-between gap-4">
-        <label htmlFor={id} className="text-base font-medium text-ink">
+        <label htmlFor={id} className="text-base font-bold text-ink">
           {label}
         </label>
-        <output htmlFor={id} className="text-xl font-bold tracking-tight text-ink">
+        <output htmlFor={id} className="text-xl font-extrabold tracking-tight text-brand">
           {display}
         </output>
       </div>
@@ -89,20 +90,27 @@ function Finantare() {
   const total = rate * months + downAmount;
 
   return (
-    <div className="pt-28 md:pt-36">
-      <section className="mx-auto max-w-[1320px] px-4 pb-10 md:px-8">
-        <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
-          Calculator de rate
-        </h1>
-        <p className="mt-3 max-w-2xl text-base leading-relaxed text-graphite md:text-lg">
-          Mută cele trei glisoare și vezi imediat rata lunară. Când ești mulțumit de cifre,
-          trimite-ne cererea — ne ocupăm noi de dosar, cu mai multe bănci și IFN-uri.
-        </p>
+    <div>
+      {/* Dark page header */}
+      <section className="bg-ink px-4 pt-32 pb-24 md:px-8 md:pt-40 md:pb-28">
+        <div className="mx-auto max-w-[1320px]">
+          <p className="flex items-center gap-2 text-[13px] font-extrabold tracking-[0.1em] text-sun uppercase">
+            <span className="h-[3px] w-6 rounded-full bg-sun" aria-hidden />
+            Finanțare
+          </p>
+          <h1 className="mt-2.5 text-3xl font-extrabold tracking-tight text-white md:text-[44px]">
+            Calculator de rate
+          </h1>
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/70 md:text-lg">
+            Mută cele trei glisoare și vezi imediat rata lunară. Când ești mulțumit de cifre,
+            trimite-ne cererea — ne ocupăm noi de dosar, cu mai multe bănci și IFN-uri.
+          </p>
+        </div>
       </section>
 
-      <section className="mx-auto grid max-w-[1320px] gap-6 px-4 pb-20 lg:grid-cols-[1.5fr_1fr] md:px-8">
+      <section className="relative z-10 mx-auto -mt-14 grid max-w-[1320px] gap-6 px-4 pb-20 md:px-8 lg:grid-cols-[1.5fr_1fr]">
         {/* Calculator */}
-        <div className="rounded-2xl border border-ink/10 bg-surface p-6 md:p-9">
+        <div className="rounded-2xl bg-surface p-6 shadow-float md:p-9">
           <div className="space-y-7">
             <SliderField
               id="calc-pret"
@@ -139,100 +147,102 @@ function Finantare() {
             />
           </div>
 
-          {/* Result */}
-          <div className="mt-9 rounded-xl bg-brand-soft p-6" role="status" aria-live="polite">
-            <p className="text-[15px] font-medium text-ink">Rata ta lunară, orientativ</p>
-            <p className="mt-1 text-5xl font-bold tracking-tight text-ink">
-              {rate} €<span className="text-xl font-semibold text-graphite"> / lună</span>
+          {/* Result — dark card, yellow figure */}
+          <div
+            className="relative mt-9 overflow-hidden rounded-xl bg-ink p-6 md:p-7"
+            role="status"
+            aria-live="polite"
+          >
+            <div
+              aria-hidden
+              className="absolute -top-24 -right-16 h-56 w-56 rounded-full bg-sun/10 blur-3xl"
+            />
+            <p className="text-[14px] font-bold tracking-wide text-white/70 uppercase">
+              Rata ta lunară, orientativ
             </p>
-            <dl className="mt-5 space-y-1.5 text-[15px] text-ink">
-              <div className="flex justify-between gap-4">
-                <dt className="text-graphite">Avans</dt>
-                <dd className="font-semibold">{formatPrice(downAmount)}</dd>
+            <p className="mt-2 text-5xl font-black tracking-tight text-sun">
+              {rate} €<span className="text-xl font-bold text-white/60"> / lună</span>
+            </p>
+            <dl className="mt-6 space-y-2 text-[15px]">
+              <div className="flex justify-between gap-4 border-b border-white/10 pb-2">
+                <dt className="text-white/65">Avans</dt>
+                <dd className="font-extrabold text-white">{formatPrice(downAmount)}</dd>
+              </div>
+              <div className="flex justify-between gap-4 border-b border-white/10 pb-2">
+                <dt className="text-white/65">Sumă finanțată</dt>
+                <dd className="font-extrabold text-white">{formatPrice(financed)}</dd>
               </div>
               <div className="flex justify-between gap-4">
-                <dt className="text-graphite">Sumă finanțată</dt>
-                <dd className="font-semibold">{formatPrice(financed)}</dd>
-              </div>
-              <div className="flex justify-between gap-4">
-                <dt className="text-graphite">Cost total estimat</dt>
-                <dd className="font-semibold">{formatPrice(total)}</dd>
+                <dt className="text-white/65">Cost total estimat</dt>
+                <dd className="font-extrabold text-white">{formatPrice(total)}</dd>
               </div>
             </dl>
-            <p className="mt-4 text-[13px] leading-relaxed text-graphite">
+            <p className="mt-5 text-[13px] leading-relaxed text-white/55">
               Calcul orientativ, cu o dobândă exemplu de {(FINANCE.annualRate * 100).toFixed(1)}% pe
               an. Oferta finală depinde de bancă și de dosarul tău — o primești gratuit, fără nicio
               obligație.
             </p>
           </div>
 
-          <Link
-            to="/contact"
-            className="mt-6 inline-flex min-h-14 w-full items-center justify-center rounded-full bg-brand px-8 text-[17px] font-semibold text-white transition-colors duration-150 hover:bg-brand-strong sm:w-auto"
-          >
+          <Link to="/contact" className="btn-primary mt-6 w-full !min-h-14 !text-[17px] sm:w-auto">
             Cere oferta exactă
           </Link>
         </div>
 
         {/* Benefits */}
         <div className="space-y-4">
-          {[
-            {
-              icon: Clock,
-              t: "Răspuns în ~48 de ore",
-              d: "Trimitem dosarul la mai multe bănci deodată și revenim rapid cu oferta.",
-            },
-            {
-              icon: TrendingDown,
-              t: "Avans de la 15%",
-              d: "Alegi avansul care se potrivește bugetului tău.",
-            },
-            {
-              icon: Wallet,
-              t: "Fără comision de analiză",
-              d: "Nu percepem niciun cost pentru întocmirea dosarului.",
-            },
-            {
-              icon: ShieldCheck,
-              t: "Totul transparent",
-              d: "Vezi dobânda, DAE și toate costurile înainte să semnezi ceva.",
-            },
-          ].map(({ icon: Icon, t, d }) => (
-            <div
-              key={t}
-              className="flex items-start gap-4 rounded-xl border border-ink/10 bg-surface p-5"
-            >
-              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-brand-soft text-brand">
-                <Icon size={20} strokeWidth={1.75} aria-hidden />
-              </span>
-              <div>
-                <h2 className="text-[16px] font-semibold text-ink">{t}</h2>
-                <p className="mt-1 text-[15px] leading-relaxed text-graphite">{d}</p>
-              </div>
-            </div>
-          ))}
+          <RevealGroup className="space-y-4">
+            {[
+              {
+                icon: Clock,
+                t: "Răspuns în ~48 de ore",
+                d: "Trimitem dosarul la mai multe bănci deodată și revenim rapid cu oferta.",
+              },
+              {
+                icon: TrendingDown,
+                t: "Avans de la 15%",
+                d: "Alegi avansul care se potrivește bugetului tău.",
+              },
+              {
+                icon: Wallet,
+                t: "Fără comision de analiză",
+                d: "Nu percepem niciun cost pentru întocmirea dosarului.",
+              },
+              {
+                icon: ShieldCheck,
+                t: "Totul transparent",
+                d: "Vezi dobânda, DAE și toate costurile înainte să semnezi ceva.",
+              },
+            ].map(({ icon: Icon, t, d }) => (
+              <RevealItem key={t}>
+                <div className="flex items-start gap-4 rounded-lg bg-surface p-5 shadow-card">
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-ink text-sun">
+                    <Icon size={20} strokeWidth={1.75} aria-hidden />
+                  </span>
+                  <div>
+                    <h2 className="text-[16px] font-extrabold text-ink">{t}</h2>
+                    <p className="mt-1 text-[15px] leading-relaxed text-graphite">{d}</p>
+                  </div>
+                </div>
+              </RevealItem>
+            ))}
+          </RevealGroup>
 
-          <div className="rounded-xl border border-ink/10 bg-surface p-5">
-            <h2 className="text-[16px] font-semibold text-ink">Cum funcționează</h2>
-            <ol className="mt-3 space-y-3 text-[15px] leading-relaxed text-graphite">
-              <li className="flex gap-3">
-                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-[13px] font-semibold text-white">
-                  1
-                </span>
-                Alegi mașina și ne spui ce avans și perioadă ți se potrivesc.
-              </li>
-              <li className="flex gap-3">
-                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-[13px] font-semibold text-white">
-                  2
-                </span>
-                Ne trimiți datele de contact — noi pregătim dosarul pentru bănci.
-              </li>
-              <li className="flex gap-3">
-                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-[13px] font-semibold text-white">
-                  3
-                </span>
-                Primești oferta în ~48h. Dacă îți convine, semnezi și pleci cu mașina.
-              </li>
+          <div className="rounded-lg bg-surface p-5 shadow-card">
+            <h2 className="text-[16px] font-extrabold text-ink">Cum funcționează</h2>
+            <ol className="mt-4 space-y-4 text-[15px] leading-relaxed text-graphite">
+              {[
+                "Alegi mașina și ne spui ce avans și perioadă ți se potrivesc.",
+                "Ne trimiți datele de contact — noi pregătim dosarul pentru bănci.",
+                "Primești oferta în ~48h. Dacă îți convine, semnezi și pleci cu mașina.",
+              ].map((step, i) => (
+                <li key={step} className="flex gap-3.5">
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-sun text-[14px] font-black text-ink">
+                    {i + 1}
+                  </span>
+                  {step}
+                </li>
+              ))}
             </ol>
           </div>
         </div>
