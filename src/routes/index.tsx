@@ -1,24 +1,26 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ShieldCheck,
   Gauge,
   Wallet,
   Phone,
-  Search,
   ChevronDown,
   MapPin,
   Clock,
   Star,
   Handshake,
+  CheckCircle2,
+  ArrowRight,
 } from "lucide-react";
 
 import finantareImg from "@/assets/finantare.jpg";
-import mercedesHero from "@/assets/mercedes/470211463.jpg.asset.json";
 import { vehicles, featuredSlugs, formatPrice } from "@/lib/vehicles";
 import { monthlyPayment, FINANCE } from "@/lib/finance";
 import { site } from "@/lib/site";
 import { VehicleCard } from "@/components/site/VehicleCard";
+import { SectionHeading } from "@/components/site/SectionHeading";
+import { Hero } from "@/components/home/Hero";
+import { Reveal, RevealGroup, RevealItem } from "@/components/motion/Reveal";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -28,10 +30,10 @@ function Home() {
   return (
     <>
       <Hero />
-      <QuickSearch />
+      <Brands />
       <Featured />
       <WhyUs />
-      <Financing />
+      <FinancingBand />
       <Testimonials />
       <Faq />
       <ContactBand />
@@ -39,121 +41,39 @@ function Home() {
   );
 }
 
-/* ---------------- HERO ---------------- */
-function Hero() {
-  return (
-    <section className="border-b border-ink/8 bg-surface px-4 pt-28 pb-12 md:px-8 md:pt-40 md:pb-16">
-      <div className="mx-auto grid max-w-[1320px] items-center gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
-        <div>
-          <h1 className="text-4xl leading-[1.1] font-bold tracking-tight text-ink md:text-[52px]">
-            Mașini rulate verificate, cu istoric complet.
-          </h1>
-          <p className="mt-5 max-w-xl text-lg leading-relaxed text-graphite">
-            Fiecare mașină din stocul nostru este verificată tehnic, are kilometrajul garantat și
-            raport de istoric. Vezi mașinile, calculează rata și programează o vizionare în{" "}
-            {site.city}.
-          </p>
-
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link
-              to="/stoc"
-              className="inline-flex min-h-14 items-center justify-center rounded-full bg-brand px-8 text-[17px] font-semibold text-white transition-colors duration-150 hover:bg-brand-strong"
-            >
-              Vezi mașinile în stoc
-            </Link>
-            <a
-              href={site.phoneHref}
-              className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full border border-ink/15 bg-surface px-8 text-[17px] font-semibold text-ink transition-colors duration-150 hover:bg-ink/5"
-            >
-              <Phone size={18} aria-hidden />
-              Sună-ne
-            </a>
-          </div>
-
-          <ul className="mt-10 grid max-w-xl grid-cols-1 gap-3 text-[15px] text-ink sm:grid-cols-3">
-            <li className="flex items-center gap-2.5">
-              <ShieldCheck size={18} className="shrink-0 text-brand" aria-hidden />
-              Istoric verificat
-            </li>
-            <li className="flex items-center gap-2.5">
-              <Gauge size={18} className="shrink-0 text-brand" aria-hidden />
-              Kilometraj garantat
-            </li>
-            <li className="flex items-center gap-2.5">
-              <Wallet size={18} className="shrink-0 text-brand" aria-hidden />
-              Finanțare în ~48h
-            </li>
-          </ul>
-        </div>
-
-        <div className="overflow-hidden rounded-2xl bg-muted">
-          <img
-            src={mercedesHero.url}
-            alt="Mercedes-Benz CLA 180 din stocul Parc Auto Yanis"
-            fetchPriority="high"
-            className="aspect-[4/3] h-full w-full object-cover"
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ---------------- QUICK SEARCH ---------------- */
-function QuickSearch() {
-  const navigate = useNavigate();
-  const [q, setQ] = useState("");
-  const brands = [...new Set(vehicles.map((v) => v.brand))].sort();
+/* ---------------- POPULAR BRANDS ---------------- */
+function Brands() {
+  const counts = new Map<string, number>();
+  for (const v of vehicles) counts.set(v.brand, (counts.get(v.brand) ?? 0) + 1);
+  const brands = [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
 
   return (
-    <section className="px-4 py-10 md:px-8" aria-labelledby="cauta-titlu">
-      <div className="mx-auto max-w-[1320px] rounded-2xl border border-ink/10 bg-surface p-5 md:p-7">
-        <h2 id="cauta-titlu" className="text-xl font-semibold text-ink">
-          Caută o mașină
-        </h2>
-        <form
-          className="mt-4 flex flex-col gap-3 sm:flex-row"
-          onSubmit={(e) => {
-            e.preventDefault();
-            navigate({ to: "/stoc", search: q.trim() ? { q: q.trim() } : {} });
-          }}
-        >
-          <div className="relative flex-1">
-            <Search
-              size={20}
-              aria-hidden
-              className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-graphite"
-            />
-            <input
-              type="search"
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Marcă sau model, de ex. Mercedes"
-              aria-label="Caută după marcă sau model"
-              className="h-14 w-full rounded-xl border border-input bg-surface pr-4 pl-12 text-base text-ink placeholder:text-graphite/70"
-            />
-          </div>
-          <button
-            type="submit"
-            className="inline-flex min-h-14 items-center justify-center rounded-xl bg-brand px-8 text-base font-semibold text-white transition-colors duration-150 hover:bg-brand-strong"
-          >
-            Caută
-          </button>
-        </form>
-
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <span className="text-[15px] text-graphite">Direct la marcă:</span>
-          {brands.map((b) => (
-            <Link
-              key={b}
-              to="/stoc"
-              search={{ marca: b }}
-              className="inline-flex min-h-10 items-center rounded-full border border-ink/15 bg-surface px-4 text-[15px] font-medium text-ink transition-colors duration-150 hover:border-ink/40"
-            >
-              {b}
-            </Link>
+    <section className="px-4 pt-14 md:px-8 md:pt-16" aria-labelledby="marci-titlu">
+      <div className="mx-auto max-w-[1320px]">
+        <SectionHeading id="marci-titlu" eyebrow="Direct la țintă" title="Mărci populare" />
+        <RevealGroup className="mt-7 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+          {brands.map(([brand, count]) => (
+            <RevealItem key={brand}>
+              <Link
+                to="/stoc"
+                search={{ marca: brand }}
+                className="group flex h-full flex-col rounded-lg bg-surface p-5 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift"
+              >
+                <span className="text-[17px] font-extrabold text-ink transition-colors duration-200 group-hover:text-brand">
+                  {brand}
+                </span>
+                <span className="mt-1 flex items-center justify-between text-[14px] font-medium text-graphite">
+                  {count === 1 ? "1 mașină" : `${count} mașini`}
+                  <ArrowRight
+                    size={16}
+                    aria-hidden
+                    className="text-sun-strong transition-transform duration-200 group-hover:translate-x-1"
+                  />
+                </span>
+              </Link>
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   );
@@ -166,30 +86,26 @@ function Featured() {
     .filter(Boolean) as typeof vehicles;
 
   return (
-    <section className="px-4 py-12 md:px-8 md:py-16" aria-labelledby="stoc-titlu">
+    <section className="px-4 py-14 md:px-8 md:py-20" aria-labelledby="stoc-titlu">
       <div className="mx-auto max-w-[1320px]">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h2 id="stoc-titlu" className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
-              Mașini recomandate
-            </h2>
-            <p className="mt-2 text-base text-graphite md:text-lg">
-              O parte din stocul disponibil acum, în {site.city}.
-            </p>
-          </div>
-          <Link
-            to="/stoc"
-            className="inline-flex min-h-12 items-center justify-center rounded-full border border-ink/15 bg-surface px-6 text-base font-semibold text-ink transition-colors duration-150 hover:bg-ink/5"
-          >
+        <SectionHeading
+          id="stoc-titlu"
+          eyebrow="Stoc actual"
+          title="Cele mai bune oferte"
+          sub={`Alese cu grijă din mașinile disponibile acum, în ${site.city}.`}
+        >
+          <Link to="/stoc" className="btn-ghost !min-h-12 !text-[15px]">
             Vezi toate cele {vehicles.length} mașini
           </Link>
-        </div>
+        </SectionHeading>
 
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <RevealGroup className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((v) => (
-            <VehicleCard key={v.slug} v={v} />
+            <RevealItem key={v.slug} className="h-full">
+              <VehicleCard v={v} />
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   );
@@ -221,94 +137,101 @@ function WhyUs() {
   ];
 
   return (
-    <section
-      className="border-y border-ink/8 bg-surface px-4 py-14 md:px-8 md:py-20"
-      aria-labelledby="deceyanis-titlu"
-    >
+    <section className="px-4 py-14 md:px-8 md:py-20" aria-labelledby="deceyanis-titlu">
       <div className="mx-auto max-w-[1320px]">
-        <h2 id="deceyanis-titlu" className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
-          De ce să cumperi de la noi
-        </h2>
-        <p className="mt-2 max-w-2xl text-base text-graphite md:text-lg">
-          Suntem în piață de 9 ani și am vândut peste 100 de mașini. Regula e simplă: vindem doar
-          mașini pe care le-am cumpăra și noi.
-        </p>
+        <SectionHeading
+          id="deceyanis-titlu"
+          eyebrow="De încredere"
+          title="De ce să cumperi de la noi"
+          sub="Suntem în piață de 9 ani și am vândut peste 100 de mașini. Regula e simplă: vindem doar mașini pe care le-am cumpăra și noi."
+        />
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <RevealGroup className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {items.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="rounded-xl border border-ink/10 bg-canvas p-6">
-              <span className="grid h-12 w-12 place-items-center rounded-full bg-brand-soft text-brand">
-                <Icon size={22} strokeWidth={1.75} aria-hidden />
-              </span>
-              <h3 className="mt-5 text-lg font-semibold text-ink">{title}</h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-graphite">{body}</p>
-            </div>
+            <RevealItem key={title} className="h-full">
+              <div className="group h-full rounded-lg bg-surface p-6 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift">
+                <span className="grid h-12 w-12 place-items-center rounded-lg bg-ink text-sun transition-transform duration-300 group-hover:scale-105">
+                  <Icon size={22} strokeWidth={1.75} aria-hidden />
+                </span>
+                <h3 className="mt-5 text-lg font-extrabold text-ink">{title}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-graphite">{body}</p>
+              </div>
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   );
 }
 
-/* ---------------- FINANCING ---------------- */
-function Financing() {
+/* ---------------- FINANCING (dark band) ---------------- */
+function FinancingBand() {
   const example = vehicles.find((v) => v.slug === "bmw-320d-2018");
   const exampleRate = example ? monthlyPayment(example.price) : null;
 
   return (
-    <section className="px-4 py-14 md:px-8 md:py-20" aria-labelledby="finantare-titlu">
-      <div className="mx-auto grid max-w-[1320px] items-center gap-10 lg:grid-cols-2 lg:gap-16">
-        <div className="order-2 overflow-hidden rounded-2xl bg-muted lg:order-1">
-          <img
-            src={finantareImg}
-            alt="Predarea cheilor unei mașini cumpărate"
-            loading="lazy"
-            className="aspect-[4/3] h-full w-full object-cover"
-          />
-        </div>
+    <section
+      className="relative isolate overflow-hidden bg-ink px-4 py-16 md:px-8 md:py-24"
+      aria-labelledby="finantare-titlu"
+    >
+      {/* Soft yellow glow, echoes the hero lighting */}
+      <div
+        aria-hidden
+        className="absolute -top-40 right-[-10%] -z-10 h-[480px] w-[480px] rounded-full bg-sun/10 blur-3xl"
+      />
 
-        <div className="order-1 lg:order-2">
-          <h2
+      <div className="mx-auto grid max-w-[1320px] items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <div>
+          <SectionHeading
             id="finantare-titlu"
-            className="text-3xl font-bold tracking-tight text-ink md:text-4xl"
-          >
-            Finanțare fără drumuri și fără bătăi de cap
-          </h2>
-          <p className="mt-4 max-w-lg text-base leading-relaxed text-graphite md:text-lg">
-            Ne ocupăm noi de dosarul de finanțare, cu mai multe bănci și IFN-uri. Tu alegi mașina,
-            noi îți aducem cea mai bună ofertă de rate.
-          </p>
+            dark
+            eyebrow="Finanțare"
+            title="Rate fără drumuri și fără bătăi de cap"
+            sub="Ne ocupăm noi de dosarul de finanțare, cu mai multe bănci și IFN-uri. Tu alegi mașina, noi îți aducem cea mai bună ofertă de rate."
+          />
 
-          <ul className="mt-7 space-y-3 text-base text-ink">
+          <ul className="mt-8 space-y-3.5 text-base text-white/90">
             {[
               `Avans de la ${FINANCE.minDownPct}%`,
               `Perioadă de la ${FINANCE.minMonths} până la ${FINANCE.maxMonths} de luni`,
               "Răspuns de la bancă în aproximativ 48 de ore",
               "Fără comision de analiză a dosarului",
             ].map((x) => (
-              <li key={x} className="flex items-start gap-3">
-                <ShieldCheck size={20} className="mt-0.5 shrink-0 text-brand" aria-hidden />
+              <li key={x} className="flex items-start gap-3 font-medium">
+                <CheckCircle2 size={20} className="mt-0.5 shrink-0 text-sun" aria-hidden />
                 {x}
               </li>
             ))}
           </ul>
 
           {example && exampleRate && (
-            <p className="mt-6 rounded-xl border border-ink/10 bg-surface p-4 text-[15px] leading-relaxed text-graphite">
+            <p className="mt-8 rounded-xl border border-white/12 bg-white/5 p-5 text-[15px] leading-relaxed text-white/75">
               De exemplu: {example.brand} {example.model} la {formatPrice(example.price)}, cu avans
               de {FINANCE.defaultDownPct}% pe {FINANCE.defaultMonths} de luni ≈{" "}
-              <strong className="text-ink">{exampleRate} € / lună</strong>. Calcul orientativ, cu
-              dobândă exemplu de {(FINANCE.annualRate * 100).toFixed(1)}% pe an.
+              <strong className="text-lg font-extrabold text-sun">{exampleRate} € / lună</strong>.
+              Calcul orientativ, cu dobândă exemplu de {(FINANCE.annualRate * 100).toFixed(1)}% pe
+              an.
             </p>
           )}
 
-          <Link
-            to="/finantare"
-            className="mt-8 inline-flex min-h-14 items-center justify-center rounded-full bg-brand px-8 text-[17px] font-semibold text-white transition-colors duration-150 hover:bg-brand-strong"
-          >
+          <Link to="/finantare" className="btn-sun mt-9 !min-h-14 !px-9 !text-[17px]">
             Calculează-ți rata
           </Link>
         </div>
+
+        <Reveal className="relative">
+          <div className="overflow-hidden rounded-2xl shadow-lift">
+            <img
+              src={finantareImg}
+              alt="Predarea cheilor unei mașini cumpărate"
+              loading="lazy"
+              width={1200}
+              height={900}
+              className="aspect-[4/3] h-full w-full object-cover"
+            />
+          </div>
+          <div aria-hidden className="absolute -bottom-3 left-6 h-1.5 w-24 rounded-full bg-sun" />
+        </Reveal>
       </div>
     </section>
   );
@@ -338,36 +261,40 @@ function Testimonials() {
   ];
 
   return (
-    <section
-      className="border-y border-ink/8 bg-surface px-4 py-14 md:px-8 md:py-20"
-      aria-labelledby="pareri-titlu"
-    >
+    <section className="px-4 py-14 md:px-8 md:py-20" aria-labelledby="pareri-titlu">
       <div className="mx-auto max-w-[1320px]">
-        <h2 id="pareri-titlu" className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
-          Ce spun clienții noștri
-        </h2>
+        <SectionHeading
+          id="pareri-titlu"
+          center
+          eyebrow="Testimoniale"
+          title="Ce spun clienții noștri"
+        />
 
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
+        <RevealGroup className="mt-10 grid gap-5 md:grid-cols-3">
           {items.map((t) => (
-            <figure
-              key={t.name}
-              className="flex h-full flex-col rounded-xl border border-ink/10 bg-canvas p-6"
-            >
-              <div className="flex gap-1 text-brand" aria-label="5 din 5 stele">
-                {Array.from({ length: 5 }).map((_, k) => (
-                  <Star key={k} size={16} fill="currentColor" strokeWidth={0} aria-hidden />
-                ))}
-              </div>
-              <blockquote className="mt-4 flex-1 text-base leading-relaxed text-ink">
-                „{t.quote}"
-              </blockquote>
-              <figcaption className="mt-5 border-t border-ink/8 pt-4 text-[15px]">
-                <span className="font-semibold text-ink">{t.name}</span>
-                <span className="text-graphite"> · {t.place}</span>
-              </figcaption>
-            </figure>
+            <RevealItem key={t.name} className="h-full">
+              <figure className="flex h-full flex-col rounded-lg bg-surface p-6 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift">
+                <div className="flex gap-1 text-sun" aria-label="5 din 5 stele">
+                  {Array.from({ length: 5 }).map((_, k) => (
+                    <Star key={k} size={17} fill="currentColor" strokeWidth={0} aria-hidden />
+                  ))}
+                </div>
+                <blockquote className="mt-4 flex-1 text-base leading-relaxed text-ink-soft">
+                  „{t.quote}"
+                </blockquote>
+                <figcaption className="mt-5 flex items-center gap-3 border-t border-ink/8 pt-4 text-[15px]">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-sun-soft text-[15px] font-extrabold text-ink">
+                    {t.name[0]}
+                  </span>
+                  <span>
+                    <span className="block font-extrabold text-ink">{t.name}</span>
+                    <span className="block text-[13px] text-graphite">Client · {t.place}</span>
+                  </span>
+                </figcaption>
+              </figure>
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   );
@@ -401,25 +328,23 @@ function Faq() {
   return (
     <section className="px-4 py-14 md:px-8 md:py-20" aria-labelledby="faq-titlu">
       <div className="mx-auto max-w-[840px]">
-        <h2 id="faq-titlu" className="text-3xl font-bold tracking-tight text-ink md:text-4xl">
-          Întrebări frecvente
-        </h2>
+        <SectionHeading id="faq-titlu" center eyebrow="Ai întrebări?" title="Întrebări frecvente" />
 
-        <div className="mt-8 divide-y divide-ink/8 rounded-xl border border-ink/10 bg-surface">
-          {items.map((it) => (
-            <details key={it.q} className="group px-5 md:px-6">
-              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-4 text-[17px] font-semibold text-ink [&::-webkit-details-marker]:hidden">
-                {it.q}
-                <ChevronDown
-                  size={20}
-                  aria-hidden
-                  className="shrink-0 text-graphite transition-transform duration-200 group-open:rotate-180"
-                />
-              </summary>
-              <p className="pb-5 text-base leading-relaxed text-graphite">{it.a}</p>
-            </details>
-          ))}
-        </div>
+        <Reveal className="mt-9">
+          <div className="divide-y divide-ink/8 rounded-2xl bg-surface shadow-card">
+            {items.map((it) => (
+              <details key={it.q} className="group px-5 md:px-7">
+                <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-4 text-[17px] font-extrabold text-ink transition-colors duration-200 hover:text-brand [&::-webkit-details-marker]:hidden">
+                  {it.q}
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-sun-soft text-ink transition-transform duration-200 group-open:rotate-180">
+                    <ChevronDown size={18} aria-hidden />
+                  </span>
+                </summary>
+                <p className="pb-6 text-base leading-relaxed text-graphite">{it.a}</p>
+              </details>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -429,55 +354,54 @@ function Faq() {
 function ContactBand() {
   return (
     <section className="px-4 pb-4 md:px-8" aria-labelledby="contact-titlu">
-      <div className="mx-auto max-w-[1320px] rounded-2xl border border-ink/10 bg-surface p-8 md:p-12">
-        <div className="grid items-center gap-8 lg:grid-cols-[1.3fr_1fr]">
-          <div>
-            <h2
-              id="contact-titlu"
-              className="text-3xl font-bold tracking-tight text-ink md:text-4xl"
-            >
-              Vino să vezi mașinile
-            </h2>
-            <p className="mt-3 max-w-lg text-base leading-relaxed text-graphite md:text-lg">
-              Te așteptăm la sediul nostru din {site.city}. Dacă ne suni înainte, pregătim mașinile
-              care te interesează pentru probă.
-            </p>
-            <ul className="mt-6 space-y-2 text-base text-ink">
-              <li className="flex items-center gap-3">
-                <MapPin size={18} className="shrink-0 text-brand" aria-hidden />
-                <a
-                  href={site.mapsUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline-offset-4 hover:underline"
-                >
-                  {site.address}
-                </a>
-              </li>
-              <li className="flex items-center gap-3">
-                <Clock size={18} className="shrink-0 text-brand" aria-hidden />
-                {site.schedule}
-              </li>
-            </ul>
-          </div>
+      <Reveal className="mx-auto max-w-[1320px]">
+        <div className="rounded-2xl bg-surface p-8 shadow-float md:p-12">
+          <div className="grid items-center gap-8 lg:grid-cols-[1.3fr_1fr]">
+            <div>
+              <SectionHeading
+                id="contact-titlu"
+                eyebrow="Te așteptăm"
+                title="Vino să vezi mașinile"
+                sub={`Te așteptăm la sediul nostru din ${site.city}. Dacă ne suni înainte, pregătim mașinile care te interesează pentru probă.`}
+              />
+              <ul className="mt-7 space-y-2 text-base text-ink">
+                <li className="flex items-center gap-3">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-sun-soft text-ink">
+                    <MapPin size={18} aria-hidden />
+                  </span>
+                  <a
+                    href={site.mapsUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-semibold underline-offset-4 hover:underline"
+                  >
+                    {site.address}
+                  </a>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-sun-soft text-ink">
+                    <Clock size={18} aria-hidden />
+                  </span>
+                  <span className="font-semibold">{site.schedule}</span>
+                </li>
+              </ul>
+            </div>
 
-          <div className="flex flex-col gap-3 lg:items-end">
-            <a
-              href={site.phoneHref}
-              className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-full bg-brand px-8 text-[17px] font-semibold text-white transition-colors duration-150 hover:bg-brand-strong lg:w-auto"
-            >
-              <Phone size={18} aria-hidden />
-              {site.phone}
-            </a>
-            <Link
-              to="/contact"
-              className="inline-flex min-h-14 w-full items-center justify-center rounded-full border border-ink/15 bg-surface px-8 text-[17px] font-semibold text-ink transition-colors duration-150 hover:bg-ink/5 lg:w-auto"
-            >
-              Trimite-ne un mesaj
-            </Link>
+            <div className="flex flex-col gap-3 lg:items-end">
+              <a
+                href={site.phoneHref}
+                className="btn-primary w-full !min-h-14 !text-[17px] lg:w-auto"
+              >
+                <Phone size={18} aria-hidden />
+                {site.phone}
+              </a>
+              <Link to="/contact" className="btn-ghost w-full !min-h-14 !text-[17px] lg:w-auto">
+                Trimite-ne un mesaj
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

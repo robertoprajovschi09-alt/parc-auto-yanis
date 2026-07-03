@@ -14,7 +14,11 @@ const links = [
 export function Logo({ dark = false }: { dark?: boolean }) {
   return (
     <span className="flex items-center gap-3">
-      <span className="relative grid h-10 w-10 place-items-center overflow-hidden rounded-lg bg-ink">
+      <span
+        className={`relative grid h-10 w-10 place-items-center overflow-hidden rounded-lg bg-ink ${
+          dark ? "border border-white/20" : ""
+        }`}
+      >
         <span className="text-lg font-black text-sun">Y</span>
         <span className="absolute inset-x-0 bottom-0 h-[3px] bg-brand" aria-hidden />
       </span>
