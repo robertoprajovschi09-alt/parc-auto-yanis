@@ -4,14 +4,16 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { MotionConfig, motion } from "motion/react";
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import "@fontsource-variable/inter/index.css";
+import "@fontsource-variable/mulish/index.css";
 import { SiteNav } from "@/components/site/SiteNav";
 import { SiteFooter } from "@/components/site/SiteFooter";
 
@@ -19,17 +21,19 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-6xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-2xl font-semibold text-foreground">Pagina nu există</h2>
+        <p className="text-7xl font-black tracking-tight text-ink">
+          4<span className="text-sun">0</span>4
+        </p>
+        <h1 className="mt-4 text-2xl font-extrabold text-foreground">Pagina nu există</h1>
         <p className="mt-3 text-base text-muted-foreground">
           Pagina pe care o cauți nu există sau a fost mutată.
         </p>
-        <div className="mt-8">
-          <Link
-            to="/"
-            className="inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-7 text-base font-medium text-white transition-colors hover:bg-brand-strong"
-          >
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <Link to="/" className="btn-primary">
             Înapoi la prima pagină
+          </Link>
+          <Link to="/stoc" className="btn-ghost">
+            Vezi mașinile în stoc
           </Link>
         </div>
       </div>
@@ -59,14 +63,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
               router.invalidate();
               reset();
             }}
-            className="inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-7 text-base font-medium text-white transition-colors hover:bg-brand-strong"
+            className="btn-primary"
           >
             Încearcă din nou
           </button>
-          <a
-            href="/"
-            className="inline-flex min-h-12 items-center justify-center rounded-full border border-input bg-background px-7 text-base font-medium text-foreground transition-colors hover:bg-secondary"
-          >
+          <a href="/" className="btn-ghost">
             Prima pagină
           </a>
         </div>
@@ -142,22 +143,32 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="relative min-h-screen bg-background text-foreground">
-        <a
-          href="#continut"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:bg-brand focus:px-5 focus:py-3 focus:text-sm focus:font-medium focus:text-white"
-        >
-          Sari la conținut
-        </a>
-        <SiteNav />
-        <main id="continut">
-          <Outlet />
-        </main>
-        <SiteFooter />
-      </div>
+      <MotionConfig reducedMotion="user">
+        <div className="relative min-h-screen bg-background text-foreground">
+          <a
+            href="#continut"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-brand focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white"
+          >
+            Sari la conținut
+          </a>
+          <SiteNav />
+          {/* Soft cross-page fade; entrance only, so SSR content stays visible */}
+          <motion.main
+            id="continut"
+            key={pathname}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: [0.21, 0.47, 0.32, 0.98] }}
+          >
+            <Outlet />
+          </motion.main>
+          <SiteFooter />
+        </div>
+      </MotionConfig>
     </QueryClientProvider>
   );
 }
