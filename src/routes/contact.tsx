@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { site, whatsappLink } from "@/lib/site";
 import { vehicles } from "@/lib/vehicles";
+import { RevealGroup, RevealItem } from "@/components/motion/Reveal";
 
 type ContactSearch = { masina?: string };
 
@@ -83,20 +84,29 @@ function Contact() {
   };
 
   return (
-    <div className="pt-28 md:pt-36">
-      <section className="mx-auto max-w-[1320px] px-4 pb-10 md:px-8">
-        <h1 className="text-3xl font-bold tracking-tight text-ink md:text-4xl">Contact</h1>
-        <p className="mt-3 max-w-2xl text-base leading-relaxed text-graphite md:text-lg">
-          Cel mai rapid ne prinzi la telefon. Dacă preferi să scrii, completează formularul și
-          trimite-l pe WhatsApp sau pe email — răspundem în cel mult 24 de ore.
-        </p>
+    <div>
+      {/* Dark page header */}
+      <section className="bg-ink px-4 pt-32 pb-24 md:px-8 md:pt-40 md:pb-28">
+        <div className="mx-auto max-w-[1320px]">
+          <p className="flex items-center gap-2 text-[13px] font-extrabold tracking-[0.1em] text-sun uppercase">
+            <span className="h-[3px] w-6 rounded-full bg-sun" aria-hidden />
+            Suntem aici
+          </p>
+          <h1 className="mt-2.5 text-3xl font-extrabold tracking-tight text-white md:text-[44px]">
+            Contact
+          </h1>
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/70 md:text-lg">
+            Cel mai rapid ne prinzi la telefon. Dacă preferi să scrii, completează formularul și
+            trimite-l pe WhatsApp sau pe email — răspundem în cel mult 24 de ore.
+          </p>
+        </div>
       </section>
 
-      <section className="mx-auto grid max-w-[1320px] gap-6 px-4 pb-20 lg:grid-cols-[1.4fr_1fr] md:px-8">
+      <section className="relative z-10 mx-auto -mt-14 grid max-w-[1320px] gap-6 px-4 pb-20 md:px-8 lg:grid-cols-[1.4fr_1fr]">
         {/* Form */}
         <form
           noValidate
-          className="rounded-2xl border border-ink/10 bg-surface p-6 md:p-9"
+          className="rounded-2xl bg-surface p-6 shadow-float md:p-9"
           onSubmit={(e) => {
             e.preventDefault();
             send("whatsapp");
@@ -126,7 +136,7 @@ function Contact() {
             />
 
             <div className="sm:col-span-2">
-              <label htmlFor="c-masina" className="mb-2 block text-base font-medium text-ink">
+              <label htmlFor="c-masina" className="mb-2 block text-base font-bold text-ink">
                 Despre ce mașină e vorba?
               </label>
               <div className="relative">
@@ -134,7 +144,7 @@ function Contact() {
                   id="c-masina"
                   value={masinaSel}
                   onChange={(e) => setMasinaSel(e.target.value)}
-                  className="h-14 w-full appearance-none rounded-xl border border-input bg-surface pr-11 pl-4 text-base text-ink"
+                  className="h-14 w-full appearance-none rounded-lg border border-input bg-surface pr-11 pl-4 text-base font-semibold text-ink"
                 >
                   <option value={GENERAL}>Întrebare generală / altă mașină</option>
                   {vehicles.map((v) => (
@@ -152,7 +162,7 @@ function Contact() {
             </div>
 
             <div className="sm:col-span-2">
-              <label htmlFor="c-mesaj" className="mb-2 block text-base font-medium text-ink">
+              <label htmlFor="c-mesaj" className="mb-2 block text-base font-bold text-ink">
                 Mesajul tău{" "}
                 <span className="text-destructive" aria-hidden>
                   *
@@ -167,12 +177,12 @@ function Contact() {
                 placeholder="De ex. Aș vrea să văd mașina sâmbătă dimineață."
                 aria-invalid={Boolean(errors.mesaj)}
                 aria-describedby={errors.mesaj ? "c-mesaj-err" : undefined}
-                className={`w-full resize-none rounded-xl border bg-surface px-4 py-3.5 text-base text-ink placeholder:text-graphite/60 ${
+                className={`w-full resize-none rounded-lg border bg-surface px-4 py-3.5 text-base text-ink placeholder:text-graphite/60 ${
                   errors.mesaj ? "border-destructive" : "border-input"
                 }`}
               />
               {errors.mesaj && (
-                <p id="c-mesaj-err" className="mt-1.5 text-[14px] font-medium text-destructive">
+                <p id="c-mesaj-err" className="mt-1.5 text-[14px] font-semibold text-destructive">
                   {errors.mesaj}
                 </p>
               )}
@@ -180,17 +190,14 @@ function Contact() {
           </div>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <button
-              type="submit"
-              className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-brand px-8 text-[17px] font-semibold text-white transition-colors duration-150 hover:bg-brand-strong"
-            >
+            <button type="submit" className="btn-primary !min-h-14 !text-[17px]">
               <MessageCircle size={18} aria-hidden />
               Trimite pe WhatsApp
             </button>
             <button
               type="button"
               onClick={() => send("email")}
-              className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full border border-ink/15 bg-surface px-8 text-[17px] font-semibold text-ink transition-colors duration-150 hover:bg-ink/5"
+              className="btn-ghost !min-h-14 !text-[17px]"
             >
               <Mail size={18} aria-hidden />
               Trimite pe email
@@ -200,7 +207,7 @@ function Contact() {
           {sentVia && (
             <div
               role="status"
-              className="mt-6 rounded-xl bg-brand-soft p-5 text-[15px] leading-relaxed text-ink"
+              className="mt-6 rounded-lg border-l-4 border-sun bg-sun-soft p-5 text-[15px] leading-relaxed text-ink"
             >
               <strong>Mesajul tău este pregătit.</strong>{" "}
               {sentVia === "whatsapp"
@@ -209,7 +216,7 @@ function Contact() {
               Dacă nu s-a deschis nimic, sună-ne direct la{" "}
               <a
                 href={site.phoneHref}
-                className="font-semibold text-brand underline underline-offset-4"
+                className="font-bold text-brand underline underline-offset-4"
               >
                 {site.phone}
               </a>
@@ -219,36 +226,46 @@ function Contact() {
         </form>
 
         {/* Contact info */}
-        <div className="space-y-3">
-          <InfoCard icon={Phone} title="Telefon" hint={site.schedule}>
-            <a
-              href={site.phoneHref}
-              className="font-semibold text-ink underline-offset-4 hover:underline"
-            >
-              {site.phone}
-            </a>
-          </InfoCard>
-          <InfoCard icon={Mail} title="Email" hint="Răspundem în cel mult 24h">
-            <a
-              href={`mailto:${site.email}`}
-              className="font-semibold text-ink underline-offset-4 hover:underline"
-            >
-              {site.email}
-            </a>
-          </InfoCard>
-          <InfoCard icon={MapPin} title="Adresă" hint="Parcare proprie pentru clienți">
-            <a
-              href={site.mapsUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="font-semibold text-ink underline-offset-4 hover:underline"
-            >
-              {site.address}
-            </a>
-          </InfoCard>
-          <InfoCard icon={Clock} title="Program" hint="Duminică: închis">
-            <span className="font-semibold text-ink">{site.schedule}</span>
-          </InfoCard>
+        <div className="space-y-4">
+          <RevealGroup className="space-y-4">
+            <RevealItem>
+              <InfoCard icon={Phone} title="Telefon" hint={site.schedule}>
+                <a
+                  href={site.phoneHref}
+                  className="font-extrabold text-ink underline-offset-4 hover:text-brand hover:underline"
+                >
+                  {site.phone}
+                </a>
+              </InfoCard>
+            </RevealItem>
+            <RevealItem>
+              <InfoCard icon={Mail} title="Email" hint="Răspundem în cel mult 24h">
+                <a
+                  href={`mailto:${site.email}`}
+                  className="font-extrabold text-ink underline-offset-4 hover:text-brand hover:underline"
+                >
+                  {site.email}
+                </a>
+              </InfoCard>
+            </RevealItem>
+            <RevealItem>
+              <InfoCard icon={MapPin} title="Adresă" hint="Parcare proprie pentru clienți">
+                <a
+                  href={site.mapsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-extrabold text-ink underline-offset-4 hover:text-brand hover:underline"
+                >
+                  {site.address}
+                </a>
+              </InfoCard>
+            </RevealItem>
+            <RevealItem>
+              <InfoCard icon={Clock} title="Program" hint="Duminică: închis">
+                <span className="font-extrabold text-ink">{site.schedule}</span>
+              </InfoCard>
+            </RevealItem>
+          </RevealGroup>
 
           <div className="flex gap-3 pt-2">
             <a
@@ -256,7 +273,7 @@ function Contact() {
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram Parc Auto Yanis"
-              className="grid h-12 w-12 place-items-center rounded-full border border-ink/15 bg-surface text-ink transition-colors duration-150 hover:bg-ink/5"
+              className="grid h-12 w-12 place-items-center rounded-lg border border-ink/15 bg-surface text-ink transition-all duration-200 hover:border-sun hover:bg-sun"
             >
               <Instagram size={18} />
             </a>
@@ -265,7 +282,7 @@ function Contact() {
               target="_blank"
               rel="noreferrer"
               aria-label="Facebook Parc Auto Yanis"
-              className="grid h-12 w-12 place-items-center rounded-full border border-ink/15 bg-surface text-ink transition-colors duration-150 hover:bg-ink/5"
+              className="grid h-12 w-12 place-items-center rounded-lg border border-ink/15 bg-surface text-ink transition-all duration-200 hover:border-sun hover:bg-sun"
             >
               <Facebook size={18} />
             </a>
@@ -299,7 +316,7 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-2 block text-base font-medium text-ink">
+      <label htmlFor={id} className="mb-2 block text-base font-bold text-ink">
         {label}{" "}
         {required && (
           <span className="text-destructive" aria-hidden>
@@ -317,12 +334,12 @@ function Field({
         autoComplete={autoComplete}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? `${id}-err` : undefined}
-        className={`h-14 w-full rounded-xl border bg-surface px-4 text-base text-ink placeholder:text-graphite/60 ${
+        className={`h-14 w-full rounded-lg border bg-surface px-4 text-base text-ink placeholder:text-graphite/60 ${
           error ? "border-destructive" : "border-input"
         }`}
       />
       {error && (
-        <p id={`${id}-err`} className="mt-1.5 text-[14px] font-medium text-destructive">
+        <p id={`${id}-err`} className="mt-1.5 text-[14px] font-semibold text-destructive">
           {error}
         </p>
       )}
@@ -342,12 +359,12 @@ function InfoCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex items-start gap-4 rounded-xl border border-ink/10 bg-surface p-5">
-      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-brand-soft text-brand">
+    <div className="flex items-start gap-4 rounded-lg bg-surface p-5 shadow-card">
+      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-ink text-sun">
         <Icon size={20} strokeWidth={1.75} aria-hidden />
       </span>
       <div className="min-w-0">
-        <p className="text-[14px] text-graphite">{title}</p>
+        <p className="text-[14px] font-semibold text-graphite">{title}</p>
         <p className="mt-0.5 text-[16px]">{children}</p>
         <p className="mt-0.5 text-[14px] text-graphite">{hint}</p>
       </div>
