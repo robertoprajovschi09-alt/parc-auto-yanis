@@ -9,7 +9,8 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "deploy": "vite build && node scripts/patch-wrangler.mjs && npx wrangler@4.86.0 deploy --config .output/server/wrangler.json"
   },
   "dependencies": {
     "@fontsource-variable/mulish": "^5.2.8",
