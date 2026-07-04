@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Phone, ArrowRight } from "lucide-react";
+import { Phone, ArrowRight, MessageCircle } from "lucide-react";
 
 import { vehicles } from "@/lib/vehicles";
-import { site } from "@/lib/site";
+import { site, whatsappLink } from "@/lib/site";
 import { VehicleCard } from "@/components/site/VehicleCard";
 import { Hero } from "@/components/home/Hero";
 import { BombaZilei } from "@/components/home/BombaZilei";
@@ -75,6 +75,15 @@ function ContactBand() {
             <a href={site.phoneHref} className="btn-sun !min-h-14 !text-[17px]">
               <Phone size={18} aria-hidden />
               {site.phone}
+            </a>
+            <a
+              href={whatsappLink("Bună ziua! Vă contactez de pe site în legătură cu o mașină.")}
+              target="_blank"
+              rel="noreferrer"
+              className="btn-ghost-dark !min-h-14 !text-[17px]"
+            >
+              <MessageCircle size={18} aria-hidden />
+              WhatsApp
             </a>
             <Link to="/contact" className="btn-ghost-dark !min-h-14 !text-[17px]">
               Trimite un mesaj

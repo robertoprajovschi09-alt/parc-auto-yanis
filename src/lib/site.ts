@@ -6,10 +6,9 @@
 export const site = {
   name: "Târg Auto Yanis",
   city: "Tulcea",
-  // TODO(owner): replace placeholder phone with the real number
-  phone: "+40 743 000 000",
-  phoneHref: "tel:+40743000000",
-  whatsappNumber: "40743000000",
+  phone: "0747 465 265",
+  phoneHref: "tel:+40747465265",
+  whatsappNumber: "40747465265",
   // TODO(owner): confirm email + social handles under the new brand
   email: "salut@targautoyanis.ro",
   address: "Str. Isaccei 12, Tulcea",
