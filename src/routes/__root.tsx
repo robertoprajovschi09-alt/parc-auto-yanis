@@ -81,14 +81,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Parc Auto Yanis — Mașini rulate verificate, în Tulcea" },
+      { title: "Târg Auto Yanis — Mașini rulate verificate, în Tulcea" },
       {
         name: "description",
         content:
-          "Mașini rulate verificate, cu istoric complet și kilometraj garantat. Finanțare cu aprobare rapidă. Parc Auto Yanis, Tulcea.",
+          "Mașini rulate verificate, cu istoric complet și kilometraj garantat. Finanțare cu aprobare rapidă. Târg Auto Yanis, Tulcea.",
       },
-      { name: "author", content: "Parc Auto Yanis" },
-      { property: "og:title", content: "Parc Auto Yanis — Mașini rulate verificate, în Tulcea" },
+      { name: "author", content: "Târg Auto Yanis" },
+      { property: "og:title", content: "Târg Auto Yanis — Mașini rulate verificate, în Tulcea" },
       {
         property: "og:description",
         content:
@@ -96,7 +96,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Parc Auto Yanis — Mașini rulate verificate, în Tulcea" },
+      { name: "twitter:title", content: "Târg Auto Yanis — Mașini rulate verificate, în Tulcea" },
       {
         name: "twitter:description",
         content:

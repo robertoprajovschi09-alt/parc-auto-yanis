@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef, useState } from "react";
-import { BadgeCheck, ChevronDown, Search } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 
 import heroBg from "@/assets/hero-bg.jpg";
 import { vehicles } from "@/lib/vehicles";
@@ -40,12 +40,12 @@ export function Hero() {
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink to-transparent" />
         </motion.div>
 
-        <div className="mx-auto max-w-[1320px] px-4 pt-36 pb-40 md:px-8 md:pt-48 md:pb-48">
+        <div className="mx-auto max-w-[1320px] px-4 pt-32 pb-36 md:px-8 md:pt-44 md:pb-44">
           <p
             className={`inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-[14px] font-semibold text-white/85 backdrop-blur-sm ${rise}`}
           >
             <span className="h-2 w-2 rounded-full bg-sun" aria-hidden />
-            Parc auto în {site.city} · {site.scheduleShort}
+            Târg auto în {site.city}
           </p>
 
           <h1
@@ -70,26 +70,14 @@ export function Hero() {
             </span>
           </h1>
 
-          <p className={`mt-7 max-w-xl text-lg leading-relaxed text-white/75 ${rise} delay-200`}>
-            Fiecare mașină din stoc este verificată tehnic, are kilometrajul garantat și raport de
-            istoric. Alege-o pe a ta și programează o vizionare în {site.city}.
+          <p className={`mt-6 max-w-lg text-lg text-white/75 ${rise} delay-200`}>
+            {vehicles.length} mașini disponibile în {site.city}.
           </p>
-
-          <ul
-            className={`mt-9 flex flex-wrap items-center gap-x-7 gap-y-3 text-[15px] font-semibold text-white ${rise} delay-300`}
-          >
-            {["Istoric verificat", "Kilometraj garantat", "Finanțare în ~48h"].map((x) => (
-              <li key={x} className="flex items-center gap-2.5">
-                <BadgeCheck size={19} className="shrink-0 text-sun" aria-hidden />
-                {x}
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
 
-      {/* Floating search panel, Vehica-style, overlapping the hero edge */}
-      <div className="relative z-10 mx-auto -mt-28 max-w-[1320px] px-4 md:-mt-24 md:px-8">
+      {/* Floating search panel, overlapping the hero edge */}
+      <div className="relative z-10 mx-auto -mt-24 max-w-[1320px] px-4 md:-mt-20 md:px-8">
         <div className={`${rise} delay-300`}>
           <SearchPanel />
         </div>

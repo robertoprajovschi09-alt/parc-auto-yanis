@@ -25,13 +25,13 @@ export const Route = createFileRoute("/contact")({
   }),
   head: () => ({
     meta: [
-      { title: "Contact — Parc Auto Yanis" },
+      { title: "Contact — Târg Auto Yanis" },
       {
         name: "description",
         content:
           "Programează o vizionare sau trimite-ne un mesaj. Ne găsești în Tulcea, de luni până sâmbătă, 09:00–19:00.",
       },
-      { property: "og:title", content: "Contact — Parc Auto Yanis" },
+      { property: "og:title", content: "Contact — Târg Auto Yanis" },
       { property: "og:description", content: "Programează o vizionare sau trimite-ne un mesaj." },
     ],
   }),
@@ -77,7 +77,7 @@ function Contact() {
     if (via === "whatsapp") {
       window.open(whatsappLink(body), "_blank", "noopener");
     } else {
-      const subject = "Mesaj de pe site — Parc Auto Yanis";
+      const subject = "Mesaj de pe site — Târg Auto Yanis";
       window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
     setSentVia(via);
@@ -272,7 +272,7 @@ function Contact() {
               href={site.instagram}
               target="_blank"
               rel="noreferrer"
-              aria-label="Instagram Parc Auto Yanis"
+              aria-label="Instagram Târg Auto Yanis"
               className="grid h-12 w-12 place-items-center rounded-lg border border-ink/15 bg-surface text-ink transition-all duration-200 hover:border-sun hover:bg-sun"
             >
               <Instagram size={18} />
@@ -281,7 +281,7 @@ function Contact() {
               href={site.facebook}
               target="_blank"
               rel="noreferrer"
-              aria-label="Facebook Parc Auto Yanis"
+              aria-label="Facebook Târg Auto Yanis"
               className="grid h-12 w-12 place-items-center rounded-lg border border-ink/15 bg-surface text-ink transition-all duration-200 hover:border-sun hover:bg-sun"
             >
               <Facebook size={18} />

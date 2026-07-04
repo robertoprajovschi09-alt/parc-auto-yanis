@@ -4,9 +4,7 @@ import { site } from "@/lib/site";
 import { Logo } from "@/components/site/SiteNav";
 
 const nav = [
-  { to: "/stoc", label: "Mașini în stoc" },
-  { to: "/finantare", label: "Calculator de rate" },
-  { to: "/despre", label: "Despre noi" },
+  { to: "/stoc", label: "Mașini" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
@@ -21,15 +19,14 @@ export function SiteFooter() {
           <div>
             <Logo dark />
             <p className="mt-6 max-w-sm text-[15px] leading-relaxed text-white/70">
-              Mașini rulate verificate tehnic, cu istoric complet și kilometraj garantat. Te ajutăm
-              și cu finanțarea, de la primul telefon până la înmatriculare.
+              Mașini rulate în {site.city}. Vino la o vizionare sau sună-ne.
             </p>
             <div className="mt-7 flex items-center gap-3">
               <a
                 href={site.instagram}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Instagram Parc Auto Yanis"
+                aria-label="Instagram Târg Auto Yanis"
                 className="grid h-12 w-12 place-items-center rounded-lg border border-white/15 transition-all duration-200 hover:border-sun hover:bg-sun hover:text-ink"
               >
                 <Instagram size={18} />
@@ -38,7 +35,7 @@ export function SiteFooter() {
                 href={site.facebook}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Facebook Parc Auto Yanis"
+                aria-label="Facebook Târg Auto Yanis"
                 className="grid h-12 w-12 place-items-center rounded-lg border border-white/15 transition-all duration-200 hover:border-sun hover:bg-sun hover:text-ink"
               >
                 <Facebook size={18} />
@@ -112,7 +109,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-14 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-6 text-sm text-white/55">
-          <p>© {new Date().getFullYear()} Parc Auto Yanis. Toate drepturile rezervate.</p>
+          <p>© {new Date().getFullYear()} Târg Auto Yanis. Toate drepturile rezervate.</p>
           <p>
             {site.city} ·{" "}
             <Link to="/stoc" className="underline-offset-4 hover:text-sun hover:underline">

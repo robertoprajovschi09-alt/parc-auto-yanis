@@ -10,8 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StocRouteImport } from './routes/stoc'
-import { Route as FinantareRouteImport } from './routes/finantare'
-import { Route as DespreRouteImport } from './routes/despre'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VehiculSlugRouteImport } from './routes/vehicul.$slug'
@@ -19,16 +17,6 @@ import { Route as VehiculSlugRouteImport } from './routes/vehicul.$slug'
 const StocRoute = StocRouteImport.update({
   id: '/stoc',
   path: '/stoc',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FinantareRoute = FinantareRouteImport.update({
-  id: '/finantare',
-  path: '/finantare',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DespreRoute = DespreRouteImport.update({
-  id: '/despre',
-  path: '/despre',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -50,16 +38,12 @@ const VehiculSlugRoute = VehiculSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
-  '/despre': typeof DespreRoute
-  '/finantare': typeof FinantareRoute
   '/stoc': typeof StocRoute
   '/vehicul/$slug': typeof VehiculSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
-  '/despre': typeof DespreRoute
-  '/finantare': typeof FinantareRoute
   '/stoc': typeof StocRoute
   '/vehicul/$slug': typeof VehiculSlugRoute
 }
@@ -67,37 +51,20 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
-  '/despre': typeof DespreRoute
-  '/finantare': typeof FinantareRoute
   '/stoc': typeof StocRoute
   '/vehicul/$slug': typeof VehiculSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/contact'
-    | '/despre'
-    | '/finantare'
-    | '/stoc'
-    | '/vehicul/$slug'
+  fullPaths: '/' | '/contact' | '/stoc' | '/vehicul/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contact' | '/despre' | '/finantare' | '/stoc' | '/vehicul/$slug'
-  id:
-    | '__root__'
-    | '/'
-    | '/contact'
-    | '/despre'
-    | '/finantare'
-    | '/stoc'
-    | '/vehicul/$slug'
+  to: '/' | '/contact' | '/stoc' | '/vehicul/$slug'
+  id: '__root__' | '/' | '/contact' | '/stoc' | '/vehicul/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactRoute: typeof ContactRoute
-  DespreRoute: typeof DespreRoute
-  FinantareRoute: typeof FinantareRoute
   StocRoute: typeof StocRoute
   VehiculSlugRoute: typeof VehiculSlugRoute
 }
@@ -109,20 +76,6 @@ declare module '@tanstack/react-router' {
       path: '/stoc'
       fullPath: '/stoc'
       preLoaderRoute: typeof StocRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/finantare': {
-      id: '/finantare'
-      path: '/finantare'
-      fullPath: '/finantare'
-      preLoaderRoute: typeof FinantareRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/despre': {
-      id: '/despre'
-      path: '/despre'
-      fullPath: '/despre'
-      preLoaderRoute: typeof DespreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -152,8 +105,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
-  DespreRoute: DespreRoute,
-  FinantareRoute: FinantareRoute,
   StocRoute: StocRoute,
   VehiculSlugRoute: VehiculSlugRoute,
 }

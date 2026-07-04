@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { ChevronDown, Search, SearchX, SlidersHorizontal } from "lucide-react";
 import { useMemo } from "react";
 import { vehicles } from "@/lib/vehicles";
+import { site } from "@/lib/site";
 import { VehicleCard } from "@/components/site/VehicleCard";
 import { EASE } from "@/components/motion/Reveal";
 
@@ -30,16 +31,15 @@ export const Route = createFileRoute("/stoc")({
   }),
   head: () => ({
     meta: [
-      { title: "Mașini în stoc — Parc Auto Yanis" },
+      { title: "Mașini în stoc — Târg Auto Yanis" },
       {
         name: "description",
-        content:
-          "Toate mașinile disponibile acum: verificate tehnic, cu istoric complet și kilometraj garantat. Filtrează după marcă, preț, combustibil sau an.",
+        content: "Toate mașinile disponibile acum. Filtrează după marcă, preț, combustibil sau an.",
       },
-      { property: "og:title", content: "Mașini în stoc — Parc Auto Yanis" },
+      { property: "og:title", content: "Mașini în stoc — Târg Auto Yanis" },
       {
         property: "og:description",
-        content: "Toate mașinile disponibile acum, verificate și cu istoric complet.",
+        content: "Toate mașinile disponibile acum.",
       },
     ],
   }),
@@ -178,7 +178,7 @@ function Inventory() {
             Mașini în stoc
           </h1>
           <p className="mt-3 text-base text-white/70 md:text-lg">
-            {vehicles.length} mașini disponibile, toate verificate tehnic și cu istoric complet.
+            {vehicles.length} mașini disponibile în {site.city}.
           </p>
         </div>
       </section>

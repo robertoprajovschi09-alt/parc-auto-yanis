@@ -5,9 +5,7 @@ import { site } from "@/lib/site";
 
 const links = [
   { to: "/", label: "Acasă" },
-  { to: "/stoc", label: "Mașini în stoc" },
-  { to: "/finantare", label: "Finanțare" },
-  { to: "/despre", label: "Despre noi" },
+  { to: "/stoc", label: "Mașini" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
@@ -26,7 +24,7 @@ export function Logo({ dark = false }: { dark?: boolean }) {
         <span
           className={`text-[13px] font-bold tracking-[0.14em] uppercase ${dark ? "text-white/70" : "text-graphite"}`}
         >
-          Parc Auto
+          Târg Auto
         </span>
         <span className={`mt-0.5 text-[20px] font-extrabold ${dark ? "text-white" : "text-ink"}`}>
           Yanis
@@ -64,7 +62,7 @@ export function SiteNav() {
         <Link
           to="/"
           className="flex min-h-11 items-center"
-          aria-label="Parc Auto Yanis — prima pagină"
+          aria-label="Târg Auto Yanis — prima pagină"
         >
           <Logo />
         </Link>

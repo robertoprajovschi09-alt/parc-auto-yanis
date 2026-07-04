@@ -51,10 +51,7 @@ export const vehicles: Vehicle[] = [
     body: "Break",
     image: hero("audi-a4-avant-2010"),
     photos: gallery("audi-a4-avant-2010", 16, "Audi A4 Avant 2010"),
-    description: [
-      "Audi A4 Avant din 2010, motor 2.0 diesel. Mașina este verificată tehnic de echipa noastră și are istoric complet — primești toate documentele înainte de cumpărare.",
-      "Poți vedea mașina la sediul nostru din Tulcea, de luni până sâmbătă. Te ajutăm și cu finanțarea, cu răspuns de la bancă în aproximativ 48 de ore.",
-    ],
+    description: ["Audi A4 Avant din 2010, motor 2.0 diesel, caroserie break."],
   },
   {
     slug: "bmw-320d-2010",
@@ -68,10 +65,7 @@ export const vehicles: Vehicle[] = [
     body: "Sedan",
     image: hero("bmw-320d-2010"),
     photos: gallery("bmw-320d-2010", 15, "BMW 320d 2010"),
-    description: [
-      "BMW 320d din 2010, motor 2.0 diesel. Prețul este negociabil — sună-ne pentru cea mai bună ofertă.",
-      "Mașina este verificată tehnic și are istoric complet. Vino la o vizionare la sediul nostru din Tulcea sau sună-ne pentru orice detaliu.",
-    ],
+    description: ["BMW 320d din 2010, motor 2.0 diesel. Preț negociabil."],
   },
   {
     slug: "mercedes-ml320-2007",
@@ -87,8 +81,7 @@ export const vehicles: Vehicle[] = [
     image: hero("mercedes-ml320-2007"),
     photos: gallery("mercedes-ml320-2007", 16, "Mercedes-Benz ML 320 CDI 2007"),
     description: [
-      "Mercedes-Benz ML 320 CDI din 2007, motor 3.0 diesel de 224 CP, cutie automată. Preț negociabil — sună-ne pentru ofertă.",
-      "SUV verificat tehnic, cu istoric complet. Te așteptăm la o vizionare la sediul nostru din Tulcea și te putem ajuta și cu finanțarea.",
+      "Mercedes-Benz ML 320 CDI din 2007, motor 3.0 diesel de 224 CP, cutie automată. Preț negociabil.",
     ],
   },
   {
@@ -104,10 +97,7 @@ export const vehicles: Vehicle[] = [
     body: "Furgon",
     image: hero("renault-kangoo-2010"),
     photos: gallery("renault-kangoo-2010", 13, "Renault Kangoo 2010"),
-    description: [
-      "Renault Kangoo din 2010, motor 1.5 diesel. Practic și economic, verificat tehnic și cu istoric complet.",
-      "Vino la o vizionare la sediul nostru din Tulcea. Te ajutăm și cu finanțarea, cu răspuns rapid de la bancă.",
-    ],
+    description: ["Renault Kangoo din 2010, motor 1.5 diesel."],
   },
   {
     slug: "dacia-duster-2014",
@@ -122,10 +112,7 @@ export const vehicles: Vehicle[] = [
     body: "SUV",
     image: hero("dacia-duster-2014"),
     photos: gallery("dacia-duster-2014", 9, "Dacia Duster 2014"),
-    description: [
-      "Dacia Duster din 2014, motor 1.2 benzină. SUV compact, ușor de întreținut, verificat tehnic și cu istoric complet.",
-      "Poți vedea mașina la sediul nostru din Tulcea. Te ajutăm și cu finanțarea, cu răspuns în aproximativ 48 de ore.",
-    ],
+    description: ["Dacia Duster din 2014, motor 1.2 benzină, SUV compact."],
   },
   {
     slug: "vw-tiguan-2009",
@@ -140,10 +127,7 @@ export const vehicles: Vehicle[] = [
     body: "SUV",
     image: hero("vw-tiguan-2009"),
     photos: gallery("vw-tiguan-2009", 16, "Volkswagen Tiguan 2009"),
-    description: [
-      "Volkswagen Tiguan din 2009, motor 2.0 diesel, cutie automată. Preț negociabil — sună-ne pentru cea mai bună ofertă.",
-      "SUV verificat tehnic, cu istoric complet. Te așteptăm la o vizionare la sediul nostru din Tulcea.",
-    ],
+    description: ["Volkswagen Tiguan din 2009, motor 2.0 diesel, cutie automată. Preț negociabil."],
   },
   {
     slug: "vw-passat-break-2011",
@@ -160,8 +144,7 @@ export const vehicles: Vehicle[] = [
     image: hero("vw-passat-break-2011"),
     photos: gallery("vw-passat-break-2011", 13, "Volkswagen Passat Variant 2011"),
     description: [
-      "Volkswagen Passat Variant din 2011, motor 1.6 TDI de 105 CP. Înmatriculat în România, se predă cu două chei și factură cu fiscal.",
-      "Mașina este verificată tehnic și are istoric complet. Oferim garanție 12 luni. Te ajutăm și cu finanțarea, cu răspuns de la bancă în aproximativ 48 de ore.",
+      "Volkswagen Passat Variant din 2011, motor 1.6 TDI de 105 CP. Înmatriculat în România, se predă cu două chei.",
     ],
     features: {
       Confort: [
@@ -196,8 +179,7 @@ export const vehicles: Vehicle[] = [
     image: hero("vw-touran-2008"),
     photos: gallery("vw-touran-2008", 13, "Volkswagen Touran 2008"),
     description: [
-      "Volkswagen Touran din 2008, motor 2.0 TDI de 170 CP, cutie în 6 trepte. Recent importat în România, cu discurile și plăcuțele față-spate recent înlocuite.",
-      "Mașina este verificată tehnic și are istoric complet. Te ajutăm cu finalizarea actelor și cu finanțarea, cu răspuns rapid de la bancă.",
+      "Volkswagen Touran din 2008, motor 2.0 TDI de 170 CP, cutie în 6 trepte. Discuri și plăcuțe față-spate recent înlocuite.",
     ],
     features: {
       Confort: [
@@ -230,10 +212,7 @@ export const vehicles: Vehicle[] = [
     body: "Monovolum, 7 locuri",
     image: hero("vw-sharan-2009"),
     photos: gallery("vw-sharan-2009", 17, "Volkswagen Sharan 2009"),
-    description: [
-      "Volkswagen Sharan din 2009, motor 2.0 diesel, 7 locuri. Ideal pentru familie, verificat tehnic și cu istoric complet.",
-      "Poți vedea mașina la sediul nostru din Tulcea. Te ajutăm și cu finanțarea, cu răspuns în aproximativ 48 de ore.",
-    ],
+    description: ["Volkswagen Sharan din 2009, motor 2.0 diesel, 7 locuri."],
   },
   {
     slug: "vw-jetta-2013",
@@ -247,10 +226,7 @@ export const vehicles: Vehicle[] = [
     body: "Sedan",
     image: hero("vw-jetta-2013"),
     photos: gallery("vw-jetta-2013", 8, "Volkswagen Jetta 2013"),
-    description: [
-      "Volkswagen Jetta din 2013, motor 1.6 diesel. Sedan economic, verificat tehnic și cu istoric complet.",
-      "Vino la o vizionare la sediul nostru din Tulcea. Te ajutăm și cu finanțarea, cu răspuns rapid de la bancă.",
-    ],
+    description: ["Volkswagen Jetta din 2013, motor 1.6 diesel, sedan."],
   },
   {
     slug: "vw-golf-6",
@@ -261,22 +237,9 @@ export const vehicles: Vehicle[] = [
     tag: "Detalii în curând",
     image: hero("vw-golf-6"),
     photos: gallery("vw-golf-6", 15, "Volkswagen Golf 6"),
-    description: [
-      "Volkswagen Golf 6 tocmai adăugat în stoc. Pregătim detaliile complete (an, kilometraj, motorizare și preț) — sună-ne pentru informații, ți le dăm pe loc.",
-    ],
+    description: ["Volkswagen Golf 6. Detalii complete în curând — sună-ne pentru informații."],
   },
 ];
-
-/* Featured on the homepage — a varied, attractive set from current stock. */
-export const featuredSlugs = [
-  "audi-a4-avant-2010",
-  "mercedes-ml320-2007",
-  "vw-passat-break-2011",
-  "vw-touran-2008",
-];
-
-/* Homepage financing example uses a car with a real listed price. */
-export const financeExampleSlug = "audi-a4-avant-2010";
 
 export function formatKm(n: number) {
   return n.toLocaleString("ro-RO") + " km";

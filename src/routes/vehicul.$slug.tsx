@@ -4,9 +4,6 @@ import { useEffect, useState } from "react";
 import {
   Phone,
   MessageCircle,
-  ShieldCheck,
-  Gauge,
-  BadgeCheck,
   X,
   ChevronLeft,
   ChevronRight,
@@ -15,8 +12,7 @@ import {
   MapPin,
 } from "lucide-react";
 
-import { vehicles, formatKm, formatPrice, priceLabel, type Vehicle } from "@/lib/vehicles";
-import { monthlyPayment, FINANCE } from "@/lib/finance";
+import { vehicles, formatKm, priceLabel, type Vehicle } from "@/lib/vehicles";
 import { site, whatsappLink } from "@/lib/site";
 import { VehicleCard } from "@/components/site/VehicleCard";
 import { SectionHeading } from "@/components/site/SectionHeading";
@@ -31,8 +27,8 @@ export const Route = createFileRoute("/vehicul/$slug")({
   head: ({ loaderData }) => {
     const v = loaderData?.vehicle;
     const title = v
-      ? `${v.brand} ${v.model}${v.year ? ` ${v.year}` : ""} — Parc Auto Yanis`
-      : "Mașină — Parc Auto Yanis";
+      ? `${v.brand} ${v.model}${v.year ? ` ${v.year}` : ""} — Târg Auto Yanis`
+      : "Mașină — Târg Auto Yanis";
     const description = v
       ? [
           `${v.brand} ${v.model}`,
@@ -97,7 +93,6 @@ function VehiclePage() {
   const photos = vehicle.photos ?? [{ src: vehicle.image, alt: title }];
   const [lightbox, setLightbox] = useState<number | null>(null);
   const related = vehicles.filter((v) => v.slug !== vehicle.slug).slice(0, 3);
-  const rate = vehicle.price != null ? monthlyPayment(vehicle.price) : null;
   const metaLine = [
     vehicle.year,
     vehicle.mileage != null && formatKm(vehicle.mileage),
@@ -229,34 +224,9 @@ function VehiclePage() {
                 {priceLabel(vehicle)}
               </p>
             </div>
-            {vehicle.price != null && rate != null ? (
-              <p className="mt-4 rounded-lg bg-canvas p-3.5 text-[14px] leading-relaxed text-graphite">
-                Rată orientativă: <strong className="text-ink">{rate} € / lună</strong> (avans{" "}
-                {FINANCE.defaultDownPct}%, {FINANCE.defaultMonths} de luni).{" "}
-                <Link
-                  to="/finantare"
-                  search={{ pret: vehicle.price }}
-                  className="font-bold text-brand underline underline-offset-4 hover:text-brand-strong"
-                >
-                  Calculează exact
-                </Link>
-              </p>
-            ) : (
-              <p className="mt-4 rounded-lg bg-canvas p-3.5 text-[14px] leading-relaxed text-graphite">
-                Prețul este negociabil. Sună-ne pentru cea mai bună ofertă și pentru o simulare de
-                rate — răspundem pe loc.
-              </p>
-            )}
 
             <div className="mt-6 space-y-2.5">
-              <Link
-                to="/contact"
-                search={{ masina: vehicle.slug }}
-                className="btn-primary w-full !min-h-14 !text-[17px]"
-              >
-                Programează o vizionare
-              </Link>
-              <a href={site.phoneHref} className="btn-ghost w-full !min-h-14 !text-[17px]">
+              <a href={site.phoneHref} className="btn-primary w-full !min-h-14 !text-[17px]">
                 <Phone size={18} aria-hidden /> {site.phone}
               </a>
               <a
@@ -265,25 +235,19 @@ function VehiclePage() {
                 rel="noreferrer"
                 className="btn-ghost w-full !min-h-14 !text-[17px]"
               >
-                <MessageCircle size={18} aria-hidden /> Scrie-ne pe WhatsApp
+                <MessageCircle size={18} aria-hidden /> WhatsApp
               </a>
+              <Link
+                to="/contact"
+                search={{ masina: vehicle.slug }}
+                className="btn-ghost w-full !min-h-14 !text-[17px]"
+              >
+                Trimite un mesaj
+              </Link>
             </div>
 
-            <ul className="mt-6 space-y-2 border-t border-ink/8 pt-5 text-[14px] font-medium text-ink-soft">
-              {[
-                "Istoric complet, oferit înainte de cumpărare",
-                "Kilometraj garantat",
-                "Garanție pentru componentele majore",
-              ].map((x) => (
-                <li key={x} className="flex items-start gap-2.5">
-                  <BadgeCheck size={17} className="mt-0.5 shrink-0 text-sun-strong" aria-hidden />
-                  {x}
-                </li>
-              ))}
-            </ul>
-
-            <p className="mt-5 text-[13px] leading-relaxed text-graphite">
-              Program: {site.schedule}. Răspundem în cel mult 24 de ore.
+            <p className="mt-5 border-t border-ink/8 pt-5 text-[13px] leading-relaxed text-graphite">
+              {site.schedule} · {site.address}
             </p>
           </div>
         </aside>
@@ -307,21 +271,18 @@ function VehiclePage() {
           </Reveal>
 
           {/* Description */}
-          <Reveal>
-            <h2 className="text-2xl font-extrabold tracking-tight text-ink">
-              Despre această mașină
-            </h2>
-            <div className="mt-4 space-y-4 text-base leading-relaxed text-ink-soft">
-              {(
-                vehicle.description ?? [
-                  `${title} din ${vehicle.year}, ${vehicle.fuel.toLowerCase()}, cutie ${vehicle.transmission.toLowerCase()}. Mașina este verificată tehnic, are kilometrajul garantat și istoric complet — primești toate documentele înainte de cumpărare.`,
-                  `Sună-ne pentru orice detaliu sau programează o vizionare la sediul nostru din ${vehicle.location}. Te putem ajuta și cu finanțarea, cu răspuns în aproximativ 48 de ore.`,
-                ]
-              ).map((p) => (
-                <p key={p.slice(0, 40)}>{p}</p>
-              ))}
-            </div>
-          </Reveal>
+          {vehicle.description && (
+            <Reveal>
+              <h2 className="text-2xl font-extrabold tracking-tight text-ink">
+                Despre această mașină
+              </h2>
+              <div className="mt-4 space-y-4 text-base leading-relaxed text-ink-soft">
+                {vehicle.description.map((p) => (
+                  <p key={p.slice(0, 40)}>{p}</p>
+                ))}
+              </div>
+            </Reveal>
+          )}
 
           {/* Features — only when real data exists */}
           {vehicle.features && (
@@ -348,31 +309,6 @@ function VehiclePage() {
               </RevealGroup>
             </div>
           )}
-
-          {/* Trust */}
-          <RevealGroup className="grid gap-4 sm:grid-cols-3">
-            {[
-              {
-                icon: ShieldCheck,
-                t: "Istoric verificat",
-                d: "Raport complet, oferit înainte de cumpărare",
-              },
-              { icon: Gauge, t: "Kilometraj garantat", d: "Confirmat prin rapoarte independente" },
-              { icon: BadgeCheck, t: "Garanție inclusă", d: "Pentru componentele majore" },
-            ].map(({ icon: Icon, t, d }) => (
-              <RevealItem key={t} className="h-full">
-                <div className="flex h-full items-start gap-3 rounded-lg bg-surface p-4 shadow-card">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-ink text-sun">
-                    <Icon size={19} strokeWidth={1.75} aria-hidden />
-                  </span>
-                  <div>
-                    <p className="text-[15px] font-extrabold text-ink">{t}</p>
-                    <p className="mt-0.5 text-[14px] text-graphite">{d}</p>
-                  </div>
-                </div>
-              </RevealItem>
-            ))}
-          </RevealGroup>
         </div>
       </section>
 

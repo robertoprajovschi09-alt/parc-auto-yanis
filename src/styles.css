@@ -66,7 +66,7 @@
 :root {
   --radius: 0.625rem; /* 10px — Vehica-like card/control radius */
 
-  /* Parc Auto Yanis — white / red / yellow */
+  /* Târg Auto Yanis — white / red / yellow */
   --canvas: oklch(0.973 0.001 286); /* soft gray page background */
   --surface: oklch(1 0 0); /* pure white for cards and panels */
   --ink: oklch(0.187 0 0); /* #131313 — headings, dark sections */

@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { Calendar, Camera, Fuel, Gauge, MapPin, Settings2, Zap } from "lucide-react";
 import type { Vehicle } from "@/lib/vehicles";
 import { formatKm, priceLabel } from "@/lib/vehicles";
-import { monthlyPayment } from "@/lib/finance";
 
 /*
  * The most important component on the site. One job: let anyone read
@@ -67,12 +66,7 @@ export function VehicleCard({ v }: { v: Vehicle; index?: number }) {
             ))}
           </ul>
 
-          <div className="mt-4 flex items-center justify-between gap-3 border-t border-ink/8 pt-4">
-            <p className="text-[13px] text-graphite">
-              {v.price != null
-                ? `Rată orientativă: ${monthlyPayment(v.price)} €/lună`
-                : "Sună pentru ofertă"}
-            </p>
+          <div className="mt-4 flex items-center justify-end border-t border-ink/8 pt-4">
             <span
               className="inline-flex items-center gap-1 text-[15px] font-bold whitespace-nowrap text-brand"
               aria-hidden
