@@ -15,7 +15,7 @@ import {
   MapPin,
 } from "lucide-react";
 
-import { vehicles, formatKm, formatPrice, type Vehicle } from "@/lib/vehicles";
+import { vehicles, formatKm, formatPrice, priceLabel, type Vehicle } from "@/lib/vehicles";
 import { monthlyPayment, FINANCE } from "@/lib/finance";
 import { site, whatsappLink } from "@/lib/site";
 import { VehicleCard } from "@/components/site/VehicleCard";
@@ -31,10 +31,18 @@ export const Route = createFileRoute("/vehicul/$slug")({
   head: ({ loaderData }) => {
     const v = loaderData?.vehicle;
     const title = v
-      ? `${v.brand} ${v.model} ${v.year} — Parc Auto Yanis`
+      ? `${v.brand} ${v.model}${v.year ? ` ${v.year}` : ""} — Parc Auto Yanis`
       : "Mașină — Parc Auto Yanis";
     const description = v
-      ? `${v.brand} ${v.model} din ${v.year}, ${formatKm(v.mileage)}, ${v.fuel}, ${v.transmission}. Preț ${formatPrice(v.price)}.`
+      ? [
+          `${v.brand} ${v.model}`,
+          v.year && `din ${v.year}`,
+          v.mileage != null && formatKm(v.mileage),
+          v.fuel,
+          `Preț: ${priceLabel(v)}`,
+        ]
+          .filter(Boolean)
+          .join(", ") + "."
       : "Detalii vehicul";
     return {
       meta: [
@@ -70,14 +78,13 @@ export const Route = createFileRoute("/vehicul/$slug")({
 });
 
 function specRows(v: Vehicle) {
-  const rows: [string, string][] = [
-    ["Anul fabricației", String(v.year)],
-    ["Kilometraj", formatKm(v.mileage)],
-    ["Combustibil", v.fuel],
-    ["Cutie de viteze", v.transmission],
-    ["Putere", v.power],
-  ];
-  if (v.engine) rows.push(["Motor", v.engine]);
+  const rows: [string, string][] = [];
+  if (v.year != null) rows.push(["Anul fabricației", String(v.year)]);
+  if (v.mileage != null) rows.push(["Kilometraj", formatKm(v.mileage)]);
+  if (v.fuel) rows.push(["Combustibil", v.fuel]);
+  if (v.transmission) rows.push(["Cutie de viteze", v.transmission]);
+  if (v.engine) rows.push(["Capacitate cilindrică", v.engine]);
+  if (v.power) rows.push(["Putere", v.power]);
   if (v.body) rows.push(["Caroserie", v.body]);
   if (v.color) rows.push(["Culoare", v.color]);
   if (v.drive) rows.push(["Tracțiune", v.drive]);
@@ -87,11 +94,20 @@ function specRows(v: Vehicle) {
 function VehiclePage() {
   const { vehicle } = Route.useLoaderData();
   const title = `${vehicle.brand} ${vehicle.model}`;
-  const photos = vehicle.photos ?? [{ src: vehicle.image, alt: `${title}, ${vehicle.year}` }];
+  const photos = vehicle.photos ?? [{ src: vehicle.image, alt: title }];
   const [lightbox, setLightbox] = useState<number | null>(null);
   const related = vehicles.filter((v) => v.slug !== vehicle.slug).slice(0, 3);
-  const rate = monthlyPayment(vehicle.price);
-  const waMessage = `Bună ziua! Mă interesează ${title} din ${vehicle.year} (${formatPrice(vehicle.price)}). Mai este disponibilă?`;
+  const rate = vehicle.price != null ? monthlyPayment(vehicle.price) : null;
+  const metaLine = [
+    vehicle.year,
+    vehicle.mileage != null && formatKm(vehicle.mileage),
+    vehicle.fuel,
+    vehicle.transmission,
+    [vehicle.engine, vehicle.power].filter(Boolean).join(" "),
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  const waMessage = `Bună ziua! Mă interesează ${title}${vehicle.year ? ` din ${vehicle.year}` : ""} (${priceLabel(vehicle)}). Mai este disponibilă?`;
 
   return (
     <div className="pt-24 md:pt-32">
@@ -132,10 +148,9 @@ function VehiclePage() {
             <h1 className="text-3xl font-extrabold tracking-tight text-ink md:text-[44px] md:leading-[1.1]">
               {title}
             </h1>
-            <p className="mt-2.5 text-base font-medium text-graphite md:text-lg">
-              {vehicle.year} · {formatKm(vehicle.mileage)} · {vehicle.fuel} · {vehicle.transmission}{" "}
-              · {vehicle.power}
-            </p>
+            {metaLine && (
+              <p className="mt-2.5 text-base font-medium text-graphite md:text-lg">{metaLine}</p>
+            )}
             <p className="mt-1.5 flex items-center gap-1.5 text-[15px] font-medium text-graphite">
               <MapPin size={15} aria-hidden className="text-brand" /> {vehicle.location}
             </p>
@@ -143,7 +158,7 @@ function VehiclePage() {
           <div className="md:text-right">
             <p className="text-[14px] font-semibold text-graphite">Preț</p>
             <p className="text-[40px] leading-none font-black tracking-tight text-brand">
-              {formatPrice(vehicle.price)}
+              {priceLabel(vehicle)}
             </p>
           </div>
         </div>
@@ -211,20 +226,27 @@ function VehiclePage() {
             <div>
               <p className="text-[14px] font-semibold text-graphite">Preț</p>
               <p className="mt-1 text-4xl font-black tracking-tight text-brand">
-                {formatPrice(vehicle.price)}
+                {priceLabel(vehicle)}
               </p>
             </div>
-            <p className="mt-4 rounded-lg bg-canvas p-3.5 text-[14px] leading-relaxed text-graphite">
-              Rată orientativă: <strong className="text-ink">{rate} € / lună</strong> (avans{" "}
-              {FINANCE.defaultDownPct}%, {FINANCE.defaultMonths} de luni).{" "}
-              <Link
-                to="/finantare"
-                search={{ pret: vehicle.price }}
-                className="font-bold text-brand underline underline-offset-4 hover:text-brand-strong"
-              >
-                Calculează exact
-              </Link>
-            </p>
+            {vehicle.price != null && rate != null ? (
+              <p className="mt-4 rounded-lg bg-canvas p-3.5 text-[14px] leading-relaxed text-graphite">
+                Rată orientativă: <strong className="text-ink">{rate} € / lună</strong> (avans{" "}
+                {FINANCE.defaultDownPct}%, {FINANCE.defaultMonths} de luni).{" "}
+                <Link
+                  to="/finantare"
+                  search={{ pret: vehicle.price }}
+                  className="font-bold text-brand underline underline-offset-4 hover:text-brand-strong"
+                >
+                  Calculează exact
+                </Link>
+              </p>
+            ) : (
+              <p className="mt-4 rounded-lg bg-canvas p-3.5 text-[14px] leading-relaxed text-graphite">
+                Prețul este negociabil. Sună-ne pentru cea mai bună ofertă și pentru o simulare de
+                rate — răspundem pe loc.
+              </p>
+            )}
 
             <div className="mt-6 space-y-2.5">
               <Link

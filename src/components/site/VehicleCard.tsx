@@ -1,23 +1,28 @@
 import { Link } from "@tanstack/react-router";
 import { Calendar, Camera, Fuel, Gauge, MapPin, Settings2, Zap } from "lucide-react";
 import type { Vehicle } from "@/lib/vehicles";
-import { formatKm, formatPrice } from "@/lib/vehicles";
+import { formatKm, priceLabel } from "@/lib/vehicles";
 import { monthlyPayment } from "@/lib/finance";
 
 /*
  * The most important component on the site. One job: let anyone read
  * "what car, what price, key facts, where" in under 3 seconds.
- * The whole card is one link; no hover-only information.
+ * The whole card is one link; no hover-only information. Only real specs
+ * are shown — missing fields simply don't render.
  */
 export function VehicleCard({ v }: { v: Vehicle; index?: number }) {
   const specs = [
-    { icon: Calendar, label: "An", value: String(v.year) },
-    { icon: Gauge, label: "Kilometraj", value: formatKm(v.mileage) },
-    { icon: Fuel, label: "Combustibil", value: v.fuel },
-    { icon: Settings2, label: "Cutie", value: v.transmission },
-    { icon: Zap, label: "Putere", value: v.power },
+    v.year != null && { icon: Calendar, label: "An", value: String(v.year) },
+    v.mileage != null && { icon: Gauge, label: "Kilometraj", value: formatKm(v.mileage) },
+    v.fuel && { icon: Fuel, label: "Combustibil", value: v.fuel },
+    v.transmission && { icon: Settings2, label: "Cutie", value: v.transmission },
+    (v.power || v.engine) && {
+      icon: Zap,
+      label: "Motor",
+      value: [v.engine, v.power].filter(Boolean).join(" · "),
+    },
     { icon: MapPin, label: "Locație", value: v.location },
-  ];
+  ].filter(Boolean) as { icon: typeof Calendar; label: string; value: string }[];
 
   return (
     <article className="group relative overflow-hidden rounded-lg bg-surface shadow-card transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lift">
@@ -25,7 +30,7 @@ export function VehicleCard({ v }: { v: Vehicle; index?: number }) {
         <div className="relative aspect-[4/3] overflow-hidden bg-muted">
           <img
             src={v.image}
-            alt={`${v.brand} ${v.model}, ${v.year}`}
+            alt={`${v.brand} ${v.model}${v.year ? `, ${v.year}` : ""}`}
             loading="lazy"
             width={800}
             height={600}
@@ -49,7 +54,7 @@ export function VehicleCard({ v }: { v: Vehicle; index?: number }) {
             {v.brand} {v.model}
           </h3>
           <p className="mt-2 text-[24px] leading-none font-extrabold tracking-tight text-brand">
-            {formatPrice(v.price)}
+            {priceLabel(v)}
           </p>
 
           <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2.5">
@@ -64,7 +69,9 @@ export function VehicleCard({ v }: { v: Vehicle; index?: number }) {
 
           <div className="mt-4 flex items-center justify-between gap-3 border-t border-ink/8 pt-4">
             <p className="text-[13px] text-graphite">
-              Rată orientativă: {monthlyPayment(v.price)} €/lună
+              {v.price != null
+                ? `Rată orientativă: ${monthlyPayment(v.price)} €/lună`
+                : "Sună pentru ofertă"}
             </p>
             <span
               className="inline-flex items-center gap-1 text-[15px] font-bold whitespace-nowrap text-brand"

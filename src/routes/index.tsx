@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 import finantareImg from "@/assets/finantare.jpg";
-import { vehicles, featuredSlugs, formatPrice } from "@/lib/vehicles";
+import { vehicles, featuredSlugs, financeExampleSlug, formatPrice } from "@/lib/vehicles";
 import { monthlyPayment, FINANCE } from "@/lib/finance";
 import { site } from "@/lib/site";
 import { VehicleCard } from "@/components/site/VehicleCard";
@@ -166,8 +166,8 @@ function WhyUs() {
 
 /* ---------------- FINANCING (dark band) ---------------- */
 function FinancingBand() {
-  const example = vehicles.find((v) => v.slug === "bmw-320d-2018");
-  const exampleRate = example ? monthlyPayment(example.price) : null;
+  const example = vehicles.find((v) => v.slug === financeExampleSlug);
+  const exampleRate = example?.price != null ? monthlyPayment(example.price) : null;
 
   return (
     <section
@@ -204,7 +204,7 @@ function FinancingBand() {
             ))}
           </ul>
 
-          {example && exampleRate && (
+          {example?.price != null && exampleRate && (
             <p className="mt-8 rounded-xl border border-white/12 bg-white/5 p-5 text-[15px] leading-relaxed text-white/75">
               De exemplu: {example.brand} {example.model} la {formatPrice(example.price)}, cu avans
               de {FINANCE.defaultDownPct}% pe {FINANCE.defaultMonths} de luni ≈{" "}

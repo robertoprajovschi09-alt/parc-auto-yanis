@@ -139,24 +139,27 @@ function Inventory() {
       if (search.cutie && v.transmission !== search.cutie) return false;
       if (search.pret) {
         const band = priceBands.find((b) => b.value === search.pret);
-        if (band && !band.test(v.price)) return false;
+        // Cars without a listed price can't match a price band.
+        if (band && (v.price == null || !band.test(v.price))) return false;
       }
-      if (search.an && v.year < Number(search.an)) return false;
+      if (search.an && (v.year == null || v.year < Number(search.an))) return false;
       return true;
     });
 
+    // Missing values sort to the end for every ordering.
+    const nOrEnd = (n: number | undefined, dir: 1 | -1) => (n == null ? dir * Infinity : n);
     switch (search.sort) {
       case "pret-asc":
-        list = [...list].sort((a, b) => a.price - b.price);
+        list = [...list].sort((a, b) => nOrEnd(a.price, 1) - nOrEnd(b.price, 1));
         break;
       case "pret-desc":
-        list = [...list].sort((a, b) => b.price - a.price);
+        list = [...list].sort((a, b) => nOrEnd(b.price, -1) - nOrEnd(a.price, -1));
         break;
       case "km-asc":
-        list = [...list].sort((a, b) => a.mileage - b.mileage);
+        list = [...list].sort((a, b) => nOrEnd(a.mileage, 1) - nOrEnd(b.mileage, 1));
         break;
       case "an-desc":
-        list = [...list].sort((a, b) => b.year - a.year);
+        list = [...list].sort((a, b) => nOrEnd(b.year, -1) - nOrEnd(a.year, -1));
         break;
     }
     return list;

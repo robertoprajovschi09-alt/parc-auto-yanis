@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Phone } from "lucide-react";
-import img from "@/assets/mercedes/470211463.jpg.asset.json";
 import { site } from "@/lib/site";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { Counter } from "@/components/motion/Counter";
@@ -87,11 +86,11 @@ function Despre() {
         <Reveal className="relative">
           <div className="overflow-hidden rounded-2xl bg-muted shadow-lift">
             <img
-              src={img.url}
+              src="/stoc/mercedes-ml320-2007/01.jpg"
               alt="Mașină din stocul Parc Auto Yanis, pregătită pentru vânzare"
               loading="lazy"
-              width={2100}
-              height={900}
+              width={1400}
+              height={600}
               className="aspect-[21/9] w-full object-cover"
             />
           </div>
