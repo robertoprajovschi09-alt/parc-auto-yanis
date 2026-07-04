@@ -11,12 +11,12 @@ export const site = {
   whatsappNumber: "40747465265",
   // TODO(owner): confirm email under the new brand
   email: "salut@targautoyanis.ro",
-  address: "Str. Isaccei 12, Tulcea",
+  address: "Str. Izvorului nr. 63, Tulcea",
   schedule: "Luni – Sâmbătă, 09:00 – 19:00",
   scheduleShort: "L–S, 09–19",
   tiktok: "https://www.tiktok.com/@targ.auto.yanis",
   facebook: "https://www.facebook.com/profile.php?id=61591624558792",
-  mapsUrl: "https://maps.google.com/?q=Str.+Isaccei+12,+Tulcea",
+  mapsUrl: "https://maps.google.com/?q=Str.+Izvorului+63,+Tulcea,+Romania",
 } as const;
 
 /** WhatsApp deep link with a prefilled Romanian message. */
