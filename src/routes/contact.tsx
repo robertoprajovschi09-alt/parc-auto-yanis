@@ -1,18 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import {
-  Phone,
-  Mail,
-  MapPin,
-  Clock,
-  Instagram,
-  Facebook,
-  MessageCircle,
-  ChevronDown,
-} from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Facebook, MessageCircle, ChevronDown } from "lucide-react";
 import { site, whatsappLink } from "@/lib/site";
 import { vehicles } from "@/lib/vehicles";
 import { RevealGroup, RevealItem } from "@/components/motion/Reveal";
+import { TikTokIcon } from "@/components/site/TikTokIcon";
 
 type ContactSearch = { masina?: string };
 
@@ -269,13 +261,13 @@ function Contact() {
 
           <div className="flex gap-3 pt-2">
             <a
-              href={site.instagram}
+              href={site.tiktok}
               target="_blank"
               rel="noreferrer"
-              aria-label="Instagram Târg Auto Yanis"
+              aria-label="TikTok Târg Auto Yanis"
               className="grid h-12 w-12 place-items-center rounded-lg border border-ink/15 bg-surface text-ink transition-all duration-200 hover:border-sun hover:bg-sun"
             >
-              <Instagram size={18} />
+              <TikTokIcon size={18} />
             </a>
             <a
               href={site.facebook}

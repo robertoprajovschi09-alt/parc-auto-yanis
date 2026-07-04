@@ -9,13 +9,13 @@ export const site = {
   phone: "0747 465 265",
   phoneHref: "tel:+40747465265",
   whatsappNumber: "40747465265",
-  // TODO(owner): confirm email + social handles under the new brand
+  // TODO(owner): confirm email under the new brand
   email: "salut@targautoyanis.ro",
   address: "Str. Isaccei 12, Tulcea",
   schedule: "Luni – Sâmbătă, 09:00 – 19:00",
   scheduleShort: "L–S, 09–19",
-  instagram: "https://www.instagram.com/targautoyanis",
-  facebook: "https://www.facebook.com/targautoyanis",
+  tiktok: "https://www.tiktok.com/@targ.auto.yanis",
+  facebook: "https://www.facebook.com/profile.php?id=61591624558792",
   mapsUrl: "https://maps.google.com/?q=Str.+Isaccei+12,+Tulcea",
 } as const;
 

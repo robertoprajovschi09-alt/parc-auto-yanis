@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { Instagram, Facebook, Phone, MapPin, Mail, Clock, ChevronRight } from "lucide-react";
+import { Facebook, Phone, MapPin, Mail, Clock, ChevronRight } from "lucide-react";
 import { site } from "@/lib/site";
 import { Logo } from "@/components/site/SiteNav";
+import { TikTokIcon } from "@/components/site/TikTokIcon";
 
 const nav = [
   { to: "/stoc", label: "Mașini" },
@@ -23,13 +24,13 @@ export function SiteFooter() {
             </p>
             <div className="mt-7 flex items-center gap-3">
               <a
-                href={site.instagram}
+                href={site.tiktok}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Instagram Târg Auto Yanis"
+                aria-label="TikTok Târg Auto Yanis"
                 className="grid h-12 w-12 place-items-center rounded-lg border border-white/15 transition-all duration-200 hover:border-sun hover:bg-sun hover:text-ink"
               >
-                <Instagram size={18} />
+                <TikTokIcon size={18} />
               </a>
               <a
                 href={site.facebook}
