@@ -5,6 +5,7 @@ import { vehicles } from "@/lib/vehicles";
 import { site } from "@/lib/site";
 import { VehicleCard } from "@/components/site/VehicleCard";
 import { Hero } from "@/components/home/Hero";
+import { BombaZilei } from "@/components/home/BombaZilei";
 import { RevealGroup, RevealItem, Reveal } from "@/components/motion/Reveal";
 
 export const Route = createFileRoute("/")({
@@ -15,6 +16,7 @@ function Home() {
   return (
     <>
       <Hero />
+      <BombaZilei />
       <Inventory />
       <ContactBand />
     </>

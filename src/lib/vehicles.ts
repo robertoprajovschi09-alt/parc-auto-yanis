@@ -241,6 +241,11 @@ export const vehicles: Vehicle[] = [
   },
 ];
 
+/* Homepage „Bomba Zilei” — the one under-market deal to spotlight.
+   Owner: change this slug to feature a different car. The section only
+   renders when the chosen car exists and has a listed price. */
+export const bombaZileiSlug = "vw-touran-2008";
+
 export function formatKm(n: number) {
   return n.toLocaleString("ro-RO") + " km";
 }

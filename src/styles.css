@@ -332,4 +332,69 @@
     outline: 2px solid var(--brand);
     outline-offset: 3px;
   }
+
+  /* ---- Bomba Zilei — signature homepage spotlight ---- */
+
+  /* Glass badge: warm glow that breathes, gentle vertical drift. */
+  .bomba-badge {
+    animation:
+      bomba-glow 3.4s ease-in-out infinite,
+      bomba-drift 6s ease-in-out infinite;
+  }
+  .group\/bomba:hover .bomba-badge {
+    box-shadow: 0 0 42px 10px oklch(0.852 0.173 86.9 / 0.5);
+  }
+
+  /* Light sweep across the card, like light on polished metal.
+     Active for ~1.6s of a 9.5s cycle. */
+  .bomba-sweep {
+    animation: bomba-sweep 9.5s linear infinite;
+    animation-delay: 3s;
+  }
+
+  /* Very subtle floating for the vehicle image wrapper. */
+  .bomba-float {
+    animation: bomba-drift 7.5s ease-in-out infinite;
+  }
+}
+
+@keyframes bomba-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 18px 2px oklch(0.852 0.173 86.9 / 0.28);
+  }
+  50% {
+    box-shadow: 0 0 32px 7px oklch(0.852 0.173 86.9 / 0.48);
+  }
+}
+
+@keyframes bomba-drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes bomba-sweep {
+  0% {
+    transform: translateX(-130%) skewX(-16deg);
+    opacity: 0;
+  }
+  1.5% {
+    opacity: 1;
+  }
+  15% {
+    transform: translateX(380%) skewX(-16deg);
+    opacity: 1;
+  }
+  17% {
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(380%) skewX(-16deg);
+    opacity: 0;
+  }
 }
