@@ -20,6 +20,10 @@ dist-ssr
 .wrangler/
 .dev.vars
 
+# Raw source media (large originals + videos) — optimised copies live in public/stoc
+TARG AUTO YANIS/
+.claude-flow/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
