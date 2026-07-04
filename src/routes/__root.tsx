@@ -16,6 +16,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import "@fontsource-variable/mulish/index.css";
 import { SiteNav } from "@/components/site/SiteNav";
 import { SiteFooter } from "@/components/site/SiteFooter";
+import { CookieBanner } from "@/components/site/CookieBanner";
 
 function NotFoundComponent() {
   return (
@@ -172,6 +173,7 @@ function RootComponent() {
             <Outlet />
           </motion.main>
           <SiteFooter />
+          <CookieBanner />
         </div>
       </MotionConfig>
     </QueryClientProvider>
