@@ -5,8 +5,8 @@ import { Logo } from "@/components/site/SiteNav";
 import { TikTokIcon } from "@/components/site/TikTokIcon";
 
 const nav = [
+  { to: "/", label: "Acasă" },
   { to: "/stoc", label: "Mașini" },
-  { to: "/contact", label: "Contact" },
 ] as const;
 
 export function SiteFooter() {

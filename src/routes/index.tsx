@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Phone, ArrowRight, MessageCircle } from "lucide-react";
+import { Phone, ArrowRight } from "lucide-react";
 
 import { vehicles } from "@/lib/vehicles";
-import { site, whatsappLink } from "@/lib/site";
+import { site } from "@/lib/site";
 import { VehicleCard } from "@/components/site/VehicleCard";
 import { Hero } from "@/components/home/Hero";
 import { BombaZilei } from "@/components/home/BombaZilei";
@@ -71,24 +71,13 @@ function ContactBand() {
           <p className="max-w-md text-base text-white/70">
             Te așteptăm la sediul din {site.city}, {site.schedule.toLowerCase()}.
           </p>
-          <div className="flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row">
-            <a href={site.phoneHref} className="btn-sun !min-h-14 !text-[17px]">
-              <Phone size={18} aria-hidden />
+          <div className="flex w-full flex-col justify-center sm:w-auto">
+            <a href={site.phoneHref} className="btn-sun !min-h-14 !px-10 !text-[18px]">
+              <Phone size={19} aria-hidden />
               {site.phone}
             </a>
-            <a
-              href={whatsappLink("Bună ziua! Vă contactez de pe site în legătură cu o mașină.")}
-              target="_blank"
-              rel="noreferrer"
-              className="btn-ghost-dark !min-h-14 !text-[17px]"
-            >
-              <MessageCircle size={18} aria-hidden />
-              WhatsApp
-            </a>
-            <Link to="/contact" className="btn-ghost-dark !min-h-14 !text-[17px]">
-              Trimite un mesaj
-            </Link>
           </div>
+          <p className="text-[14px] text-white/55">{site.address}</p>
         </div>
       </Reveal>
     </section>

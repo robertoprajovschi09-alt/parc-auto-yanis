@@ -7,7 +7,8 @@ import { formatKm, priceLabel } from "@/lib/vehicles";
  * The most important component on the site. One job: let anyone read
  * "what car, what price, key facts, where" in under 3 seconds.
  * The whole card is one link; no hover-only information. Only real specs
- * are shown — missing fields simply don't render.
+ * are shown — missing fields simply don't render. Sold cars stay listed
+ * as social proof: photo dimmed, "Vândut" instead of the price.
  */
 export function VehicleCard({ v }: { v: Vehicle; index?: number }) {
   const specs = [
@@ -33,14 +34,25 @@ export function VehicleCard({ v }: { v: Vehicle; index?: number }) {
             loading="lazy"
             width={800}
             height={600}
-            className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+            className={`h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04] ${
+              v.sold ? "opacity-75 saturate-50" : ""
+            }`}
           />
-          {v.tag && (
-            <span className="absolute top-3 left-3 rounded-md bg-sun px-2.5 py-1 text-[13px] font-bold text-ink shadow-sm">
-              {v.tag}
+          {v.sold ? (
+            <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md bg-ink px-3 py-1.5 text-[13px] font-black tracking-wide text-white uppercase shadow-sm">
+              Vândut
+              {v.soldNote && (
+                <span className="font-bold text-sun normal-case">⚡ {v.soldNote}</span>
+              )}
             </span>
+          ) : (
+            v.tag && (
+              <span className="absolute top-3 left-3 rounded-md bg-sun px-2.5 py-1 text-[13px] font-bold text-ink shadow-sm">
+                {v.tag}
+              </span>
+            )
           )}
-          {v.photos && v.photos.length > 1 && (
+          {!v.sold && v.photos && v.photos.length > 1 && (
             <span className="absolute right-3 bottom-3 inline-flex items-center gap-1.5 rounded-md bg-ink/75 px-2.5 py-1 text-[13px] font-semibold text-white">
               <Camera size={13} aria-hidden />
               {v.photos.length}
@@ -52,9 +64,20 @@ export function VehicleCard({ v }: { v: Vehicle; index?: number }) {
           <h3 className="text-[17px] leading-snug font-extrabold text-ink transition-colors duration-200 group-hover:text-brand">
             {v.brand} {v.model}
           </h3>
-          <p className="mt-2 text-[24px] leading-none font-extrabold tracking-tight text-brand">
-            {priceLabel(v)}
-          </p>
+          {v.sold ? (
+            <p className="mt-2 text-[24px] leading-none font-extrabold tracking-tight text-graphite">
+              Vândut
+              {v.soldNote && (
+                <span className="ml-2 align-middle text-[14px] font-bold text-brand">
+                  ⚡ {v.soldNote}
+                </span>
+              )}
+            </p>
+          ) : (
+            <p className="mt-2 text-[24px] leading-none font-extrabold tracking-tight text-brand">
+              {priceLabel(v)}
+            </p>
+          )}
 
           <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2.5">
             {specs.map((s) => (

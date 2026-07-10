@@ -6,7 +6,6 @@ import { site } from "@/lib/site";
 const links = [
   { to: "/", label: "Acasă" },
   { to: "/stoc", label: "Mașini" },
-  { to: "/contact", label: "Contact" },
 ] as const;
 
 export function Logo({ dark = false }: { dark?: boolean }) {

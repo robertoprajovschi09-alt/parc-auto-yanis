@@ -23,6 +23,10 @@ export type Vehicle = {
   photos?: VehiclePhoto[];
   features?: Record<string, string[]>;
   description?: string[];
+  /* Sold cars stay listed as social proof, clearly marked. `soldNote` is the
+     short brag line shown on the badge, e.g. "în sub 24 de ore". */
+  sold?: boolean;
+  soldNote?: string;
 };
 
 /* Real inventory photos live in public/stoc/<slug>/ — hero.jpg (card) plus
@@ -127,7 +131,12 @@ export const vehicles: Vehicle[] = [
     body: "SUV",
     image: hero("vw-tiguan-2009"),
     photos: gallery("vw-tiguan-2009", 16, "Volkswagen Tiguan 2009"),
-    description: ["Volkswagen Tiguan din 2009, motor 2.0 diesel, cutie automată. Preț negociabil."],
+    sold: true,
+    soldNote: "în sub 24 de ore",
+    description: [
+      "Volkswagen Tiguan din 2009, motor 2.0 diesel, cutie automată. S-a vândut în mai puțin de 24 de ore de la listare.",
+      "Cauți ceva asemănător? Sună-ne — îți spunem imediat ce mai avem sau ce urmează să intre în stoc.",
+    ],
   },
   {
     slug: "vw-passat-break-2011",

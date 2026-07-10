@@ -1,19 +1,10 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
-import {
-  Phone,
-  MessageCircle,
-  X,
-  ChevronLeft,
-  ChevronRight,
-  Check,
-  Camera,
-  MapPin,
-} from "lucide-react";
+import { Phone, X, ChevronLeft, ChevronRight, Check, Camera, MapPin } from "lucide-react";
 
 import { vehicles, formatKm, priceLabel, type Vehicle } from "@/lib/vehicles";
-import { site, whatsappLink } from "@/lib/site";
+import { site } from "@/lib/site";
 import { VehicleCard } from "@/components/site/VehicleCard";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { Reveal, RevealGroup, RevealItem, EASE } from "@/components/motion/Reveal";
@@ -35,7 +26,7 @@ export const Route = createFileRoute("/vehicul/$slug")({
           v.year && `din ${v.year}`,
           v.mileage != null && formatKm(v.mileage),
           v.fuel,
-          `Preț: ${priceLabel(v)}`,
+          v.sold ? "Vândut" : `Preț: ${priceLabel(v)}`,
         ]
           .filter(Boolean)
           .join(", ") + "."
@@ -102,7 +93,6 @@ function VehiclePage() {
   ]
     .filter(Boolean)
     .join(" · ");
-  const waMessage = `Bună ziua! Mă interesează ${title}${vehicle.year ? ` din ${vehicle.year}` : ""} (${priceLabel(vehicle)}). Mai este disponibilă?`;
 
   return (
     <div className="pt-24 md:pt-32">
@@ -135,10 +125,19 @@ function VehiclePage() {
       <header className="mx-auto max-w-[1320px] px-4 pt-6 md:px-8">
         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
           <div>
-            {vehicle.tag && (
-              <span className="mb-3 inline-block rounded-md bg-sun px-2.5 py-1 text-[13px] font-bold text-ink">
-                {vehicle.tag}
+            {vehicle.sold ? (
+              <span className="mb-3 inline-flex items-center gap-1.5 rounded-md bg-ink px-3 py-1.5 text-[13px] font-black tracking-wide text-white uppercase">
+                Vândut
+                {vehicle.soldNote && (
+                  <span className="font-bold text-sun normal-case">⚡ {vehicle.soldNote}</span>
+                )}
               </span>
+            ) : (
+              vehicle.tag && (
+                <span className="mb-3 inline-block rounded-md bg-sun px-2.5 py-1 text-[13px] font-bold text-ink">
+                  {vehicle.tag}
+                </span>
+              )
             )}
             <h1 className="text-3xl font-extrabold tracking-tight text-ink md:text-[44px] md:leading-[1.1]">
               {title}
@@ -151,10 +150,18 @@ function VehiclePage() {
             </p>
           </div>
           <div className="md:text-right">
-            <p className="text-[14px] font-semibold text-graphite">Preț</p>
-            <p className="text-[40px] leading-none font-black tracking-tight text-brand">
-              {priceLabel(vehicle)}
-            </p>
+            {vehicle.sold ? (
+              <p className="text-[40px] leading-none font-black tracking-tight text-graphite">
+                Vândut
+              </p>
+            ) : (
+              <>
+                <p className="text-[14px] font-semibold text-graphite">Preț</p>
+                <p className="text-[40px] leading-none font-black tracking-tight text-brand">
+                  {priceLabel(vehicle)}
+                </p>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -218,32 +225,27 @@ function VehiclePage() {
         {/* Price + actions — first on mobile, right column on desktop */}
         <aside className="md:order-2 md:sticky md:top-32 md:self-start">
           <div className="rounded-2xl bg-surface p-6 shadow-float">
-            <div>
-              <p className="text-[14px] font-semibold text-graphite">Preț</p>
-              <p className="mt-1 text-4xl font-black tracking-tight text-brand">
-                {priceLabel(vehicle)}
-              </p>
-            </div>
+            {vehicle.sold ? (
+              <div>
+                <p className="text-4xl font-black tracking-tight text-graphite">Vândut</p>
+                <p className="mt-3 text-[14px] leading-relaxed text-graphite">
+                  Această mașină s-a vândut{vehicle.soldNote ? ` ${vehicle.soldNote}` : ""}. Cauți
+                  ceva asemănător? Sună-ne.
+                </p>
+              </div>
+            ) : (
+              <div>
+                <p className="text-[14px] font-semibold text-graphite">Preț</p>
+                <p className="mt-1 text-4xl font-black tracking-tight text-brand">
+                  {priceLabel(vehicle)}
+                </p>
+              </div>
+            )}
 
-            <div className="mt-6 space-y-2.5">
+            <div className="mt-6">
               <a href={site.phoneHref} className="btn-primary w-full !min-h-14 !text-[17px]">
                 <Phone size={18} aria-hidden /> {site.phone}
               </a>
-              <a
-                href={whatsappLink(waMessage)}
-                target="_blank"
-                rel="noreferrer"
-                className="btn-ghost w-full !min-h-14 !text-[17px]"
-              >
-                <MessageCircle size={18} aria-hidden /> WhatsApp
-              </a>
-              <Link
-                to="/contact"
-                search={{ masina: vehicle.slug }}
-                className="btn-ghost w-full !min-h-14 !text-[17px]"
-              >
-                Trimite un mesaj
-              </Link>
             </div>
 
             <p className="mt-5 border-t border-ink/8 pt-5 text-[13px] leading-relaxed text-graphite">
