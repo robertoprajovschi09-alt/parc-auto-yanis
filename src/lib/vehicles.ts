@@ -162,6 +162,23 @@ export const vehicles: Vehicle[] = [
     description: ["Volkswagen Touran din 2005, motor 2.0 diesel, 241.646 km. Preț negociabil."],
   },
   {
+    slug: "mercedes-sprinter-duba",
+    brand: "Mercedes-Benz",
+    model: "Sprinter",
+    mileage: 135000,
+    fuel: "Diesel",
+    transmission: "Automată",
+    engine: "2.0 L",
+    location: "Tulcea",
+    body: "Dubă cu cutie de marfă",
+    image: hero("mercedes-sprinter-duba"),
+    photos: gallery("mercedes-sprinter-duba", 17, "Mercedes-Benz Sprinter, dubă de marfă"),
+    description: [
+      "Mercedes-Benz Sprinter, generația nouă — dubă de marfă cu cutie Sommer, uși duble spate și treaptă de acces. Motor diesel cu cutie automată, aproximativ 135.000 km.",
+      "Ideală pentru curierat sau transport de marfă. Recent adusă din Germania. Preț la cerere — sună-ne pentru detalii și ofertă.",
+    ],
+  },
+  {
     slug: "audi-a4-avant-2010",
     brand: "Audi",
     model: "A4 Avant",
