@@ -11,14 +11,13 @@ const links = [
 export function Logo({ dark = false }: { dark?: boolean }) {
   return (
     <span className="flex items-center gap-3">
-      <span
-        className={`relative grid h-10 w-10 place-items-center overflow-hidden rounded-lg bg-ink ${
-          dark ? "border border-white/20" : ""
-        }`}
-      >
-        <span className="text-lg font-black text-sun">Y</span>
-        <span className="absolute inset-x-0 bottom-0 h-[3px] bg-brand" aria-hidden />
-      </span>
+      <img
+        src="/brand/logo.jpg"
+        alt=""
+        width={44}
+        height={44}
+        className={`h-11 w-11 rounded-full object-cover ${dark ? "ring-1 ring-white/25" : "ring-1 ring-ink/10"}`}
+      />
       <span className="flex flex-col leading-none">
         <span
           className={`text-[13px] font-bold tracking-[0.14em] uppercase ${dark ? "text-white/70" : "text-graphite"}`}
