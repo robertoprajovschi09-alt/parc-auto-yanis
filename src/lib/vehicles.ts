@@ -43,6 +43,125 @@ function gallery(slug: string, count: number, label: string): VehiclePhoto[] {
 
 export const vehicles: Vehicle[] = [
   {
+    slug: "kia-ceed-2008",
+    brand: "Kia",
+    model: "Ceed",
+    year: 2008,
+    mileage: 187450,
+    fuel: "Benzină",
+    engine: "1.4 L",
+    price: 1750,
+    location: "Tulcea",
+    tag: "💣 Bomba zilei",
+    image: hero("kia-ceed-2008"),
+    photos: gallery("kia-ceed-2008", 7, "Kia Ceed 2008"),
+    description: [
+      "Kia Ceed din 2008, motor 1.4 benzină, 187.450 km. La 1.750 €, negociabil, este una dintre cele mai accesibile mașini din stoc.",
+    ],
+  },
+  {
+    slug: "citroen-c3-2005",
+    brand: "Citroën",
+    model: "C3",
+    year: 2005,
+    fuel: "Diesel",
+    engine: "1.4 L",
+    location: "Tulcea",
+    tag: "💣 Bomba zilei",
+    image: hero("citroen-c3-2005"),
+    photos: gallery("citroen-c3-2005", 10, "Citroën C3 2005"),
+    description: [
+      "Citroën C3 din 2005, motor 1.4 diesel. Mașină mică de oraș, ușor de parcat și economică. Preț negociabil — sună-ne pentru cea mai bună ofertă.",
+    ],
+  },
+  {
+    slug: "opel-astra-j-2012",
+    brand: "Opel",
+    model: "Astra J",
+    year: 2012,
+    mileage: 234430,
+    fuel: "Diesel",
+    engine: "1.7 L",
+    price: 3500,
+    location: "Tulcea",
+    image: hero("opel-astra-j-2012"),
+    photos: gallery("opel-astra-j-2012", 17, "Opel Astra J 2012"),
+    description: ["Opel Astra J din 2012, motor 1.7 diesel, 234.430 km."],
+  },
+  {
+    slug: "audi-a4-s-line",
+    brand: "Audi",
+    model: "A4 S-line",
+    location: "Tulcea",
+    body: "Sedan",
+    tag: "Detalii în curând",
+    image: hero("audi-a4-s-line"),
+    photos: gallery("audi-a4-s-line", 13, "Audi A4 S-line"),
+    description: [
+      "Audi A4 în pachet S-line, negru, cu jante negre și postură sportivă — una dintre cele mai arătoase mașini din curte.",
+      "Detaliile complete (an, kilometraj, motorizare și preț) vin în curând. Sună-ne și îți spunem pe loc tot ce vrei să știi.",
+    ],
+  },
+  {
+    slug: "chevrolet-orlando",
+    brand: "Chevrolet",
+    model: "Orlando",
+    location: "Tulcea",
+    body: "Monovolum, 7 locuri",
+    tag: "Detalii în curând",
+    image: hero("chevrolet-orlando"),
+    photos: gallery("chevrolet-orlando", 12, "Chevrolet Orlando"),
+    description: [
+      "Chevrolet Orlando — monovolum cu 7 locuri, spațios și practic pentru familie: loc generos pentru pasageri și bagaje.",
+      "Detaliile complete vin în curând. Sună-ne și îți spunem pe loc tot ce vrei să știi.",
+    ],
+  },
+  {
+    slug: "dacia-logan",
+    brand: "Dacia",
+    model: "Logan",
+    location: "Tulcea",
+    body: "Sedan",
+    color: "Alb",
+    tag: "Detalii în curând",
+    image: hero("dacia-logan"),
+    photos: gallery("dacia-logan", 10, "Dacia Logan"),
+    description: [
+      "Dacia Logan albă, generație recentă — mașina simplă și de încredere: întreținere ieftină, piese oriunde, consum mic.",
+      "Detaliile complete vin în curând. Sună-ne și îți spunem pe loc tot ce vrei să știi.",
+    ],
+  },
+  {
+    slug: "vw-golf-5-plus-2006",
+    brand: "Volkswagen",
+    model: "Golf 5 Plus",
+    year: 2006,
+    fuel: "Diesel",
+    engine: "2.0 L",
+    price: 2200,
+    location: "Tulcea",
+    image: hero("vw-golf-5-plus-2006"),
+    photos: gallery("vw-golf-5-plus-2006", 11, "Volkswagen Golf 5 Plus 2006"),
+    description: [
+      "Volkswagen Golf 5 Plus din 2006, motor 2.0 diesel. Poziție de condus mai înaltă și interior spațios.",
+    ],
+  },
+  {
+    slug: "vw-touran-2005",
+    brand: "Volkswagen",
+    model: "Touran",
+    year: 2005,
+    mileage: 241646,
+    fuel: "Diesel",
+    engine: "2.0 L",
+    price: 2500,
+    location: "Tulcea",
+    body: "Monovolum",
+    image: hero("vw-touran-2005"),
+    photos: gallery("vw-touran-2005", 8, "Volkswagen Touran 2005"),
+    description: ["Volkswagen Touran din 2005, motor 2.0 diesel, 241.646 km. Preț negociabil."],
+  },
+  {
     slug: "audi-a4-avant-2010",
     brand: "Audi",
     model: "A4 Avant",
@@ -253,7 +372,7 @@ export const vehicles: Vehicle[] = [
 /* Homepage „Bomba Zilei” — the one under-market deal to spotlight.
    Owner: change this slug to feature a different car. The section only
    renders when the chosen car exists and has a listed price. */
-export const bombaZileiSlug = "vw-touran-2008";
+export const bombaZileiSlug = "kia-ceed-2008";
 
 export function formatKm(n: number) {
   return n.toLocaleString("ro-RO") + " km";
