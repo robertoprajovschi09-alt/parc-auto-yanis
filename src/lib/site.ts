@@ -5,6 +5,7 @@
  */
 export const site = {
   name: "Târg Auto Yanis",
+  slogan: "Mașini pentru toate buzunarele!",
   city: "Tulcea",
   phone: "0747 888 289",
   phoneHref: "tel:+40747888289",

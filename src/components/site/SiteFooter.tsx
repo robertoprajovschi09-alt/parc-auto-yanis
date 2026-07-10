@@ -19,7 +19,8 @@ export function SiteFooter() {
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1.3fr]">
           <div>
             <Logo dark />
-            <p className="mt-6 max-w-sm text-[15px] leading-relaxed text-white/70">
+            <p className="mt-5 text-lg font-extrabold text-sun">{site.slogan}</p>
+            <p className="mt-3 max-w-sm text-[15px] leading-relaxed text-white/70">
               Mașini rulate în {site.city}. Vino la o vizionare sau sună-ne.
             </p>
             <div className="mt-7 flex items-center gap-3">

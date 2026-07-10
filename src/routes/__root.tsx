@@ -82,24 +82,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Târg Auto Yanis — Mașini rulate în Tulcea" },
+      { title: "Târg Auto Yanis — Mașini pentru toate buzunarele" },
       {
         name: "description",
         content:
-          "Mașini rulate în Tulcea. Vezi stocul, sună-ne sau vino la o vizionare. Str. Izvorului nr. 63.",
+          "Mașini pentru toate buzunarele! Parc auto în Tulcea — vezi stocul, sună-ne sau vino la o vizionare. Str. Izvorului nr. 63.",
       },
       { name: "author", content: "Târg Auto Yanis" },
-      { property: "og:title", content: "Târg Auto Yanis — Mașini rulate în Tulcea" },
+      { property: "og:title", content: "Târg Auto Yanis — Mașini pentru toate buzunarele" },
       {
         property: "og:description",
-        content: "Mașini rulate în Tulcea. Vezi stocul și sună-ne.",
+        content: "Mașini pentru toate buzunarele! Parc auto în Tulcea. Vezi stocul și sună-ne.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Târg Auto Yanis — Mașini rulate în Tulcea" },
+      { name: "twitter:title", content: "Târg Auto Yanis — Mașini pentru toate buzunarele" },
       {
         name: "twitter:description",
-        content: "Mașini rulate în Tulcea. Vezi stocul și sună-ne.",
+        content: "Mașini pentru toate buzunarele! Parc auto în Tulcea. Vezi stocul și sună-ne.",
       },
       {
         property: "og:image",

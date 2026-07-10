@@ -51,7 +51,11 @@ export function Hero() {
             </span>
           </h1>
 
-          <p className={`mt-6 max-w-lg text-lg text-white/75 ${rise} delay-200`}>
+          <p className={`mt-5 text-xl font-extrabold text-sun md:text-2xl ${rise} delay-200`}>
+            {site.slogan}
+          </p>
+
+          <p className={`mt-4 max-w-lg text-lg text-white/75 ${rise} delay-300`}>
             {vehicles.length} mașini disponibile în {site.city}.
           </p>
         </div>
