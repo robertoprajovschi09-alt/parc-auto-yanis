@@ -103,11 +103,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       {
         property: "og:image",
-        content: "https://targautoyanis.ro/brand/panou.jpg",
+        content: "https://targautoyanis.ro/brand/logo.jpg",
       },
       {
         name: "twitter:image",
-        content: "https://targautoyanis.ro/brand/panou.jpg",
+        content: "https://targautoyanis.ro/brand/logo.jpg",
       },
     ],
     links: [

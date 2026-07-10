@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { motion, useScroll, useTransform } from "motion/react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { ChevronDown, Search } from "lucide-react";
 
 import { vehicles } from "@/lib/vehicles";
@@ -9,78 +8,52 @@ import { site } from "@/lib/site";
 const brands = [...new Set(vehicles.map((v) => v.brand))].sort();
 
 /* Staggered entrance via CSS animations (tw-animate-css): they run without
-   JS and the SSR HTML is never hidden, so the LCP hero is always readable.
-   Motion is used only for the parallax enhancement on the sign photo. */
+   JS and the SSR HTML is never hidden, so the LCP hero is always readable. */
 const rise = "animate-in fade-in slide-in-from-bottom-6 fill-mode-backwards duration-700";
 
 export function Hero() {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const signY = useTransform(scrollYProgress, [0, 1], [0, 40]);
-
   return (
     <>
-      <section
-        ref={ref}
-        className="relative isolate overflow-hidden bg-ink"
-        aria-label="Prezentare"
-      >
-        {/* Warm glow behind the sign photo */}
+      <section className="relative isolate overflow-hidden bg-ink" aria-label="Prezentare">
+        {/* Warm glow, echoing the brand yellow */}
         <div
           aria-hidden
           className="absolute top-1/2 right-[-5%] -z-10 h-[560px] w-[560px] -translate-y-1/2 rounded-full bg-sun/10 blur-3xl"
         />
 
-        <div className="mx-auto grid max-w-[1320px] items-center gap-10 px-4 pt-28 pb-36 md:px-8 md:pt-40 md:pb-44 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
-          <div>
-            <p
-              className={`inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-[14px] font-semibold text-white/85 backdrop-blur-sm ${rise}`}
-            >
-              <span className="h-2 w-2 rounded-full bg-sun" aria-hidden />
-              Târg auto în {site.city}
-            </p>
+        <div className="mx-auto max-w-[1320px] px-4 pt-32 pb-36 md:px-8 md:pt-44 md:pb-44">
+          <p
+            className={`inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-[14px] font-semibold text-white/85 backdrop-blur-sm ${rise}`}
+          >
+            <span className="h-2 w-2 rounded-full bg-sun" aria-hidden />
+            Târg auto în {site.city}
+          </p>
 
-            <h1
-              className={`mt-6 text-[42px] leading-[1.05] font-black tracking-tight text-white md:text-[60px] ${rise} delay-100`}
-            >
-              Găsește-ți următoarea{" "}
-              <span className="relative inline-block">
-                mașină
-                <svg
-                  className="absolute -bottom-2 left-0 w-full text-sun"
-                  viewBox="0 0 220 12"
-                  fill="none"
-                  aria-hidden
-                >
-                  <path
-                    d="M3 9c40-5 140-7 214-4"
-                    stroke="currentColor"
-                    strokeWidth="5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </span>
-            </h1>
+          <h1
+            className={`mt-6 max-w-3xl text-[42px] leading-[1.05] font-black tracking-tight text-white md:text-[64px] ${rise} delay-100`}
+          >
+            Găsește-ți următoarea{" "}
+            <span className="relative inline-block">
+              mașină
+              <svg
+                className="absolute -bottom-2 left-0 w-full text-sun"
+                viewBox="0 0 220 12"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  d="M3 9c40-5 140-7 214-4"
+                  stroke="currentColor"
+                  strokeWidth="5"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </span>
+          </h1>
 
-            <p className={`mt-6 max-w-lg text-lg text-white/75 ${rise} delay-200`}>
-              {vehicles.length} mașini disponibile în {site.city}.
-            </p>
-          </div>
-
-          {/* The real sign at the entrance — the brand, in the flesh */}
-          <motion.div style={{ y: signY }} className={`relative ${rise} delay-200`}>
-            <div className="overflow-hidden rounded-2xl ring-1 ring-white/15 shadow-lift">
-              <img
-                src="/brand/panou.jpg"
-                alt={`Panoul ${site.name}, la intrarea în parcul auto din ${site.city}`}
-                fetchPriority="high"
-                width={1170}
-                height={1185}
-                className="aspect-square w-full object-cover"
-              />
-            </div>
-            <div aria-hidden className="absolute -bottom-3 left-8 h-1.5 w-24 rounded-full bg-sun" />
-          </motion.div>
+          <p className={`mt-6 max-w-lg text-lg text-white/75 ${rise} delay-200`}>
+            {vehicles.length} mașini disponibile în {site.city}.
+          </p>
         </div>
       </section>
 
