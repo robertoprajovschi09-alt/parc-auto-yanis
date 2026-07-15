@@ -255,12 +255,14 @@ export const vehicles: Vehicle[] = [
     year: 2005,
     fuel: "Diesel",
     engine: "1.4 L",
+    price: 1100,
     location: "Tulcea",
     tag: "💣 Bomba zilei",
     image: hero("citroen-c3-2005"),
     photos: gallery("citroen-c3-2005", 10, "Citroën C3 2005"),
     description: [
-      "Citroën C3 din 2005, motor 1.4 diesel. Mașină mică de oraș, ușor de parcat și economică. Preț negociabil — sună-ne pentru cea mai bună ofertă.",
+      "Citroën C3 din 2005, motor 1.4 diesel. Mașină mică de oraș, ușor de parcat și economică — la 1.100 €, cea mai accesibilă mașină din stoc.",
+      "Preț negociabil. Sună-ne pentru detalii și o vizionare.",
     ],
   },
   {
