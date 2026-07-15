@@ -16,5 +16,13 @@ cfg.routes = [
   { pattern: "www.targautoyanis.ro", custom_domain: true },
 ];
 
+/* Pin the compatibility date. Nitro stamps it from the machine's LOCAL date,
+   which in a UTC+n timezone can already be "tomorrow" — Cloudflare validates
+   against UTC and rejects a future date (error 10021). A pinned date is also
+   what compatibility dates are for: stable runtime behaviour across deploys. */
+cfg.compatibility_date = "2026-07-04";
+
 writeFileSync(path, JSON.stringify(cfg, null, 2));
-console.log(`wrangler.json patched: name=${cfg.name}, routes=${cfg.routes.length}`);
+console.log(
+  `wrangler.json patched: name=${cfg.name}, routes=${cfg.routes.length}, compat=${cfg.compatibility_date}`,
+);
