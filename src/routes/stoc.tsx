@@ -135,8 +135,9 @@ function Inventory() {
         if (!hay.includes(search.q.toLowerCase().trim())) return false;
       }
       if (search.marca && v.brand !== search.marca) return false;
-      if (search.combustibil && v.fuel !== search.combustibil) return false;
-      if (search.cutie && v.transmission !== search.cutie) return false;
+      // Substring match so combined fuels ("Benzină + GPL") still match "Benzină".
+      if (search.combustibil && !v.fuel?.includes(search.combustibil)) return false;
+      if (search.cutie && !v.transmission?.includes(search.cutie)) return false;
       if (search.pret) {
         const band = priceBands.find((b) => b.value === search.pret);
         // Cars without a listed price can't match a price band.
